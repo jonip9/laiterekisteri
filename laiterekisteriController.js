@@ -18,11 +18,15 @@ module.exports = {
       } else if (results.length > 0) {
         if (password == results[0].salasana) {
           res.json({ status: true, message: 'OK' });
+          req.session.username = username;
+          res.redirect('/client');
         } else {
           res.json({ status: false, message: 'Väärä' });
+          res.redirect('/?message=Virheellinen käyttäjätunnus tai salasana');
         }
       } else {
         res.json({ status: false, message: 'Väärä' });
+        res.redirect('/?message=Virheellinen käyttäjätunnus tai salasana');
       }
     });
   },
