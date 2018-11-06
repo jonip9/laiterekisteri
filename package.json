@@ -1,0 +1,24 @@
+{
+  "name": "laiterekisteri",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "consolidate": "^0.15.1",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "handlebars": "^4.0.12",
+    "mysql": "^2.16.0"
+  }
+}
