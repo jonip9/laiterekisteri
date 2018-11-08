@@ -1,9 +1,9 @@
-let express = require('express');
-let cons = require('consolidate');
-let bodyParser = require('body-parser');
-let http = require('http');
-let session = require('express-session');
-let path = require('path');
+const express = require('express');
+const cons = require('consolidate');
+const bodyParser = require('body-parser');
+// let http = require('http');
+const session = require('express-session');
+const path = require('path');
 const laiterekisteriController = require('./laiterekisteriController');
 
 let app = express();
@@ -52,6 +52,21 @@ app.post('/login', laiterekisteriController.checkUser);
 app.get('/client', (req, res) => {
   res.sendFile(path.join(`${__dirname}views/client.html`));
 });
+
+app.route('/kayttaja')
+  .post(laiterekisteriController.registerUser);
+
+app.route('/kayttaja/:id')
+  .get(laiterekisteriController.fetchUserData)
+  .put(laiterekisteriController.updateUser);
+
+app.route('/laite')
+  .get(laiterekisteriController.fetchAllItems)
+  .post(laiterekisteriController.addItem);
+
+app.route('/laite/:id')
+  .put(laiterekisteriController.updateItem)
+  .delete(laiterekisteriController.deleteItem);
 
 app.listen(port, hostlocal, () => {
   console.log(`Local server running AT http://${hostlocal}:${port}/`);
