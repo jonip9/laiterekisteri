@@ -7,7 +7,8 @@ let path = require('path');
 const laiterekisteriController = require('./laiterekisteriController');
 
 let app = express();
-const hostname = '127.0.0.1';
+const hostlocal = 'localhost';
+const hostname = '192.168.1.102';
 const port = process.env.PORT || 3000;
 
 app.engine('html', cons.handlebars);
@@ -52,6 +53,10 @@ app.get('/client', (req, res) => {
   res.sendFile(path.join(`${__dirname}views/client.html`));
 });
 
+app.listen(port, hostlocal, () => {
+  console.log(`Local server running AT http://${hostlocal}:${port}/`);
+});
+
 app.listen(port, hostname, () => {
-  console.log(`Server running AT http://${hostname}:${port}/`);
+  console.log(`Public server running AT http://${hostname}:${port}/`);
 });
