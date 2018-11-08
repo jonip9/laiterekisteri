@@ -6,7 +6,7 @@ const session = require('express-session');
 const path = require('path');
 const laiterekisteriController = require('./laiterekisteriController');
 
-let app = express();
+const app = express();
 const hostlocal = 'localhost';
 const hostname = '192.168.1.102';
 const port = process.env.PORT || 3000;
@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  let msg = "Tervetuloa";
+  let msg = 'Tervetuloa';
 
   if (req.query.message) {
     msg = req.query.message;
@@ -67,6 +67,12 @@ app.route('/laite')
 app.route('/laite/:id')
   .put(laiterekisteriController.updateItem)
   .delete(laiterekisteriController.deleteItem);
+
+app.route('/kategoria')
+  .get(laiterekisteriController.fetchCategory);
+
+app.route('/omistaja')
+  .get(laiterekisteriController.fetchOwner);
 
 app.listen(port, hostlocal, () => {
   console.log(`Local server running AT http://${hostlocal}:${port}/`);

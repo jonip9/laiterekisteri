@@ -94,9 +94,9 @@ module.exports = {
   },
 
   deleteItem: (req, res) => {
-    connection.query('DELETE FROM laite WHERE sarjanro = ?', [req.params.id], (error, results , fields) => {
+    connection.query('DELETE FROM laite WHERE sarjanro = ?', [req.params.id], (error, results, fields) => {
       if (error) {
-        console.log(error.sqlMessage)
+        console.log(error.sqlMessage);
         throw error;
       } else {
         res.send(results);
@@ -115,5 +115,27 @@ module.exports = {
           res.send(results);
         }
       });
+  },
+
+  fetchCategory: (req, res) => {
+    connection.query('SELECT id, nimi FROM kategoria', (error, results, fields) => {
+      if (error) {
+        console.log(error.sqlMessage);
+        throw error;
+      } else {
+        res.send(results);
+      }
+    });
+  },
+
+  fetchOwner: (req, res) => {
+    connection.query('SELECT id, nimi FROM omistaja', (error, results, fields) => {
+      if (error) {
+        console.log(error.sqlMessage);
+        throw error;
+      } else {
+        res.send(results);
+      }
+    });
   },
 };
