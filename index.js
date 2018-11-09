@@ -28,10 +28,8 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-// app.use(express.static('public'));
-
+app.use(express.static('public'));
 app.use(allowCrossDomain);
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
