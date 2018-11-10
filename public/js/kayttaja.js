@@ -27,7 +27,6 @@ $(function () {
                         $.trim($("#salasana_muutos").val()) === "" ||
                         $.trim($("#salasana2_muutos").val()) === "" ||
                         $.trim($("#nimi_muutos").val()) === "" ||
-                        $.trim($("#sposti_muutos").val()) === "" ||
                         $.trim($("#malli_muutos").val()) === "") {
                         alert('Anna arvo kaikki kenttiin!');
                         return false;
@@ -136,7 +135,6 @@ function avaaKayttajaMuutos(id) {          //TEHTY
         $("#salasana_muutos").val(data.salasana);
         $("#salasana2_muutos").val(data.salasana);
         $("#nimi_muutos").val(data.nimi);
-        $("#sposti_muutos").val(data.sposti);
 
         $("#dialogi_kayttajamuutos").dialog("open");
     }).fail(function (jqXHR, textStatus, errorThrown) {
