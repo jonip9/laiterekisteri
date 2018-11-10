@@ -117,6 +117,17 @@ module.exports = {
       });
   },
 
+  fetchOneItem: (req, res) => {
+    connection.query('SELECT * FROM laite WHERE sarjanro = ?', [req.params.id], (error, results, fields) => {
+      if (error) {
+        console.log(error.sqlMessage);
+        throw error;
+      } else {
+        res.send(results);
+      }
+    });
+  },
+
   fetchCategory: (req, res) => {
     connection.query('SELECT id, nimi FROM kategoria', (error, results, fields) => {
       if (error) {

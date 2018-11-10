@@ -63,6 +63,7 @@ app.route('/laite')
   .post(laiterekisteriController.addItem);
 
 app.route('/laite/:id')
+  .get(laiterekisteriController.fetchOneItem)
   .put(laiterekisteriController.updateItem)
   .delete(laiterekisteriController.deleteItem);
 
