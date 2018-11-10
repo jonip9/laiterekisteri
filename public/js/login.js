@@ -43,7 +43,7 @@ $(function () {
    
     function regKayttaja(reglauseke) {  //Tarkista onko tunnus uusi
         $.post(
-            "http://localhost:3001/kayttaja",
+            "http://localhost:3000/kayttaja",
             reglauseke
         ).done(function (data, textStatus, jqXHR) {
             $("#hakulomake").submit();
@@ -56,7 +56,7 @@ $(function () {
     $("#kirjaudu").click(function () {
         function login() {
             $.get(
-                "http://localhost:3001/login",
+                "http://localhost:3000/login",
                 "tunnus=" + tunnus + "&salasana=" + ss   // Hakuehdot muodossa nimi=kalle&osoite=teku
             ).done(function (data, textStatus, jqXHR) {
                 $("#asiakkaat").empty(); //Poistetaan vanhat arvot taulukosta
