@@ -56,8 +56,8 @@ module.exports = {
   },
 
   fetchUserData: (req, res) => {
-    connection.query('SELECT tunnus, nimi FROM kayttaja WHERE id = ?',
-      [req.params.id], (error, results, fields) => {
+    connection.query('SELECT tunnus, salasana, nimi, id FROM kayttaja WHERE tunnus = ?',
+      [req.session.username], (error, results, fields) => {
         if (error) {
           console.log(error.sqlMessage);
           throw error;
@@ -115,6 +115,17 @@ module.exports = {
           res.send(results);
         }
       });
+  },
+
+  fetchOneItem: (req, res) => {
+    connection.query('SELECT * FROM laite WHERE sarjanro = ?', [req.params.id], (error, results, fields) => {
+      if (error) {
+        console.log(error.sqlMessage);
+        throw error;
+      } else {
+        res.send(results);
+      }
+    });
   },
 
   fetchCategory: (req, res) => {
