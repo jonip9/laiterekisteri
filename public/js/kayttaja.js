@@ -33,7 +33,7 @@ $(function () {
                         return false;
                     } else if (
                         $.trim($("#salasana_muutos").val()) != $.trim($("#salasana2_muutos").val())) {
-                        alert('Antamasi salasanat eiv‰t t‰sm‰‰!');
+                        alert('Antamasi salasanat eiv√§t t√§sm√§√§!');
                         return false;
                     } else {
                         var muutettukayttajaData = $("#kayttajanmuutoslomake").serialize();
@@ -58,14 +58,14 @@ $(function () {
     });
 });
 
-function haeVaraukset(kayttaja_id) {  //Tee: hakee k‰ytt‰j‰n varaukset/ lainat (k‰ytt‰j‰id->status), Admin osio
+function haeVaraukset(kayttaja_id) {  //Tee: hakee k√§ytt√§j√§n varaukset/ lainat (k√§ytt√§j√§id->status), (Admin osio?: Tehd√§√§nk√∂ adminille mahdollisuus hakea varauksia)
     $.get(
         "http://localhost:3001/varaus/", kayttaja_id
     ).done(function (data, textStatus, jqXHR) {
         $("#varauksettaulu").empty(); //Poistetaan vanhat arvot taulukosta
 
         if (data.length == 0) {
-            alert("Antamillasi hakuehdoilla ei lˆytynyt varauksia!");
+            alert("Antamillasi hakuehdoilla ei l√∂ytynyt varauksia!");
         } else {
             data.forEach(function (varaus) {
                 $("#varauksettaulu").append(
@@ -85,14 +85,14 @@ function haeVaraukset(kayttaja_id) {  //Tee: hakee k‰ytt‰j‰n varaukset/ lainat (
     });
 }
 // Lainojen haku
-function haeLainat(kayttaja_id) {  //Tee: hakee k‰ytt‰j‰n varaukset/ lainat (k‰ytt‰j‰id->status), Admin osio
+function haeLainat(kayttaja_id) {  //Tee: hakee k√§ytt√§j√§n varaukset/ lainat (k√§ytt√§j√§id->status), (Admin osio: sama kuin ylem√§p√§n√§)
     $.get(
         "http://localhost:3001/laina/", kayttaja_id
     ).done(function (data, textStatus, jqXHR) {
         $("#lainattaulu").empty(); //Poistetaan vanhat arvot taulukosta
 
         if (data.length == 0) {
-            alert("Antamillasi hakuehdoilla ei lˆytynyt lainoja!");
+            alert("Antamillasi hakuehdoilla ei l√∂ytynyt lainoja!");
         } else {
             data.forEach(function (varaus) {
                 $("#varauksettaulu").append(
@@ -115,21 +115,21 @@ function haeLainat(kayttaja_id) {  //Tee: hakee k‰ytt‰j‰n varaukset/ lainat (k‰y
 function muutaKayttajatiedot(data, id) {
     $.ajax(
         {
-            url: "http://localhost:3001/kayttaja/muuta/" + sarjanro,
+            url: "http://localhost:3001/kayttaja/" + id,
             method: 'put',
             data: data
         }).done(function (data, textStatus, jqXHR) {
             // Haetaan data uudelleen
             $("#hakulomake").submit();
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            // Suoriteaan, jos kutsu ep‰onnistuu
-            console.log("Kutsu ep‰onnistui: " + errorThrown);
+            // Suoriteaan, jos kutsu ep√§onnistuu
+            console.log("Kutsu ep√§onnistui: " + errorThrown);
         });
 }
 
-function avaaKayttajaMuutos(sarjanro) {          //TEHTY
+function avaaKayttajaMuutos(id) {          //TEHTY
     $.get(
-        "http://localhost:3001/kayttaja/muuta/" + sarjanro
+        "http://localhost:3001/kayttaja/" + id
     ).done(function (data, textStatus, jqXHR) {
         $("#id_muutos").val(data.id);
         $("#tunnus_muutos").val(data.tunnus);
