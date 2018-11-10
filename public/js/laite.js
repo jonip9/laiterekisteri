@@ -57,7 +57,7 @@ $(function () {
                         return false;
                     } else {
                         var lisattyData = $("#lisayslomake").serialize();
-                        lis‰‰Laite(lisattyData);
+                        lis√§√§Laite(lisattyData);
                         $(this).dialog("close");
 
                         $("#lisayslomake")[0].reset();
@@ -129,10 +129,10 @@ $(function () {
                         alert('Anna arvo kaikki kenttiin!');
                         return false;
                     }
-                                   /* else if (      //Pit‰‰ tehd‰ logiikka tarkistaa meneekˆ varauspvm edelt‰vien p‰‰lle
+                                   /* else if (      //Pit√§√§ tehd√§ logiikka tarkistaa meneek√∂ varauspvm edelt√§vien p√§√§lle
 
                                         ) {
-                                        alert('Varaus menee muiden varasuten p‰‰lle!');
+                                        alert('Varaus menee muiden varasuten p√§√§lle!');
                                         return false;
                                     } */else {
                         var lisattyVarausData = $("#uusivaraus").serialize();
@@ -157,13 +157,13 @@ $(function () {
 
 function haeLaitteet(hakuehdot) {                   //TEHTY
     $.get(
-        "http://localhost:3001/laite/",
+        "http://localhost:3001/laite",
         hakuehdot   // Hakuehdot muodossa nimi=kalle&osoite=teku
     ).done(function (data, textStatus, jqXHR) {
         $("#laitetaulu").empty(); //Poistetaan vanhat arvot taulukosta
 
         if (data.length == 0) {
-            alert("Antamillasi hakuehdoilla ei lˆytynyt varauksia!");
+            alert("Antamillasi hakuehdoilla ei l√∂ytynyt varauksia!");
         } else {
             data.forEach(function (laite) {
                 $("#laitetaulu").append(
@@ -180,7 +180,7 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
                     "</tr>"
                 );
             });
-        } /*else //tee t‰m‰ hakuehto kuntoon, ja katso viel‰ Adminin varausmuutos kuntoon
+        } /*else //tee t√§m√§ hakuehto kuntoon, ja katso viel√§ Adminin varausmuutos kuntoon
                             {
                                 data.forEach(function (laite) {
                                     $("#laitetaulu").append(
@@ -206,9 +206,9 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
     });
 }
 
-function varaushistoria(sarjanro) {
+function varaushistoria(sarjanro) {     //Tee: Mit√§ tietoja hakee katsottaessa varaushistoriaa ja miten koko uuden varauksen teko toimii
     $.get(
-        "http://localhost:3001/varaus/", sarjanro
+        "http://localhost:3001/varaus/", sarjanro //t√§m√§ linkki pit√§√§ korjata
     ).done(function (data, textStatus, jqXHR) {
         $("#varaushistoriataulu").empty(); //Poistetaan vanhat arvot taulukosta
 
@@ -227,16 +227,16 @@ function varaushistoria(sarjanro) {
 
         $("#laite_id").val(sarjanro);
         $("#status").val(data.status);
-        $("#kayttaja_id").val();  // HAE sis‰‰nkirjautuneen k‰ytt‰j‰n id
+        $("#kayttaja_id").val();  // HAE sis√§√§nkirjautuneen k√§ytt√§j√§n id
 
         $("#dialogi_varaushistoria").dialog("open");
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
-function lisaaVaraus(lisattyVarausData) {
+function lisaaVaraus(lisattyVarausData) {      //T√§m√§n sis√§lt√§ viel√§ pit√§√§ varmistaa kun varaaminen on tehty kuntoon
     $.post(
-        "http://localhost:3001/varaus/lisaa/",
+        "http://localhost:3001/varaus/lisaa/",  //Linkki oikeaksi
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
         $("#hakulomake").submit();              //onko tarpeellinen
@@ -253,7 +253,7 @@ function lisaaVaraus(lisattyVarausData) {
 
 function lisaaLaite(lisattyData) {
     $.post(
-        "http://localhost:3001/laite/lisaa/",
+        "http://localhost:3001/laite",
         lisattyData
     ).done(function (data, textStatus, jqXHR) {
         $("#hakulomake").submit();
@@ -262,17 +262,17 @@ function lisaaLaite(lisattyData) {
     });
 }
 
-function poistaLaite(sarjanro) {            //Tarkista onko varauksia ja poisto jos ei
+function poistaLaite(sarjanro) {            
     $.ajax(
         {
-            url: "http://localhost:3001/laite/poista/" + sarjanro,
+            url: "http://localhost:3001/laite/" + sarjanro,
             method: 'delete'
         }).done(function (data, textStatus, jqXHR) {
             // Haetaan data uudelleen
             $("#hakulomake").submit();
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            // Suoriteaan, jos kutsu ep‰onnistuu
-            console.log("Kutsu ep‰onnistui: " + errorThrown);
+            // Suoriteaan, jos kutsu ep√§onnistuu
+            console.log("Kutsu ep√§onnistui: " + errorThrown);
         });
 }
 
@@ -283,19 +283,19 @@ function poistaLaite(sarjanro) {            //Tarkista onko varauksia ja poisto 
 function muutaLaite(data, sarjanro) {
     $.ajax(
         {
-            url: "http://localhost:3001/laite/muuta/" + sarjanro,
+            url: "http://localhost:3001/laite/" + sarjanro,
             method: 'put',
             data: data
         }).done(function (data, textStatus, jqXHR) {
             // Haetaan data uudelleen
             $("#hakulomake").submit();
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            // Suoriteaan, jos kutsu ep‰onnistuu
-            console.log("Kutsu ep‰onnistui: " + errorThrown);
+            // Suoriteaan, jos kutsu ep√§onnistuu
+            console.log("Kutsu ep√§onnistui: " + errorThrown);
         });
 }
 
-function avaaMuutosLomake(sarjanro) {          //TEHTY
+function avaaMuutosLomake(sarjanro) {          // Miten t√§m√§n laita index.js verraten; t√§m√§ siis hakee laitteen muutos dialogiin valmiiksi muutettavan laitteen tiedot
     $.get(
         "http://localhost:3001/laite/muuta/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
