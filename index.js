@@ -52,10 +52,10 @@ app.get('/client', (req, res) => {
 });
 
 app.route('/kayttaja')
+  .get(laiterekisteriController.fetchUserData)
   .post(laiterekisteriController.registerUser);
 
 app.route('/kayttaja/:id')
-  .get(laiterekisteriController.fetchUserData)
   .put(laiterekisteriController.updateUser);
 
 app.route('/laite')
