@@ -125,14 +125,12 @@ function muutaKayttajatiedot(data, id) {
         });
 }
 
-function avaaKayttajaMuutos(id) {          //Tämä ei saa id:tä vielä mistään, pitäisikö hakea userdata tunnuksen kautta?
+function avaaKayttajaMuutos() {          
     $.get(
-        "http://localhost:3000/kayttaja/" + id
+        "http://localhost:3000/kayttaja", tunnus 
     ).done(function (data, textStatus, jqXHR) {
         $("#id_muutos").val(data.id);
         $("#tunnus_muutos").val(data.tunnus);
-        $("#salasana_muutos").val(data.salasana);
-        $("#salasana2_muutos").val(data.salasana);
         $("#nimi_muutos").val(data.nimi);
 
         $("#dialogi_kayttajamuutos").dialog("open");
