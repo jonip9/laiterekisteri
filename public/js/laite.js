@@ -293,11 +293,10 @@ function muutaLaite(data, sarjanro) {
         });
 }
 
-function avaaMuutosLomake(sarjanro) {          // Miten tämän laita index.js verraten; tämä siis hakee laitteen muutos dialogiin valmiiksi muutettavan laitteen tiedot
+function avaaMuutosLomake(sarjanro) {         
     $.get(
-        "http://localhost:3000/laite/muuta/" + sarjanro
+        "http://localhost:3000/laite/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
-        $("#sarjanro_muutos").val(data.sarjanro);
         $("#kategoria_muutos").val(data.kategoria);
         $("#nimi_muutos").val(data.nimi);
         $("#merkki_muutos").val(data.merkki);
