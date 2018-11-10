@@ -45,8 +45,7 @@ $(function () {
             {
                 text: "Tallenna",
                 click: function () {
-                    if ($.trim($("#sarjanro_lisays").val()) === "" ||
-                        $.trim($("#kategoria_lisays").val()) === "" ||
+                    if ($.trim($("#kategoria_lisays").val()) === "" ||
                         $.trim($("#nimi_lisays").val()) === "" ||
                         $.trim($("#merkki_lisays").val()) === "" ||
                         $.trim($("#malli_lisays").val()) === "" ||
@@ -87,8 +86,7 @@ $(function () {
             {
                 text: "Tallenna",
                 click: function () {
-                    if ($.trim($("#sarjanro_muutos").val()) === "" ||
-                        $.trim($("#kategoria_muutos").val()) === "" ||
+                    if ($.trim($("#kategoria_muutos").val()) === "" ||
                         $.trim($("#nimi_muutos").val()) === "" ||
                         $.trim($("#merkki_muutos").val()) === "" ||
                         $.trim($("#malli_muutos").val()) === "" ||
