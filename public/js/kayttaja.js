@@ -8,7 +8,7 @@ $(function () {
     });
 
     $("#muutatietoja").click(function () {
-        avaaKayttajaMuutos();
+        avaaKayttajaMuutos();                   
         $("#dialogi_kayttajanmuutos").dialog("open");
     });
 
@@ -125,7 +125,7 @@ function muutaKayttajatiedot(data, id) {
         });
 }
 
-function avaaKayttajaMuutos(id) {          //TEHTY
+function avaaKayttajaMuutos(id) {          //Tämä ei saa id:tä vielä mistään, pitäisikö hakea userdata tunnuksen kautta?
     $.get(
         "http://localhost:3000/kayttaja/" + id
     ).done(function (data, textStatus, jqXHR) {
