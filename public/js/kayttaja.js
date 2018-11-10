@@ -60,7 +60,7 @@ $(function () {
 
 function haeVaraukset(kayttaja_id) {  //Tee: hakee käyttäjän varaukset/ lainat (käyttäjäid->status), (Admin osio?: Tehdäänkö adminille mahdollisuus hakea varauksia)
     $.get(
-        "http://localhost:3001/varaus/", kayttaja_id
+        "http://localhost:3000/varaus/", kayttaja_id
     ).done(function (data, textStatus, jqXHR) {
         $("#varauksettaulu").empty(); //Poistetaan vanhat arvot taulukosta
 
@@ -87,7 +87,7 @@ function haeVaraukset(kayttaja_id) {  //Tee: hakee käyttäjän varaukset/ laina
 // Lainojen haku
 function haeLainat(kayttaja_id) {  //Tee: hakee käyttäjän varaukset/ lainat (käyttäjäid->status), (Admin osio: sama kuin ylemäpänä)
     $.get(
-        "http://localhost:3001/laina/", kayttaja_id
+        "http://localhost:3000/laina/", kayttaja_id
     ).done(function (data, textStatus, jqXHR) {
         $("#lainattaulu").empty(); //Poistetaan vanhat arvot taulukosta
 
@@ -115,7 +115,7 @@ function haeLainat(kayttaja_id) {  //Tee: hakee käyttäjän varaukset/ lainat (
 function muutaKayttajatiedot(data, id) {
     $.ajax(
         {
-            url: "http://localhost:3001/kayttaja/" + id,
+            url: "http://localhost:3000/kayttaja/" + id,
             method: 'put',
             data: data
         }).done(function (data, textStatus, jqXHR) {
@@ -129,7 +129,7 @@ function muutaKayttajatiedot(data, id) {
 
 function avaaKayttajaMuutos(id) {          //TEHTY
     $.get(
-        "http://localhost:3001/kayttaja/" + id
+        "http://localhost:3000/kayttaja/" + id
     ).done(function (data, textStatus, jqXHR) {
         $("#id_muutos").val(data.id);
         $("#tunnus_muutos").val(data.tunnus);
