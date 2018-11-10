@@ -11,7 +11,9 @@ $(function () {
             {
                 text: "Save",
                 click: function () {
-                    if ($.trim($("#reg_tunnus").val()) === "" || $.trim($("#reg_ss").val()) === "" || $.trim($("#reg_nimi").val()) === "" || $.trim($("#reg_email").val()) === "") {
+                    if ($.trim($("#reg_tunnus").val()) === "" || 
+                        $.trim($("#reg_ss").val()) === "" || 
+                        $.trim($("#reg_nimi").val()) === "" ||) {
                         alert('Anna arvo kaikkiin kenttiin!');
                         return false;
                     } else if (
