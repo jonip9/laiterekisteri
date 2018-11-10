@@ -157,7 +157,7 @@ $(function () {
 
 function haeLaitteet(hakuehdot) {                   //TEHTY
     $.get(
-        "http://localhost:3001/laite",
+        "http://localhost:3000/laite",
         hakuehdot   // Hakuehdot muodossa nimi=kalle&osoite=teku
     ).done(function (data, textStatus, jqXHR) {
         $("#laitetaulu").empty(); //Poistetaan vanhat arvot taulukosta
@@ -208,7 +208,7 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
 
 function varaushistoria(sarjanro) {     //Tee: Mitä tietoja hakee katsottaessa varaushistoriaa ja miten koko uuden varauksen teko toimii
     $.get(
-        "http://localhost:3001/varaus/", sarjanro //tämä linkki pitää korjata
+        "http://localhost:3000/varaus/", sarjanro //tämä linkki pitää korjata
     ).done(function (data, textStatus, jqXHR) {
         $("#varaushistoriataulu").empty(); //Poistetaan vanhat arvot taulukosta
 
@@ -236,7 +236,7 @@ function varaushistoria(sarjanro) {     //Tee: Mitä tietoja hakee katsottaessa 
 }
 function lisaaVaraus(lisattyVarausData) {      //Tämän sisältä vielä pitää varmistaa kun varaaminen on tehty kuntoon
     $.post(
-        "http://localhost:3001/varaus/lisaa/",  //Linkki oikeaksi
+        "http://localhost:3000/varaus/lisaa/",  //Linkki oikeaksi
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
         $("#hakulomake").submit();              //onko tarpeellinen
@@ -253,7 +253,7 @@ function lisaaVaraus(lisattyVarausData) {      //Tämän sisältä vielä pitä�
 
 function lisaaLaite(lisattyData) {
     $.post(
-        "http://localhost:3001/laite",
+        "http://localhost:3000/laite",
         lisattyData
     ).done(function (data, textStatus, jqXHR) {
         $("#hakulomake").submit();
@@ -265,7 +265,7 @@ function lisaaLaite(lisattyData) {
 function poistaLaite(sarjanro) {            
     $.ajax(
         {
-            url: "http://localhost:3001/laite/" + sarjanro,
+            url: "http://localhost:3000/laite/" + sarjanro,
             method: 'delete'
         }).done(function (data, textStatus, jqXHR) {
             // Haetaan data uudelleen
@@ -283,7 +283,7 @@ function poistaLaite(sarjanro) {
 function muutaLaite(data, sarjanro) {
     $.ajax(
         {
-            url: "http://localhost:3001/laite/" + sarjanro,
+            url: "http://localhost:3000/laite/" + sarjanro,
             method: 'put',
             data: data
         }).done(function (data, textStatus, jqXHR) {
@@ -297,7 +297,7 @@ function muutaLaite(data, sarjanro) {
 
 function avaaMuutosLomake(sarjanro) {          // Miten tämän laita index.js verraten; tämä siis hakee laitteen muutos dialogiin valmiiksi muutettavan laitteen tiedot
     $.get(
-        "http://localhost:3001/laite/muuta/" + sarjanro
+        "http://localhost:3000/laite/muuta/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
         $("#sarjanro_muutos").val(data.sarjanro);
         $("#kategoria_muutos").val(data.kategoria);
