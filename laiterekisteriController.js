@@ -56,7 +56,7 @@ module.exports = {
   },
 
   fetchUserData: (req, res) => {
-    connection.query('SELECT tunnus, nimi FROM kayttaja WHERE id = ?',
+    connection.query('SELECT tunnus, nimi, id FROM kayttaja WHERE id = ?',
       [req.params.id], (error, results, fields) => {
         if (error) {
           console.log(error.sqlMessage);
