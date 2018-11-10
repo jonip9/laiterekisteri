@@ -1,6 +1,6 @@
 $(function () {
     tunnus = $("#tunnus"),
-        ss = $("#ss")
+    salasana = $("#ss")
 
     $("#register").click(function () {
         $("#dialogi_register").dialog("open");
