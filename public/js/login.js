@@ -40,8 +40,8 @@ $(function () {
         modal: true,
         resizable: false
     });
-    //tarkista onko tunnus uusi
-    function regKayttaja(reglauseke) {
+   
+    function regKayttaja(reglauseke) {  //Tarkista onko tunnus uusi
         $.post(
             "http://localhost:3001/kayttaja",
             reglauseke
