@@ -16,7 +16,7 @@ $(function () {
                         return false;
                     } else if (
                         $.trim($("#reg_ss").val()) != $.trim($("#reg_ss2").val())) {
-                        alert('Antamasi salasanat eivät täsmää!');
+                        alert('Antamasi salasanat eivÃ¤t tÃ¤smÃ¤Ã¤!');
                         return false;
                     } else {
                         var reglauseke = $("#reglomake").serialize();
@@ -43,7 +43,7 @@ $(function () {
     //tarkista onko tunnus uusi
     function regKayttaja(reglauseke) {
         $.post(
-            "http://localhost:3001/kayttaja/lisaa/",
+            "http://localhost:3001/kayttaja",
             reglauseke
         ).done(function (data, textStatus, jqXHR) {
             $("#hakulomake").submit();
@@ -56,13 +56,13 @@ $(function () {
     $("#kirjaudu").click(function () {
         function login() {
             $.get(
-                "http://localhost:3001/kayttaja",
+                "http://localhost:3001/login",
                 "tunnus=" + tunnus + "&salasana=" + ss   // Hakuehdot muodossa nimi=kalle&osoite=teku
             ).done(function (data, textStatus, jqXHR) {
                 $("#asiakkaat").empty(); //Poistetaan vanhat arvot taulukosta
 
                 if (data.length == 0) {
-                    alert("Tunnus tai salasana väärin!");
+                    alert("Tunnus tai salasana vÃ¤Ã¤rin!");
                 } else {
                     $("#sisalto").removeClass("hidden");
                 }
@@ -71,38 +71,4 @@ $(function () {
             });
         }
     });
-    /* TARKISTA + MUOKAA TÄMÄ JOS TÄTÄ TARVITAAN!!!!
-     *
-
-     * function tulos() {
-        $.get(
-            "http://localhost:3001/kayttaja",
-            hakuehdot   // Hakuehdot muodossa nimi=kalle&osoite=teku
-        ).done(function (data, textStatus, jqXHR) {
-            $("#asiakkaat").empty(); //Poistetaan vanhat arvot taulukosta
-
-            if (data.length == 0) {
-                alert("Antamillasi hakuehdoilla ei löytynyt asiakkaita!");
-            } else {
-                data.forEach(function (asiakas) {
-                    $("#asiakkaat").append(
-                        "<tr>" +
-                        "<td>" + asiakas.Avain + "</td>" +
-                        "<td>" + asiakas.Nimi + "</td>" +
-                        "<td>" + asiakas.Osoite + "</td>" +
-                        "<td>" + asiakas.Postinro + "</td>" +
-                        "<td>" + asiakas.Postitmp + "</td>" +
-                        "<td>" + asiakas.Luontipvm + "</td>" +
-                        "<td>" + asiakas.Selite + "</td>" +
-                        "<td><button onclick=\"poistaAsiakas(" + asiakas.Avain + ")\">Poista asiakas</button></td>" +
-                        "<td><button onclick=\"avaaMuutosLomake(" + asiakas.Avain + ")\">Muuta asiakas</button></td>" +
-                        "</tr>"
-                    );
-                });
-            }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("status=" + textStatus + ", " + errorThrown);
-        });
-    }*/
-
 });
