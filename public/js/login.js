@@ -55,13 +55,12 @@ $(function () {
     }
 
 
-    $("#kirjaudu").click(function () {
+    $("#kirjaudu").click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein
         function login() {
-            $.get(
+            $.post(
                 "http://localhost:3000/login",
-                "tunnus=" + tunnus + "&salasana=" + ss   // Hakuehdot muodossa nimi=kalle&osoite=teku
+                "tunnus=" + tunnus + "&salasana=" + ss   
             ).done(function (data, textStatus, jqXHR) {
-                $("#asiakkaat").empty(); //Poistetaan vanhat arvot taulukosta
 
                 if (data.length == 0) {
                     alert("Tunnus tai salasana väärin!");
