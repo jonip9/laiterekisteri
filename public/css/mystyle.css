@@ -18,13 +18,10 @@ th, td {
     margin: 1em;
 }
 
-#dialogi, #laitedialogi, #dialogi_lisays, #dialogi_muutos {
-    display: none;
-}
 
-    #dialogi input[type="text"] {
-        display: block;
-    }
+#dialogi input[type="text"] {
+    display: block;
+}
 
 .adminjutut {
     visibility: hidden;
