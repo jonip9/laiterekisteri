@@ -1,6 +1,7 @@
 $(function () {
     tunnus = $("#tunnus"),
-    salasana = $("#ss")
+    salasana = $("#ss")    
+    var adminkayttaja = false;  
 
     $("#register").click(function () {
         $("#dialogi_register").dialog("open");
@@ -43,19 +44,35 @@ $(function () {
         resizable: false
     });
    
-    function regKayttaja(reglauseke) {  //Tarkista onko tunnus uusi
-        $.post(
-            "http://localhost:3000/kayttaja",
-            reglauseke
-        ).done(function (data, textStatus, jqXHR) {
-            $("#hakulomake").submit();
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("status=" + textStatus + ", " + errorThrown);
-        });
+    function regKayttaja(reglauseke) {       
+        function onkoadmin() {          
+            $.get(
+                "http://localhost:3000/kayttaja", tunnus 
+            ).done(function (data, textStatus, jqXHR) {
+                if( data.lenght == 0) {      
+                    $.post(
+                        "http://localhost:3000/kayttaja",
+                        reglauseke
+                    ).done(function (data, textStatus, jqXHR) {
+                        $("#hakulomake").submit();
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("status=" + textStatus + ", " + errorThrown);
+                    });
+                } else {
+                    alert("Anatamasi tunnus on jo käytössä!") 
+                }       
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("status=" + textStatus + ", " + errorThrown);
+         });
+}
+        
+        
+        
+
     }
 
 
-    $("#kirjaudu").click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein
+    $("#kirjaudu").click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein --pitäisi olla
         function login() {
             $.post(
                 "http://localhost:3000/login",
@@ -66,6 +83,7 @@ $(function () {
                     alert("Tunnus tai salasana väärin!");
                 } else {
                     $("#sisalto").removeClass("hidden");
+                    onkoadmin();
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log("status=" + textStatus + ", " + errorThrown);
@@ -73,3 +91,14 @@ $(function () {
         }
     });
 });
+
+function onkoadmin() {          
+    $.get(
+        "http://localhost:3000/kayttaja", tunnus 
+    ).done(function (data, textStatus, jqXHR) {
+        if( data.id == 99)
+            adminkayttaja = true;
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log("status=" + textStatus + ", " + errorThrown);
+    });
+}
