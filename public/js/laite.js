@@ -1,8 +1,5 @@
 $(function () {
-    var adminkayttaja = false;
 
-    
-    
     $("#hakulomake").submit(function (event) {
         event.preventDefault();
 
