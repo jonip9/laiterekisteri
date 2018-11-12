@@ -82,7 +82,6 @@ $(function () {
                 if (data.length == 0) {
                     alert("Tunnus tai salasana väärin!");
                 } else {
-                    $("#sisalto").removeClass("hidden");
                     onkoadmin();
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
