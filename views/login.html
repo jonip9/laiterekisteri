@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>Sisäänkirjautuminen</title>
+
+    <script src="/js/login.js"></script>
+</head>
+<body>
+
+    <p>Kirjaudu sisään järjestelmään</p>
+    <form id="loginForm" action="/login" method="post">
+        <label for="tunnus">Tunnus</label>
+        <input type="text" name="tunnus" />
+        <label for="ss">Salasana</label>
+        <input type="text" name="ss" />
+        <input type="submit" id="kirjaudu" name="send" value="Kirjaudu" />
+    </form>
+    <button id="register">Rekisteröidy</button>
+    <div id="dialogi_register" title="Rekisteröityminen">
+        <form id="reg_lomake">
+            <input type="text" id="reg_tunnus" name="tunnus" placeholder="Tunnus">
+            <input type="text" id="reg_ss" name="talasana" placeholder="Salasana">
+            <input type="text" id="reg_ss2" name="vahvista salasana" placeholder="Vahvista salasana">
+            <input type="text" id="reg_nimi" name="nimi" placeholder="Nimi">
+        </form>
+    </div>
+</body>
+</html>
