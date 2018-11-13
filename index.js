@@ -77,6 +77,6 @@ app.listen(port, hostlocal, () => {
   console.log(`Local server running AT http://${hostlocal}:${port}/`);
 });
 
-app.listen(port, hostname, () => {
+/* app.listen(port, hostname, () => {
   console.log(`Public server running AT http://${hostname}:${port}/`);
-});
+}); */
