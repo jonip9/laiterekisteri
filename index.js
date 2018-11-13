@@ -1,7 +1,7 @@
 const express = require('express');
 const cons = require('consolidate');
 const bodyParser = require('body-parser');
-// let http = require('http');
+const http = require('http');
 const session = require('express-session');
 const path = require('path');
 const laiterekisteriController = require('./laiterekisteriController');
@@ -36,8 +36,8 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
   let msg = 'Tervetuloa';
 
-  if (req.query.message) {
-    msg = req.query.message;
+  if (req.session.error) {
+    msg = req.session.error;
   }
 
   res.render('login', {

@@ -11,6 +11,8 @@
 </head>
 <body>
 
+    {{message}}
+
     <p>Kirjaudu sisään järjestelmään</p>
     <form id="loginForm" action="/login" method="post">
         <label for="tunnus">Tunnus</label>
@@ -19,6 +21,7 @@
         <input type="text" id="salasana" name="salasana" />
         <input type="submit" id="kirjaudu" name="send" value="Kirjaudu" />
     </form>
+
     <button id="register">Rekisteröidy</button>
     <div id="dialogi_register" title="Rekisteröityminen">
         <form id="reg_lomake">
@@ -26,6 +29,8 @@
             <input type="text" id="reg_ss" name="salasana" placeholder="Salasana">
             <input type="text" id="reg_ss2" name="vahvista salasana" placeholder="Vahvista salasana">
             <input type="text" id="reg_nimi" name="nimi" placeholder="Nimi">
+
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </form>
     </div>
 </body>

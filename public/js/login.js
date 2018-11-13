@@ -1,100 +1,93 @@
-$(function () {
-    tunnus = $("#tunnus").val();
-    salasana = $("#salasana").val();
-    var adminkayttaja = false;
+/* eslint-disable no-undef */
+/* eslint-disable quotes */
+$(() => {
+  let tunnus = $("#tunnus").val();
+  let salasana = $("#salasana").val();
+  let adminkayttaja = false;
+  let dialog;
+  let form;
 
-    $("#register").click(function () {
-        $("#dialogi_register").dialog("open");
+  function regKayttaja() {
+    $.post(
+      "http://localhost:3000/kayttaja",
+      { tunnus: $("#reg_tunnus").val(), salasana: $("#reg_ss").val(), nimi: $("#reg_nimi").val() },
+    ).done(() => {
+      dialog.dialog("close");
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      console.log("status=" + textStatus + ", " + errorThrown);
+      alert('Käyttäjä on jo olemassa!');
     });
-    
-    $("#dialogi_register").dialog({
-        autoOpen: false,
-        buttons: [
-            {
-                text: "Save",
-                click: function () {
-                    if ($.trim($("#reg_tunnus").val()) === "" ||
-                        $.trim($("#reg_ss").val()) === "" ||
-                        $.trim($("#reg_nimi").val()) === "" ||) {
-                        alert('Anna arvo kaikkiin kenttiin!');
-                        return false;
-                    } else if (
-                        $.trim($("#reg_ss").val()) != $.trim($("#reg_ss2").val())) {
-                        alert('Antamasi salasanat eivät täsmää!');
-                        return false;
-                    } else {
-                        var reglauseke = $("#reglomake").serialize();
-                        console.log("Reglauseke: " + reglauseke);
-                        regKayttaja(reglauseke);
-                        $("#reg_lomake")[0].reset();
-                        $(this).dialog("close");
-                    }
-                },
-            },
-            {
-                text: "Peruuta",
-                click: function () {
-                    $(this).dialog("close");
-                    $("#reg_lomake")[0].reset();
-                },
-            }
-        ],
-        closeOnEscape: false,
-        draggable: false,
-        modal: true,
-        resizable: false
-    });
+  }
 
-    function regKayttaja(reglauseke) {
-        function onkoadmin() {
-            $.get(
-                "http://localhost:3000/kayttaja", tunnus
-            ).done(function (data, textStatus, jqXHR) {
-                if (data.lenght == 0) {
-                    $.post(
-                        "http://localhost:3000/kayttaja",
-                        reglauseke
-                    ).done(function (data, textStatus, jqXHR) {
-                        $("#hakulomake").submit();
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log("status=" + textStatus + ", " + errorThrown);
-                    });
-                } else {
-                    alert("Anatamasi tunnus on jo käytössä!")
-                }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log("status=" + textStatus + ", " + errorThrown);
-            });
-        }
-    }
+  dialog = $("#dialogi_register").dialog({
+    autoOpen: false,
+    closeOnEscape: false,
+    draggable: false,
+    modal: true,
+    resizable: false,
+    buttons: [
+      {
+        text: "Lähetä",
+        click: () => {
+          if ($.trim($("#reg_tunnus").val()) === "" || $.trim($("#reg_ss").val()) === "" || $.trim($("#reg_nimi").val()) === "") {
+            alert('Anna arvo kaikkiin kenttiin!');
+            return false;
+          }
+          if (
+            $.trim($("#reg_ss").val()) !== $.trim($("#reg_ss2").val())) {
+            alert('Antamasi salasanat eivät täsmää!');
+            return false;
+          }
+          regKayttaja();
+        },
+      },
+      {
+        text: "Peruuta",
+        click: () => {
+          dialog.dialog("close");
+        },
+      },
+    ],
+    close: () => {
+      form[0].reset();
+    },
+  });
 
+  form = dialog.find("form").on("submit", (event) => {
+    event.preventDefault();
+    regKayttaja();
+  });
 
-    /* $("#kirjaudu").click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein --pitäisi olla
-        function login() {
-            $.post(
-                "http://localhost:3000/login",
-                "tunnus=" + tunnus + "&salasana=" + ss   
-            ).done(function (data, textStatus, jqXHR) {
+  $("#register").click(() => {
+    dialog.dialog("open");
+  });
 
-                if (data.length == 0) {
-                    alert("Tunnus tai salasana väärin!");
-                } else {
-                    onkoadmin();
-                }
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                console.log("status=" + textStatus + ", " + errorThrown);
-            });
-        }
-    }); */
+  /* $("#kirjaudu").click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein --pitäisi olla
+      function login() {
+          $.post(
+              "http://localhost:3000/login",
+              "tunnus=" + tunnus + "&salasana=" + ss   
+          ).done(function (data, textStatus, jqXHR) {
+
+              if (data.length == 0) {
+                  alert("Tunnus tai salasana väärin!");
+              } else {
+                  onkoadmin();
+              }
+          }).fail(function (jqXHR, textStatus, errorThrown) {
+              console.log("status=" + textStatus + ", " + errorThrown);
+          });
+      }
+  }); */
 });
 
-function onkoadmin() {
-    $.get(
-        "http://localhost:3000/kayttaja", tunnus
-    ).done(function (data, textStatus, jqXHR) {
-        if (data.id == 99)
-            adminkayttaja = true;
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.log("status=" + textStatus + ", " + errorThrown);
-    });
-}
+/* function onkoadmin() {
+  $.get(
+    "http://localhost:3000/kayttaja", tunnus
+  ).done(function (data, textStatus, jqXHR) {
+    if (data.id == 99)
+      adminkayttaja = true;
+  }).fail(function (jqXHR, textStatus, errorThrown) {
+    console.log("status=" + textStatus + ", " + errorThrown);
+  });
+} */
