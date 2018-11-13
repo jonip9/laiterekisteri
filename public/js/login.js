@@ -1,19 +1,20 @@
 $(function () {
-    tunnus = $("#tunnus"),
-    salasana = $("#ss")    
-    var adminkayttaja = false;  
+    tunnus = $("#tunnus").val();
+    salasana = $("#salasana").val();
+    var adminkayttaja = false;
 
     $("#register").click(function () {
         $("#dialogi_register").dialog("open");
     });
+    
     $("#dialogi_register").dialog({
         autoOpen: false,
         buttons: [
             {
                 text: "Save",
                 click: function () {
-                    if ($.trim($("#reg_tunnus").val()) === "" || 
-                        $.trim($("#reg_ss").val()) === "" || 
+                    if ($.trim($("#reg_tunnus").val()) === "" ||
+                        $.trim($("#reg_ss").val()) === "" ||
                         $.trim($("#reg_nimi").val()) === "" ||) {
                         alert('Anna arvo kaikkiin kenttiin!');
                         return false;
@@ -43,13 +44,13 @@ $(function () {
         modal: true,
         resizable: false
     });
-   
-    function regKayttaja(reglauseke) {       
-        function onkoadmin() {          
+
+    function regKayttaja(reglauseke) {
+        function onkoadmin() {
             $.get(
-                "http://localhost:3000/kayttaja", tunnus 
+                "http://localhost:3000/kayttaja", tunnus
             ).done(function (data, textStatus, jqXHR) {
-                if( data.lenght == 0) {      
+                if (data.lenght == 0) {
                     $.post(
                         "http://localhost:3000/kayttaja",
                         reglauseke
@@ -59,20 +60,16 @@ $(function () {
                         console.log("status=" + textStatus + ", " + errorThrown);
                     });
                 } else {
-                    alert("Anatamasi tunnus on jo käytössä!") 
-                }       
+                    alert("Anatamasi tunnus on jo käytössä!")
+                }
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log("status=" + textStatus + ", " + errorThrown);
-         });
-}
-        
-        
-        
-
+            });
+        }
     }
 
 
-    $("#kirjaudu").click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein --pitäisi olla
+    /* $("#kirjaudu").click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein --pitäisi olla
         function login() {
             $.post(
                 "http://localhost:3000/login",
@@ -88,14 +85,14 @@ $(function () {
                 console.log("status=" + textStatus + ", " + errorThrown);
             });
         }
-    });
+    }); */
 });
 
-function onkoadmin() {          
+function onkoadmin() {
     $.get(
-        "http://localhost:3000/kayttaja", tunnus 
+        "http://localhost:3000/kayttaja", tunnus
     ).done(function (data, textStatus, jqXHR) {
-        if( data.id == 99)
+        if (data.id == 99)
             adminkayttaja = true;
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
