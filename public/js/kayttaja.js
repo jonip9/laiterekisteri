@@ -26,7 +26,7 @@ $(function () {
                     if ($.trim($("#tunnus_muutos").val()) === "" ||
                         $.trim($("#salasana_muutos").val()) === "" ||
                         $.trim($("#salasana2_muutos").val()) === "" ||
-                        $.trim($("#nimi_muutos").val()) === "" ||) {
+                        $.trim($("#nimi_muutos").val()) === "" ) {
                         alert('Anna arvo kaikki kenttiin!');
                         return false;
                     } else if (
