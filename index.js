@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
 app.post('/login', laiterekisteriController.checkUser);
 
 app.get('/client', (req, res) => {
-  res.sendFile(path.join(`${__dirname}views/client.html`));
+  res.sendFile(path.join(`${__dirname}/views/client.html`));
 });
 
 app.route('/kayttaja')
