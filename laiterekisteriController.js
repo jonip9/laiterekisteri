@@ -23,10 +23,10 @@ module.exports = {
           console.log('Session user: ' + req.session.user);
           return res.redirect('/client');
         }
-        req.session.error = 'Virheellinen salasana';
+        req.session.error = 'Virheellinen salasana.';
         return res.redirect('/');
       }
-      req.session.error = 'Virheellinen käyttäjätunnus';
+      req.session.error = 'Virheellinen käyttäjätunnus.';
       return res.redirect('/');
     });
   },
@@ -38,6 +38,7 @@ module.exports = {
           console.log(error.sqlMessage);
           throw error;
         } else {
+          req.session.success = 'Käyttäjä luotu onnistuneesti.';
           res.send(results);
         }
       });

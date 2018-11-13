@@ -15,7 +15,7 @@ $(() => {
       dialog.dialog("close");
     }).fail((jqXHR, textStatus, errorThrown) => {
       console.log("status=" + textStatus + ", " + errorThrown);
-      alert('Käyttäjä on jo olemassa!');
+      $("#regError").html('<p>Käyttäjä on jo olemassa!</p>');
     });
   }
 
@@ -30,12 +30,12 @@ $(() => {
         text: "Lähetä",
         click: () => {
           if ($.trim($("#reg_tunnus").val()) === "" || $.trim($("#reg_ss").val()) === "" || $.trim($("#reg_nimi").val()) === "") {
-            alert('Anna arvo kaikkiin kenttiin!');
+            $("#regError").html('<p>Anna arvo kaikkiin kenttiin!</p>');
             return false;
           }
           if (
             $.trim($("#reg_ss").val()) !== $.trim($("#reg_ss2").val())) {
-            alert('Antamasi salasanat eivät täsmää!');
+            $("#regError").html('<p>Antamasi salasanat eivät täsmää!</p>');
             return false;
           }
           regKayttaja();

@@ -34,10 +34,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  let msg = 'Tervetuloa';
+  let msg = '';
 
   if (req.session.error) {
     msg = req.session.error;
+  }
+
+  if (req.session.success) {
+    msg = req.session.success;
   }
 
   res.render('login', {
