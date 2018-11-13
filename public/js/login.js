@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable quotes */
 $(() => {
   let tunnus = $("#tunnus").val();
   let salasana = $("#salasana").val();
