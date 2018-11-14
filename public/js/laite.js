@@ -78,7 +78,7 @@ $(function () {
 
 
 
-    //Laitteen muutos dialogi               --TEHTY
+    //Laitteen muutos dialogi               //TEHTY
     $("#dialogi_muutos").dialog({
         autoOpen: false,
         buttons: [
@@ -154,7 +154,7 @@ $(function () {
 
 function haeLaitteet(hakuehdot) {                   //TEHTY
     $.get(
-        "http://localhost:3000/laite"   
+        "http://localhost:3000/laite", hakuehdot   
     ).done(function (data, textStatus, jqXHR) {
         $("#laitetaulu").empty(); 
 
