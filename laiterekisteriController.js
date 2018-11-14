@@ -11,23 +11,23 @@ module.exports = {
   checkUser: (req, res) => {
     const username = req.body.tunnus;
     const password = req.body.salasana;
+    console.log('Käyttäjä: ' + username + ', Salasana: ' + password);
 
     connection.query('SELECT * FROM kayttaja WHERE tunnus = ?', [username], (error, results, fields) => {
       if (error) {
-        res.json({ status: false, message: 'Virhe' });
-      } else if (results.length > 0) {
-        if (password == results[0].salasana) {
-          res.json({ status: true, message: 'OK' });
-          req.session.username = username;
-          res.redirect('/client');
-        } else {
-          res.json({ status: false, message: 'Väärä' });
-          res.redirect('/?message=Virheellinen käyttäjätunnus tai salasana');
-        }
-      } else {
-        res.json({ status: false, message: 'Väärä' });
-        res.redirect('/?message=Virheellinen käyttäjätunnus tai salasana');
+        return res.json({ status: false, message: 'Virhe' });
       }
+      if (results.length > 0) {
+        if (password === results[0].salasana) {
+          req.session.user = username;
+          console.log('Session user: ' + req.session.user);
+          return res.redirect('/client');
+        }
+        req.session.error = 'Virheellinen salasana.';
+        return res.redirect('/');
+      }
+      req.session.error = 'Virheellinen käyttäjätunnus.';
+      return res.redirect('/');
     });
   },
 
@@ -38,6 +38,7 @@ module.exports = {
           console.log(error.sqlMessage);
           throw error;
         } else {
+          req.session.success = 'Käyttäjä luotu onnistuneesti.';
           res.send(results);
         }
       });
@@ -57,7 +58,7 @@ module.exports = {
 
   fetchUserData: (req, res) => {
     connection.query('SELECT tunnus, salasana, nimi, id FROM kayttaja WHERE tunnus = ?',
-      [req.session.username], (error, results, fields) => {
+      [req.session.user], (error, results, fields) => {
         if (error) {
           console.log(error.sqlMessage);
           throw error;
