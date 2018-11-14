@@ -4,7 +4,7 @@ $(function () {
         event.preventDefault();
 
         var hakuehdot = $(this).serialize();
-        haeVaraukset(hakuehdot);
+        haeLaitteet(hakuehdot);
     });
 
     $("#laitteet").click(function () {
@@ -154,10 +154,9 @@ $(function () {
 
 function haeLaitteet(hakuehdot) {                   //TEHTY
     $.get(
-        "http://localhost:3000/laite",
-        hakuehdot   // Hakuehdot muodossa nimi=kalle&osoite=teku
+        "http://localhost:3000/laite"   
     ).done(function (data, textStatus, jqXHR) {
-        $("#laitetaulu").empty(); //Poistetaan vanhat arvot taulukosta
+        $("#laitetaulu").empty(); 
 
         if (data.length == 0) {
             alert("Antamillasi hakuehdoilla ei löytynyt varauksia!");
