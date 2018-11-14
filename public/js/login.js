@@ -47,6 +47,7 @@ $(() => {
       },
     ],
     close: () => {
+      $("#regError").html('');
       form[0].reset();
     },
   });
