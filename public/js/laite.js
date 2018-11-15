@@ -55,7 +55,7 @@ $(function () {
                         return false;
                     } else {
                         var lisattyData = $("#lisayslomake").serialize();
-                        lisääLaite(lisattyData);
+                        lisaaLaite(lisattyData);
                         $(this).dialog("close");
 
                         $("#lisayslomake")[0].reset();
