@@ -12,9 +12,6 @@ $(function () {
         $("#laitedialogi").dialog("open");
     });
 
-    $("lisaalaite").click(function () {
-        $("#dialogi_lisays").dialog("open");
-    });
 
     // Laite dialogi                //TEHTY
     $("#laitedialogi").dialog({
@@ -23,9 +20,17 @@ $(function () {
         width: 800,
         buttons: [
             {
+                text: "Lisää",
+                click: function () {
+                    $("#dialogi_lisays").dialog("open");
+                    $("#hakulomake")[0].reset();
+                },
+            },
+            {
                 text: "Takaisin",
                 click: function () {
                     $(this).dialog("close");
+                    $("#hakulomake")[0].reset();
                 },
             }
         ],
