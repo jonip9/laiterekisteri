@@ -233,7 +233,7 @@ function lisaaVaraus(lisattyVarausData) {      //Tämän sisältö vielä pitä�
         "http://localhost:3000/varaus/lisaa/",  //Linkki oikeaksi
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
-        $("#hakulomake").submit();              //onko tarpeellinen
+        
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
