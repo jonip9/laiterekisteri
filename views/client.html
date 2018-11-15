@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="/css/mystyle.css">
     <title>Asiakkaan käsittely</title>
 
-    <script src="/js/login.js"></script>
     <script src="/js/laite.js"></script>
     <script src="/js/kayttaja.js"></script>
 
@@ -122,12 +121,13 @@
     </div>
 
     <div id="dialogi_kayttajamuutos" title="Muuta käyttäjän tietoja">
+        <div id="muutosError"></div>
         <form id="kayttajanmuutoslomake">
-            <input type="hidden" id="id_muutos" name="id">
-            <input type="text" id="tunnus_muutos" name="tunnus" placeholder="Tunnus" readonly>
-            <input type="text" id="salasana_muutos" name="salasana" placeholder="Salasana">
-            <input type="text" id="salasana2_muutos" name="salasana2" placeholder="Salasana2">
-            <input type="text" id="nimi_muutos" name="nimi" placeholder="Nimi">
+            <input type="hidden" id="usrID" name="id">
+            <input type="text" id="usrTunnus" name="tunnus" placeholder="Tunnus" readonly>
+            <input type="text" id="usrSalasana" name="salasana" placeholder="Salasana">
+            <input type="text" id="usrSalasana2" name="salasana2" placeholder="Salasana2">
+            <input type="text" id="usrNimi" name="nimi" placeholder="Nimi">
 
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </form>

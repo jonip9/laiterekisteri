@@ -1,147 +1,135 @@
-/* eslint-disable func-names */
 $(() => {
-  let dialogMuuta;
   let formMuuta;
 
   function haeVaraukset(kayttaja_id) { // Tee: hakee käyttäjän varaukset/ lainat (käyttäjäid->status), (Admin osio?: Tehdäänkö adminille mahdollisuus hakea varauksia)
     $.get(
-      "http://localhost:3000/varaus/", kayttaja_id,
+      'http://localhost:3000/varaus/', kayttaja_id,
     ).done((data, textStatus, jqXHR) => {
-      $("#varauksettaulu").empty(); // Poistetaan vanhat arvot taulukosta
+      $('#varauksettaulu').empty(); // Poistetaan vanhat arvot taulukosta
 
       if (data.length === 0) {
-        alert("Antamillasi hakuehdoilla ei löytynyt varauksia!");
+        alert('Antamillasi hakuehdoilla ei löytynyt varauksia!');
       } else {
         data.forEach(function (varaus) {
-          $("#varauksettaulu").append(
-            "<tr>"
-            + "<td>" + varaus.id + "</td>"
-            + "<td>" + varaus.laite_id + "</td>"
-            + "<td>" + varaus.alkupvm + "</td>"
-            + "<td>" + varaus.loppupvm + "</td>"
-            + "<td>" + varaus.status + "</td>"
-            + "<td>" + varaus.kayttaja_id + "</td>"
-            + "</tr>"
+          $('#varauksettaulu').append(
+            '<tr>'
+            + '<td>' + varaus.id + '</td>'
+            + '<td>' + varaus.laite_id + '</td>'
+            + '<td>' + varaus.alkupvm + '</td>'
+            + '<td>' + varaus.loppupvm + '</td>'
+            + '<td>' + varaus.status + '</td>'
+            + '<td>' + varaus.kayttaja_id + '</td>'
+            + '</tr>'
           );
         });
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log("status=" + textStatus + ", " + errorThrown);
+      console.log('status=' + textStatus + ', ' + errorThrown);
     });
   }
+
   function haeLainat(kayttaja_id) { // Tee: hakee käyttäjän varaukset/ lainat (käyttäjäid->status), (Admin osio: sama kuin ylemäpänä)
     $.get(
-      "http://localhost:3000/laina/", kayttaja_id,
+      'http://localhost:3000/laina/', kayttaja_id,
     ).done(function (data, textStatus, jqXHR) {
-      $("#lainattaulu").empty(); // Poistetaan vanhat arvot taulukosta
+      $('#lainattaulu').empty(); // Poistetaan vanhat arvot taulukosta
 
       if (data.length === 0) {
-        alert("Antamillasi hakuehdoilla ei löytynyt lainoja!");
+        alert('Antamillasi hakuehdoilla ei löytynyt lainoja!');
       } else {
         data.forEach(function (varaus) {
-          $("#varauksettaulu").append(
-            "<tr>"
-            + "<td>" + varaus.id + "</td>"
-            + "<td>" + varaus.laite_id + "</td>"
-            + "<td>" + varaus.alkupvm + "</td>"
-            + "<td>" + varaus.loppupvm + "</td>"
-            + "<td>" + varaus.status + "</td>"
-            + "<td>" + varaus.kayttaja_id + "</td>"
-            + "</tr>"
+          $('#varauksettaulu').append(
+            '<tr>'
+            + '<td>' + varaus.id + '</td>'
+            + '<td>' + varaus.laite_id + '</td>'
+            + '<td>' + varaus.alkupvm + '</td>'
+            + '<td>' + varaus.loppupvm + '</td>'
+            + '<td>' + varaus.status + '</td>'
+            + '<td>' + varaus.kayttaja_id + '</td>'
+            + '</tr>'
           );
         });
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log("status=" + textStatus + ", " + errorThrown);
+      console.log('status=' + textStatus + ', ' + errorThrown);
     });
   }
 
   function muutaKayttajatiedot() {
-    const muutettukayttajaData = $("#kayttajanmuutoslomake").serialize();
+    const muutettukayttajaData = $('#kayttajanmuutoslomake').serialize();
 
     $.ajax({
-      url: "http://localhost:3000/kayttaja/" + $("#id_muutos").val(),
+      url: 'http://localhost:3000/kayttaja/' + $('#usrID').val(),
       method: 'put',
       data: muutettukayttajaData,
-    }).done((data2, textStatus, jqXHR) => {
-      // Haetaan data uudelleen
-      // $("#hakulomake").submit();
-    }).fail((jqXHR, textStatus, errorThrown) => {
-      // Suoriteaan, jos kutsu epäonnistuu
-      console.log("Kutsu epäonnistui: " + errorThrown);
     });
   }
 
-  function avaaKayttajaMuutos() {
-    $.get(
-      "http://localhost:3000/kayttaja",
-    ).done((data, textStatus, jqXHR) => {
-      console.log(data[0]);
-      $("#id_muutos").val(data[0].id);
-      $("#tunnus_muutos").val(data[0].tunnus);
-      $("#nimi_muutos").val(data[0].nimi);
-
-      // $("#dialogi_kayttajamuutos").dialog("open");
-    }).fail((jqXHR, textStatus, errorThrown) => {
-      console.log("status=" + textStatus + ", " + errorThrown);
-    });
+  function haeKayttajatiedot() {
+    $.get('http://localhost:3000/kayttaja',
+      (data, textStatus, jqXHR) => {
+        $('#usrID').val(data[0].id);
+        $('#usrTunnus').val(data[0].tunnus);
+        $('#usrNimi').val(data[0].nimi);
+      });
   }
 
-  $("#hakulomake").submit(function (event) {
+  $('#hakulomake').submit(function (event) {
     event.preventDefault();
 
     let hakuehdot = $(this).serialize();
     haeVaraukset(hakuehdot);
   });
 
-  $("#kirjauduulos").click(function () {
-    var element = document.getElementById("sisalto");
-    element.classList.add("hidden");
+  $('#kirjauduulos').click(function () {
+    var element = document.getElementById('sisalto');
+    element.classList.add('hidden');
   });
 
-  dialogMuuta = $("#dialogi_kayttajamuutos").dialog({
+  const dialogMuuta = $('#dialogi_kayttajamuutos').dialog({
     autoOpen: false,
     closeOnEscape: false,
     draggable: false,
     modal: true,
     resizable: false,
-    open: avaaKayttajaMuutos(),
+    open: haeKayttajatiedot,
+    close: () => {
+      $('#muutosError').html('');
+      formMuuta[0].reset();
+    },
     buttons: [
       {
-        text: "Tallenna",
-        click: function () {
-          if ($.trim($("#tunnus_muutos").val()) === ""
-            || $.trim($("#salasana_muutos").val()) === ""
-            || $.trim($("#salasana2_muutos").val()) === ""
-            || $.trim($("#nimi_muutos").val()) === "") {
-            alert('Anna arvo kaikki kenttiin!');
+        text: 'Tallenna',
+        click: () => {
+          if ($.trim($('#usrTunnus').val()) === ''
+            || $.trim($('#usrSalasana').val()) === ''
+            || $.trim($('#usrSalasana2').val()) === ''
+            || $.trim($('#usrNimi').val()) === '') {
+            $('#muutosError').html('<p>Anna arvo kaikki kenttiin!</p>');
             return false;
-          } else if ($.trim($("#salasana_muutos").val()) !== $.trim($("#salasana2_muutos").val())) {
-            alert('Antamasi salasanat eivät täsmää!');
-            return false;
-          } else {
-            // let muutettukayttajaData = $("#kayttajanmuutoslomake").serialize();
-            muutaKayttajatiedot();
-            formMuuta[0].reset();
-            dialogMuuta.dialog("close");
           }
+          if ($.trim($('#usrSalasana').val()) !== $.trim($('#usrSalasana2').val())) {
+            $('#muutosError').html('<p>Antamasi salasanat eivät täsmää!</p>');
+            return false;
+          }
+          muutaKayttajatiedot();
+          dialogMuuta.dialog('close');
         },
       },
       {
-        text: "Peruuta",
-        click: function () {
-          dialogMuuta.dialog("close");
+        text: 'Peruuta',
+        click: () => {
+          dialogMuuta.dialog('close');
         },
       },
     ],
   });
 
-  $("#muutaTietoja").click(function () {
-    dialogMuuta.dialog("open");
+  $('#muutaTietoja').click(() => {
+    dialogMuuta.dialog('open');
   });
 
-  formMuuta = dialogMuuta.find("form").on("submit", (event) => {
+  formMuuta = dialogMuuta.find('form').on('submit', (event) => {
     event.preventDefault();
-    muutaKayttajatiedot();
   });
 });
