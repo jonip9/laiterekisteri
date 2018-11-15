@@ -127,7 +127,7 @@ function muutaKayttajatiedot(data, id) {
 
 function avaaKayttajaMuutos() {          
     $.get(
-        "http://localhost:3000/kayttaja", tunnus 
+        "http://localhost:3000/kayttaja"
     ).done(function (data, textStatus, jqXHR) {
         $("#id_muutos").val(data.id);
         $("#tunnus_muutos").val(data.tunnus);
