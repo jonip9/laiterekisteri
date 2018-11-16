@@ -1,5 +1,4 @@
 $(function () {
-    let sarjanro;
     let adminkayttaja = false;
 
 
