@@ -1,4 +1,7 @@
 $(function () {
+    let sarjanro;
+    let adminkayttaja = false;
+
 
     $("#hakulomake").submit(function (event) {
         event.preventDefault();
@@ -8,24 +11,28 @@ $(function () {
     });
 
     $("#laitteet").click(function () {
-        haeLaitteet();
         $("#laitedialogi").dialog("open");
-    });
-
-    $("lisaalaite").click(function () {
-        $("#dialogi_lisays").dialog("open");
     });
 
     // Laite dialogi                //TEHTY
     $("#laitedialogi").dialog({
         autoOpen: false,
         height: 500,
-        width: 800,
+        width: 1330,
         buttons: [
+
+            {
+                text: "Lisää",
+                click: function () {
+                    $("#dialogi_lisays").dialog("open");
+                    $("#hakulomake")[0].reset();
+                },
+            },
             {
                 text: "Takaisin",
                 click: function () {
                     $(this).dialog("close");
+                    $("#hakulomake")[0].reset();
                 },
             }
         ],
@@ -117,22 +124,26 @@ $(function () {
     //Varaushistoria diaogi                 TEE
     $("#dialogi_varaushistoria").dialog({
         autoOpen: false,
+        closeOnEscape: false,
+        draggable: false,
+        modal: true,
+        resizable: false,
         buttons: [
             {
                 text: "Tallenna",
                 click: function () {
                     if ($.trim($("#alkupvm").val()) === "" ||
                         $.trim($("#loppupvm").val()) === "") {
-                        alert('Anna arvo kaikki kenttiin!');
+                        $('#muutosError2').html('<p>Anna arvo kaikki kenttiin!</p>');
                         return false;
                     }
                                    /* else if (      //Pitää tehdä logiikka tarkistaa meneekö varauspvm edeltävien päälle
 
                                         ) {
-                                        alert('Varaus menee muiden varasuten päälle!');
+                                        $('#muutosError2').html('<p>Varaus menee vanhan varauksen päälle!</p>');
                                         return false;
                                     } */else {
-                        var lisattyVarausData = $("#uusivaraus").serialize();
+                        var lisattyVarausData = $("#uusivaraus").serialize();   
                         lisaaVaraus(lisattyVarausData);
                         $(this).dialog("close");
                     }
@@ -145,12 +156,9 @@ $(function () {
                 },
             }
         ],
-        closeOnEscape: false,
-        draggable: false,
-        modal: true,
-        resizable: false
     });
 });
+
 
 function haeLaitteet(hakuehdot) {                   //TEHTY
     $.get(
@@ -159,8 +167,8 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
         $("#laitetaulu").empty(); 
 
         if (data.length == 0) {
-            alert("Antamillasi hakuehdoilla ei löytynyt varauksia!");
-        } else if (adminkayttaja) {
+            alert("Antamillasi hakuehdoilla ei löytynyt laitteita!");
+        } else if (adminkayttaja=false) {
                  data.forEach(function (laite) {
                     $("#laitetaulu").append(
                         "<tr>" +
@@ -172,7 +180,7 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
                         "<td>" + laite.omistaja + "</td>" +
                         "<td>" + laite.kuvaus + "</td>" +
                         "<td>" + laite.sijainti + "</td>" +
-                        "<td><button onclick=\"varaushistoria(" + laite.sarjanro + ")\">Varaushistoria</button></td>" +
+                        "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + ")\">Varatutpäivät</button></td>" +
                         "<td><button onclick=\"poistaLaite(" + laite.sarjanro + ")\">Poista laite</button></td>" +
                         "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + ")\">Muuta laite</button></td>" +
                         "</tr>"
@@ -190,59 +198,53 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
                     "<td>" + laite.omistaja + "</td>" +
                     "<td>" + laite.kuvaus + "</td>" +
                     "<td>" + laite.sijainti + "</td>" +
-                    "<td><button onclick=\"varaushistoria(" + laite.sarjanro + ")\">Varaushistoria</button></td>" +
+                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + ")\">Varatutpäivät</button></td>" +
                     "</tr>"
                 );
             });
-        } 
+        }
+        
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
 
-function varaushistoria(sarjanro) {     //Tee: Mitä tietoja hakee katsottaessa varaushistoriaa ja miten koko uuden varauksen teko toimii
+function haeVaratutpaivat(sarjanro) {     //Tee
     $.get(
-        "http://localhost:3000/varaus/", sarjanro //tämä linkki pitää korjata
+        "http://localhost:3000/laitteenvaraus/", sarjanro //tämä linkki pitää korjata
     ).done(function (data, textStatus, jqXHR) {
-        $("#varaushistoriataulu").empty(); //Poistetaan vanhat arvot taulukosta
 
-        data.forEach(function (varaus) {
+        data.forEach(function (laite) {
             $("#varaushistoriataulu").append(
                 "<tr>" +
-                "<td>" + varaus.id + "</td>" +
-                "<td>" + varaus.laite_id + "</td>" +
-                "<td>" + varaus.alkupvm + "</td>" +
-                "<td>" + varaus.loppupvm + "</td>" +
-                "<td>" + varaus.status + "</td>" +
-                "<td>" + varaus.kayttaja_id + "</td>" +
+                "<td>" + laite.id + "</td>" +
+                "<td>" + laite.laite_id + "</td>" +
+                "<td>" + laite.alkupvm + "</td>" +
+                "<td>" + laite.loppupvm + "</td>" +
+                "<td>" + laite.status + "</td>" +
+                "<td>" + laite.kayttaja_id + "</td>" +
                 "</tr>"
             );
         });
 
+
         $("#laite_id").val(sarjanro);
-        $("#status").val(data.status);
-        $("#kayttaja_id").val();  // HAE sisäänkirjautuneen käyttäjän id
 
         $("#dialogi_varaushistoria").dialog("open");
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
-function lisaaVaraus(lisattyVarausData) {      //Tämän sisältö vielä pitää varmistaa kun varaaminen on tehty kuntoon
+function lisaaVaraus(lisattyVarausData) {      
     $.post(
-        "http://localhost:3000/varaus/lisaa/",  //Linkki oikeaksi
+        "http://localhost:3000/laitteenvaraus",  
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
-        $("#hakulomake").submit();              //onko tarpeellinen
+        $("#hakulomake").submit();              // korjaa päivittämään haevaratutpäivät taulu  
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
-
-
-
-
-
 
 
 function lisaaLaite(lisattyData) {
