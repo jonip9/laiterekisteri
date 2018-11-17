@@ -120,38 +120,41 @@ $(function () {
         resizable: false
     });
 
-    //Varaushistoria diaogi                 TEE
+    //Varaushistoria diaogi                 
     $("#dialogi_varaushistoria").dialog({
         autoOpen: false,
         closeOnEscape: false,
         draggable: false,
         modal: true,
         resizable: false,
+        close: () => {
+            $('#muutosError2').html('');
+        },
         buttons: [
             {
                 text: "Tallenna",
                 click: function () {
+                    open: tarkistapaallekkaisyydet($("#laite_id").val);
                     if ($.trim($("#alkupvm").val()) === "" ||
                         $.trim($("#loppupvm").val()) === "") {
-                        $('#muutosError2').html('<p>Anna arvo kaikki kenttiin!</p>');
+                        $('#muutosError2').html('<p>Anna arvo kaikkiin kenttiin!</p>');
                         return false;
                     }
-                                   /* else if (      //Pitää tehdä logiikka tarkistaa meneekö varauspvm edeltävien päälle
-
-                                        ) {
-                                        $('#muutosError2').html('<p>Varaus menee vanhan varauksen päälle!</p>');
-                                        return false;
-                                    } */else {
-                        var lisattyVarausData = $("#uusivaraus").serialize();   
+                    else if (tarkistapaallekkaisyydet())      
+                         {
+                         $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
+                         return false;
+                    } else {
+                        var lisattyVarausData = $("#uusivaraus").serialize();
                         lisaaVaraus(lisattyVarausData);
-                        $(this).dialog("close");
+                        dialogVaraushistoria.dialog("close");
                     }
                 },
             },
             {
                 text: "Takaisin",
                 click: function () {
-                    $(this).dialog("close");
+                    dialogVaraushistoria.dialog("close");
                 },
             }
         ],
@@ -244,6 +247,26 @@ function lisaaVaraus(lisattyVarausData) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
+
+function tarkistapaallekkaisyydet(sarjanro) {
+    $.get(
+        "http://localhost:3000/laitteenvaraus/", sarjanro
+    ).done(function (data, textStatus, jqXHR) {
+
+        data.forEach(function (pvm) {
+            var alku = pvm[0].alkupvm;
+            var loppu = pvm[0].loppupvm;
+            if (loppu >= ("#alkupvm").val && alku <= ("#loppupvm").val) {
+                paalekkain = true;
+            } else
+                paalekkain = false;
+        });
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log("status=" + textStatus + ", " + errorThrown);
+    });
+
+
 
 
 function lisaaLaite(lisattyData) {
