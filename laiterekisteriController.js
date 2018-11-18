@@ -154,7 +154,7 @@ module.exports = {
     },
 
     fetchBookedDates: (req, res) => {
-        connection.query('SELECT * FROM varaus WHERE laite_id = ?', [req.params.id], (error, results, fields) => {
+        connection.query('SELECT * FROM varaus WHERE laite_id = ? AND loppupvm >= NOW()', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
