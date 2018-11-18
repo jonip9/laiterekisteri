@@ -1,27 +1,29 @@
 $(function () {
     let adminkayttaja = false;
-    
-    var date = new Date();
 
-    var day = date.getDate(),
-        month = date.getMonth() + 1,
-        year = date.getFullYear(),
-        hour = date.getHours(),
-        min = date.getMinutes();
+    function date() {
+        var date = new Date();
 
-    month = (month < 10 ? "0" : "") + month;
-    day = (day < 10 ? "0" : "") + day;
-    hour = (hour < 10 ? "0" : "") + hour;
-    min = (min < 10 ? "0" : "") + min;
+        var day = date.getDate(),
+            month = date.getMonth() + 1,
+            year = date.getFullYear(),
+            hour = date.getHours(),
+            min = date.getMinutes();
 
-    var today = year + "-" + month + "-" + day,
-        displayTime = hour + ":" + min;
+        month = (month < 10 ? "0" : "") + month;
+        day = (day < 10 ? "0" : "") + day;
+        hour = (hour < 10 ? "0" : "") + hour;
+        min = (min < 10 ? "0" : "") + min;
 
-    document.getElementById("alkupvm").value = today;
-    document.getElementById("loppupvm").value = today;
-    document.getElementById("kloaika1").value = displayTime;
-    document.getElementById("kloaika2").value = displayTime;
+        var today = year + "-" + month + "-" + day,
+            displayTime = hour + ":" + min;
 
+        document.getElementById("alkupvm").value = today;
+        document.getElementById("loppupvm").value = today;
+        document.getElementById("kloaika1").value = displayTime;
+        document.getElementById("kloaika2").value = displayTime;
+    }
+    window.onload = date;
 
     $("#hakulomake").submit(function (event) {
         event.preventDefault();
@@ -31,8 +33,10 @@ $(function () {
     });
 
     $("#laitteet").click(function () {
+        haeLaitteet();
         $("#laitedialogi").dialog("open");
     });
+
 
     // Laite dialogi                //TEHTY
     $("#laitedialogi").dialog({
@@ -40,7 +44,6 @@ $(function () {
         height: 500,
         width: 1330,
         buttons: [
-
             {
                 text: "Lisää",
                 click: function () {
@@ -52,7 +55,6 @@ $(function () {
                 text: "Takaisin",
                 click: function () {
                     $(this).dialog("close");
-                    $("#hakulomake")[0].reset();
                 },
             }
         ],
@@ -105,7 +107,7 @@ $(function () {
 
 
 
-    //Laitteen muutos dialogi               //TEHTY
+    //Laitteen muutos dialogi               --TEHTY
     $("#dialogi_muutos").dialog({
         autoOpen: false,
         buttons: [
@@ -141,8 +143,8 @@ $(function () {
         resizable: false
     });
 
-    //Varaushistoria diaogi                 
-    $("#dialogi_varaushistoria").dialog({
+    //Varaushistoria diaogi                 TEE
+    const dialogVaraushistoria = $("#dialogi_varaushistoria").dialog({
         autoOpen: false,
         closeOnEscape: false,
         draggable: false,
@@ -166,6 +168,8 @@ $(function () {
                          $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
                          return false;
                     } else {
+                        document.getElementById("alkupvm").value = document.getElementById("alkupvm").value + " " + document.getElementById("kloaika1").value;
+                        document.getElementById("loppupvm").value = document.getElementById("loppupvm").value + " " + document.getElementById("kloaika2").value;
                         var lisattyVarausData = $("#uusivaraus").serialize();
                         lisaaVaraus(lisattyVarausData);
                         dialogVaraushistoria.dialog("close");
@@ -182,33 +186,32 @@ $(function () {
     });
 });
 
-
 function haeLaitteet(hakuehdot) {                   //TEHTY
     $.get(
-        "http://localhost:3000/laite", hakuehdot   
+        "http://localhost:3000/laite", hakuehdot
     ).done(function (data, textStatus, jqXHR) {
-        $("#laitetaulu").empty(); 
+        $("#laitetaulu").empty();
 
         if (data.length == 0) {
             alert("Antamillasi hakuehdoilla ei löytynyt laitteita!");
-        } else if (adminkayttaja=false) {
-                 data.forEach(function (laite) {
-                    $("#laitetaulu").append(
-                        "<tr>" +
-                        "<td>" + laite.sarjanro + "</td>" +
-                        "<td>" + laite.kategoria + "</td>" +
-                        "<td>" + laite.nimi + "</td>" +
-                        "<td>" + laite.merkki + "</td>" +
-                        "<td>" + laite.malli + "</td>" +
-                        "<td>" + laite.omistaja + "</td>" +
-                        "<td>" + laite.kuvaus + "</td>" +
-                        "<td>" + laite.sijainti + "</td>" +
-                        "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + ")\">Varatutpäivät</button></td>" +
-                        "<td><button onclick=\"poistaLaite(" + laite.sarjanro + ")\">Poista laite</button></td>" +
-                        "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + ")\">Muuta laite</button></td>" +
-                        "</tr>"
-                      );
-                  });
+        } else if (adminkayttaja = false) {
+            data.forEach(function (laite) {
+                $("#laitetaulu").append(
+                    "<tr>" +
+                    "<td>" + laite.sarjanro + "</td>" +
+                    "<td>" + laite.kategoria + "</td>" +
+                    "<td>" + laite.nimi + "</td>" +
+                    "<td>" + laite.merkki + "</td>" +
+                    "<td>" + laite.malli + "</td>" +
+                    "<td>" + laite.omistaja + "</td>" +
+                    "<td>" + laite.kuvaus + "</td>" +
+                    "<td>" + laite.sijainti + "</td>" +
+                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + ")\">Varatutpäivät</button></td>" +
+                    "<td><button onclick=\"poistaLaite(" + laite.sarjanro + ")\">Poista laite</button></td>" +
+                    "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + ")\">Muuta laite</button></td>" +
+                    "</tr>"
+                );
+            });
         } else {
             data.forEach(function (laite) {
                 $("#laitetaulu").append(
@@ -226,41 +229,40 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
                 );
             });
         }
-        
+
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
 
-function haeVaratutpaivat(sarjanro) {     //Tee
+function haeVaratutpaivat(sarjanro) {     //Tämä failaa jostain syystä.
     $.get(
-        "http://localhost:3000/laitteenvaraus/", sarjanro //tämä linkki pitää korjata
+        "http://localhost:3000/laitteenvaraus/", sarjanro 
     ).done(function (data, textStatus, jqXHR) {
 
-        data.forEach(function (laite) {
-            $("#varaushistoriataulu").append(
-                "<tr>" +
-                "<td>" + laite.id + "</td>" +
-                "<td>" + laite.laite_id + "</td>" +
-                "<td>" + laite.alkupvm + "</td>" +
-                "<td>" + laite.loppupvm + "</td>" +
-                "<td>" + laite.status + "</td>" +
-                "<td>" + laite.kayttaja_id + "</td>" +
-                "</tr>"
-            );
-        });
-
+            data.forEach(function (laite) {
+                $("#varaushistoriataulu").append(
+                    "<tr>" +
+                    "<td>" + laite.id + "</td>" +
+                    "<td>" + laite.laite_id + "</td>" +
+                    "<td>" + laite.alkupvm + "</td>" +
+                    "<td>" + laite.loppupvm + "</td>" +
+                    "<td>" + laite.status + "</td>" +
+                    "<td>" + laite.kayttaja_id + "</td>" +
+                    "</tr>"
+                );
+            });
 
         $("#laite_id").val(sarjanro);
 
-        $("#dialogi_varaushistoria").dialog("open");
+        dialogVaraushistoria.dialog('open');
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
-function lisaaVaraus(lisattyVarausData) {      
+function lisaaVaraus(lisattyVarausData) {
     $.post(
-        "http://localhost:3000/laitteenvaraus",  
+        "http://localhost:3000/laitteenvaraus",
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
         $("#hakulomake").submit();              // korjaa päivittämään haevaratutpäivät taulu  
@@ -268,6 +270,7 @@ function lisaaVaraus(lisattyVarausData) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
+
 
 function tarkistapaallekkaisyydet(sarjanro) {
     $.get(
@@ -286,7 +289,7 @@ function tarkistapaallekkaisyydet(sarjanro) {
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
-
+}
 
 
 
@@ -301,7 +304,7 @@ function lisaaLaite(lisattyData) {
     });
 }
 
-function poistaLaite(sarjanro) {            
+function poistaLaite(sarjanro) {
     $.ajax(
         {
             url: "http://localhost:3000/laite/" + sarjanro,
@@ -334,7 +337,7 @@ function muutaLaite(data, sarjanro) {
         });
 }
 
-function avaaMuutosLomake(sarjanro) {         
+function avaaMuutosLomake(sarjanro) {
     $.get(
         "http://localhost:3000/laite/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
