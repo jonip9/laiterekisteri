@@ -1,5 +1,26 @@
 $(function () {
     let adminkayttaja = false;
+    
+    var date = new Date();
+
+    var day = date.getDate(),
+        month = date.getMonth() + 1,
+        year = date.getFullYear(),
+        hour = date.getHours(),
+        min = date.getMinutes();
+
+    month = (month < 10 ? "0" : "") + month;
+    day = (day < 10 ? "0" : "") + day;
+    hour = (hour < 10 ? "0" : "") + hour;
+    min = (min < 10 ? "0" : "") + min;
+
+    var today = year + "-" + month + "-" + day,
+        displayTime = hour + ":" + min;
+
+    document.getElementById("alkupvm").value = today;
+    document.getElementById("loppupvm").value = today;
+    document.getElementById("kloaika1").value = displayTime;
+    document.getElementById("kloaika2").value = displayTime;
 
 
     $("#hakulomake").submit(function (event) {
