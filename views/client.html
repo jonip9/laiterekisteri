@@ -96,10 +96,16 @@
         <div id="muutosError2"></div>
         <form id="uusivaraus">
             <p>Tee uusi varaus</p>
-
+            
             <input type="hidden" id="laite_id" name="laite_id">
-            <input type="date" id="alkupvm" name="alkupvm" placeholder="Alkupvm">
-            <input type="text" id="loppupvm" name="loppupvm" placeholder="Loppupvm">
+            <label for="alkupvm">Alkupvm:</label>
+            <input type="date" id="alkupvm" name="alkupvm">
+            <label for="kloaika1">Kellon aika:</label>
+            <input type="time" id="kloaika1" name="kloaika1">
+            <label for="loppupvm">Loppupvm:</label>
+            <input type="date" id="loppupvm" name="loppupvm">
+            <label for="kloaika2">Kellon aika:</label>
+            <input type="time" id="kloaika2" name="kloaika2">
             <input type="hidden" id="status" name="status" value="Varattu">
             <input type="hidden" id="kayttaja_id" name="kayttaja_id">
 
