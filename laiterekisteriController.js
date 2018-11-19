@@ -11,7 +11,6 @@ module.exports = {
     checkUser: (req, res) => {
         const username = req.body.tunnus;
         const password = req.body.salasana;
-        const userid = req.body.id;
         console.log('Käyttäjä: ' + username + ', Salasana: ' + password);
 
         connection.query('SELECT * FROM kayttaja WHERE tunnus = ?', [username], (error, results, fields) => {
@@ -21,7 +20,7 @@ module.exports = {
             if (results.length > 0) {
                 if (password === results[0].salasana) {
                     req.session.user = username;
-                    req.session.userid = userid;
+                    req.session.userid = results[0].id;
                     console.log('Session user: ' + req.session.user + 'session userid: ' + req.session.userid);
                     return res.redirect('/client');
                 }
@@ -153,8 +152,41 @@ module.exports = {
         });
     },
 
-    fetchBookedDates: (req, res) => {
-        connection.query('SELECT * FROM varaus WHERE laite_id = ? AND loppupvm >= NOW()', [req.params.id], (error, results, fields) => {
+    fetchAllBookings: (req, res) => {
+        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = Varattu', [req.session.userid], (error, results, fields) => {
+            if (error) {
+                console.log(error.sqlMessage);
+                throw error;
+            } else {
+                res.send(results);
+            }
+        });
+    },
+
+    deleteBooking: (req, res) => {
+        connection.query('DELETE FROM varaus WHERE kayttaja_id = ?', [req.session.userid], (error, results, fields) => {
+            if (error) {
+                console.log(error.sqlMessage);
+                throw error;
+            } else {
+                res.send(results);
+            }
+        });
+    },
+
+    fetchAllLoans: (req, res) => {
+        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = Lainattu', [req.session.userid], (error, results, fields) => {
+            if (error) {
+                console.log(error.sqlMessage);
+                throw error;
+            } else {
+                res.send(results);
+            }
+        });
+    },
+
+    fetchBookedDates: (req, res) => {                               //toimiiko tämä ja muuta format-> SELECT DATE_FORMAT(NOW(),'%Y%m%d%H%i')
+        connection.query('SELECT * FROM varaus WHERE laite_id = ? AND loppupvm > NOW()', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
@@ -177,5 +209,15 @@ module.exports = {
             });
     },
 
-
+    updateBooking: (req, res) => {
+        connection.query('UPDATE varaus SET status = IF(status = Varattu, Lainattu IF(status = Lainattu, Palautettu)) WHERE sarjanro = ?',
+            [req.params.id], (error, results, fields) => {
+                if (error) {
+                    console.log(error.sqlMessage);
+                    throw error;
+                } else {
+                    res.send(results);
+                }
+            });
+    },
 };
