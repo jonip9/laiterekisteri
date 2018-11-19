@@ -77,11 +77,19 @@ app.route('/kategoria')
 app.route('/omistaja')
     .get(laiterekisteriController.fetchOwner);
 
+app.route('/varaus')
+    .get(laiterekisteriController.fetchAllBookings)
+    .delete(laiterekisteriController.deleteBooking);
+
+app.route('/laina')
+    .get(laiterekisteriController.fetchAllLoans);
+
 app.route('/laitteenvaraus')
     .post(laiterekisteriController.addBookedDates);
 
 app.route('/laitteenvaraus/:id')
-    .get(laiterekisteriController.fetchBookedDates);
+    .get(laiterekisteriController.fetchBookedDates)
+    .put(laiterekisteriController.updateBooking);
 
 app.listen(port, hostlocal, () => {
     console.log(`Local server running AT http://${hostlocal}:${port}/`);
