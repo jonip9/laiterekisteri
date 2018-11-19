@@ -169,10 +169,10 @@ $(function () {
                          return false;
                     } else {
                         var lisattyVarausData = "laite_id=" + $("#laite_id").val +
-                        "&alkupvm=" + $("#alkupvm").val + " " + $("#kloaika1").val +
-                        "&loppupvm=" + $("#loppupvm").val + " " + $("#kloaika2").val +
-                        "&status=Varattu&kayttaja_id=";
-                        lisaaVaraus(lisattyVarausData);
+                            "&alkupvm=" + $("#alkupvm").val + " " + $("#kloaika1").val +
+                            "&loppupvm=" + $("#loppupvm").val + " " + $("#kloaika2").val +
+                            "&status=Varattu&kayttaja_id=";
+                        lisaaVaraus(lisattyVarausData, $("#laite_id").val);
                         dialogVaraushistoria.dialog("close");
                     }
                 },
@@ -236,37 +236,37 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
     });
 }
 
-function haeVaratutpaivat(sarjanro) {     //Tämä failaa jostain syystä.
+function haeVaratutpaivat(laite_id) {     //Tämä failaa jostain syystä.
     $.get(
-        "http://localhost:3000/laitteenvaraus/", sarjanro 
+        "http://localhost:3000/laitteenvaraus/" + laite_id 
     ).done(function (data, textStatus, jqXHR) {
 
-            data.forEach(function (laite) {
+            data.forEach(function (varaus) {
                 $("#varaushistoriataulu").append(
                     "<tr>" +
-                    "<td>" + laite.id + "</td>" +
-                    "<td>" + laite.laite_id + "</td>" +
-                    "<td>" + laite.alkupvm + "</td>" +
-                    "<td>" + laite.loppupvm + "</td>" +
-                    "<td>" + laite.status + "</td>" +
-                    "<td>" + laite.kayttaja_id + "</td>" +
+                    "<td>" + varaus.id + "</td>" +
+                    "<td>" + varaus.laite_id + "</td>" +
+                    "<td>" + varaus.alkupvm + "</td>" +
+                    "<td>" + varaus.loppupvm + "</td>" +
+                    "<td>" + varaus.status + "</td>" +
+                    "<td>" + varaus.kayttaja_id + "</td>" +
                     "</tr>"
                 );
             });
 
-        $("#laite_id").val(sarjanro);
+        $("#laite_id").val(laite_id);
 
         dialogVaraushistoria.dialog('open');
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
-function lisaaVaraus(lisattyVarausData) {
+function lisaaVaraus(lisattyVarausData, laite_id) {
     $.post(
         "http://localhost:3000/laitteenvaraus",
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
-        $("#hakulomake").submit();              // korjaa päivittämään haevaratutpäivät taulu  
+        haeVaratutpaivat(laite_id);              
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
@@ -275,7 +275,7 @@ function lisaaVaraus(lisattyVarausData) {
 
 function tarkistapaallekkaisyydet(sarjanro) {
     $.get(
-        "http://localhost:3000/laitteenvaraus/", sarjanro
+        "http://localhost:3000/laitteenvaraus/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
 
         data.forEach(function (pvm) {
@@ -306,19 +306,27 @@ function lisaaLaite(lisattyData) {
 }
 
 function poistaLaite(sarjanro) {
-    $.ajax(
-        {
-            url: "http://localhost:3000/laite/" + sarjanro,
-            method: 'delete'
-        }).done(function (data, textStatus, jqXHR) {
-            // Haetaan data uudelleen
-            $("#hakulomake").submit();
+    $.get(
+        "http://localhost:3000/laitteenvaraus/"+ sarjanro 
+    ).done((data, textStatus, jqXHR) => {
+
+        if (data.length === 0) {
+            $.ajax(
+                {
+                    url: "http://localhost:3000/laite/" + sarjanro,
+                    method: 'delete'
+                }).done(function (data, textStatus, jqXHR) {
+                    $("#hakulomake").submit();
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log("Kutsu epäonnistui: " + errorThrown);
+                });
+        } else {
+            $('#poistoerror').html('<p>Laitteella on varauksia tai lainoja: ei voi poistaa!</p>');
+        }
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            // Suoriteaan, jos kutsu epäonnistuu
-            console.log("Kutsu epäonnistui: " + errorThrown);
+            console.log("status=" + textStatus + ", " + errorThrown);
         });
 }
-
 
 
 
