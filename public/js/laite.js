@@ -168,9 +168,10 @@ $(function () {
                          $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
                          return false;
                     } else {
-                        document.getElementById("alkupvm").value = document.getElementById("alkupvm").value + " " + document.getElementById("kloaika1").value;
-                        document.getElementById("loppupvm").value = document.getElementById("loppupvm").value + " " + document.getElementById("kloaika2").value;
-                        var lisattyVarausData = $("#uusivaraus").serialize();
+                        var lisattyVarausData = "laite_id=" + $("#laite_id").val +
+                        "&alkupvm=" + $("#alkupvm").val + " " + $("#kloaika1").val +
+                        "&loppupvm=" + $("#loppupvm").val + " " + $("#kloaika2").val +
+                        "&status=Varattu&kayttaja_id=";
                         lisaaVaraus(lisattyVarausData);
                         dialogVaraushistoria.dialog("close");
                     }
