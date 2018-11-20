@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -17,7 +17,8 @@
 
 <body>
     <button id="muutaTietoja">Muuta käyttäjätietoja</button>
-    <button id="kirjauduulos">Kirjaudu ulos</button>
+    <!-- <button id="kirjauduUlos">Kirjaudu ulos</button> -->
+    <a class="ui-button ui-widget ui-corner-all" href="/logout">Kirjaudu ulos</a>
 
 
     <table>
@@ -96,7 +97,7 @@
         <div id="muutosError2"></div>
         <form id="uusivaraus">
             <p>Tee uusi varaus</p>
-            
+
             <input type="hidden" id="laite_id" name="laite_id">
             <label for="alkupvm">Alkupvm:</label>
             <input type="date" id="alkupvm" name="alkupvm">
@@ -167,4 +168,5 @@
         </form>
     </div>
 </body>
+
 </html>

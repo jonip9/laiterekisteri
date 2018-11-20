@@ -5,23 +5,23 @@ $(() => {
         $.get(
             'http://localhost:3000/varaus',
         ).done((data, textStatus, jqXHR) => {
-            $('#varauksettaulu').empty(); 
+            $('#varauksettaulu').empty();
 
-                data.forEach(function (varaus) {
-                    $('#varauksettaulu').append(
-                        '<tr>'
-                        + '<td>' + varaus.id + '</td>'
-                        + '<td>' + varaus.laite_id + '</td>'
-                        + '<td>' + varaus.alkupvm + '</td>'
-                        + '<td>' + varaus.loppupvm + '</td>'
-                        + '<td>' + varaus.status + '</td>'
-                        + '<td>' + varaus.kayttaja_id + '</td>'
-                        + "<td><button onclick=\"poistaVaraus(" + varaus.id + ")\">Poista varaus</button></td>"
-                     // + "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ")\">Muuta lainatuksi</button></td>"
-                        + '</tr>'
-                    );
-                });
-            
+            data.forEach(function (varaus) {
+                $('#varauksettaulu').append(
+                    '<tr>'
+                    + '<td>' + varaus.id + '</td>'
+                    + '<td>' + varaus.laite_id + '</td>'
+                    + '<td>' + varaus.alkupvm + '</td>'
+                    + '<td>' + varaus.loppupvm + '</td>'
+                    + '<td>' + varaus.status + '</td>'
+                    + '<td>' + varaus.kayttaja_id + '</td>'
+                    + "<td><button onclick=\"poistaVaraus(" + varaus.id + ")\">Poista varaus</button></td>"
+                    // + "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ")\">Muuta lainatuksi</button></td>"
+                    + '</tr>'
+                );
+            });
+
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log('status=' + textStatus + ', ' + errorThrown);
         });
@@ -40,20 +40,20 @@ $(() => {
         ).done(function (data, textStatus, jqXHR) {
             $('#lainattaulu').empty();
 
-                data.forEach(function (varaus) {
-                    $('#varauksettaulu').append(
-                        '<tr>'
-                        + '<td>' + varaus.id + '</td>'
-                        + '<td>' + varaus.laite_id + '</td>'
-                        + '<td>' + varaus.alkupvm + '</td>'
-                        + '<td>' + varaus.loppupvm + '</td>'
-                        + '<td>' + varaus.status + '</td>'
-                        + '<td>' + varaus.kayttaja_id + '</td>'
-                     // + "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ")\">Muuta palautetuksi</button></td>"
-                        + '</tr>'
-                    );
-                });
-            
+            data.forEach(function (varaus) {
+                $('#varauksettaulu').append(
+                    '<tr>'
+                    + '<td>' + varaus.id + '</td>'
+                    + '<td>' + varaus.laite_id + '</td>'
+                    + '<td>' + varaus.alkupvm + '</td>'
+                    + '<td>' + varaus.loppupvm + '</td>'
+                    + '<td>' + varaus.status + '</td>'
+                    + '<td>' + varaus.kayttaja_id + '</td>'
+                    // + "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ")\">Muuta palautetuksi</button></td>"
+                    + '</tr>'
+                );
+            });
+
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log('status=' + textStatus + ', ' + errorThrown);
         });
@@ -99,18 +99,16 @@ $(() => {
             });
     }
 
-   /* 
-   $('#hakulomake').submit(function (event) {
-        event.preventDefault();
+    /* 
+    $('#hakulomake').submit(function (event) {
+         event.preventDefault();
+ 
+         let hakuehdot = $(this).serialize();
+         haeVaraukset(hakuehdot);
+     });
+     
 
-        let hakuehdot = $(this).serialize();
-        haeVaraukset(hakuehdot);
-    });
-    
-    $('#kirjauduulos').click(function () {
-       
-    });
-*/
+ */
     const dialogMuuta = $('#dialogi_kayttajamuutos').dialog({
         autoOpen: false,
         closeOnEscape: false,
