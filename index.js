@@ -57,7 +57,15 @@ app.post('/login', laiterekisteriController.checkUser);
 
 app.get('/client', (req, res) => {
     if (req.session.user) {
-        res.sendFile(path.join(`${__dirname}/views/client.html`));
+        if (req.session.user === 'admin') {
+            res.render('client', {
+                isAdmin: 'true',
+            });
+        } else {
+            res.render('client', {
+                isAdmin: 'false',
+            });
+        }
     } else {
         res.redirect('/');
     }
