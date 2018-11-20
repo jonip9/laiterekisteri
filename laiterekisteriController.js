@@ -185,12 +185,15 @@ module.exports = {
         });
     },
 
-    fetchBookedDates: (req, res) => {                               //toimiiko tämä ja muuta format-> SELECT DATE_FORMAT(NOW(),'%Y%m%d%H%i')
+    fetchBookedDates: (req, res) => {
+        console.log("fetchbookeddates: " + req.params.id);
         connection.query('SELECT * FROM varaus WHERE laite_id = ? AND loppupvm > NOW()', [req.params.id], (error, results, fields) => {
             if (error) {
+                console.log("error" + JSON.stringify(error));
                 console.log(error.sqlMessage);
                 throw error;
             } else {
+                console.log("results=" + JSON.stringify(results));
                 res.send(results);
             }
         });
@@ -210,7 +213,7 @@ module.exports = {
     },
 
     updateBooking: (req, res) => {
-        connection.query('UPDATE varaus SET status = IF(status = Varattu, Lainattu IF(status = Lainattu, Palautettu)) WHERE sarjanro = ?',
+        connection.query('UPDATE varaus SET loppupvm = NOW(), status = IF(status = Varattu, Lainattu IF(status = Lainattu, Palautettu)) WHERE laite_id = ?',
             [req.params.id], (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
