@@ -60,33 +60,4 @@ $(() => {
   $('#register').click(() => {
     dialog.dialog('open');
   });
-
-  /* $('#kirjaudu').click(function () {  //Täällä pitää tarkistaa done kohdassa, meneekö kaikki oikein --pitäisi olla
-      function login() {
-          $.post(
-              'http://localhost:3000/login',
-              'tunnus=' + tunnus + '&salasana=' + ss   
-          ).done(function (data, textStatus, jqXHR) {
-
-              if (data.length == 0) {
-                  alert('Tunnus tai salasana väärin!');
-              } else {
-                  onkoadmin();
-              }
-          }).fail(function (jqXHR, textStatus, errorThrown) {
-              console.log('status=' + textStatus + ', ' + errorThrown);
-          });
-      }
-  }); */
 });
-
-/* function onkoadmin() {
-  $.get(
-    'http://localhost:3000/kayttaja', tunnus
-  ).done(function (data, textStatus, jqXHR) {
-    if (data.id == 99)
-      adminkayttaja = true;
-  }).fail(function (jqXHR, textStatus, errorThrown) {
-    console.log('status=' + textStatus + ', ' + errorThrown);
-  });
-} */

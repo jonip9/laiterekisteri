@@ -34,25 +34,43 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    let msg = '';
+    if (!req.session.user) {
+        let msg = '';
 
-    if (req.session.error) {
-        msg = req.session.error;
+        if (req.session.error) {
+            msg = req.session.error;
+        }
+
+        if (req.session.success) {
+            msg = req.session.success;
+        }
+
+        res.render('login', {
+            message: msg,
+        });
+    } else {
+        res.redirect('/client');
     }
-
-    if (req.session.success) {
-        msg = req.session.success;
-    }
-
-    res.render('login', {
-        message: msg,
-    });
 });
 
 app.post('/login', laiterekisteriController.checkUser);
 
 app.get('/client', (req, res) => {
-    res.sendFile(path.join(`${__dirname}/views/client.html`));
+    if (req.session.user) {
+        res.sendFile(path.join(`${__dirname}/views/client.html`));
+    } else {
+        res.redirect('/');
+    }
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy((error) => {
+        if (error) {
+            console.log(error);
+        } else {
+            res.redirect('/');
+        }
+    });
 });
 
 app.route('/kayttaja')
