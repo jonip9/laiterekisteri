@@ -145,7 +145,7 @@ $(function () {
     });
 
     //Varaushistoria diaogi                 TEE
-    const dialogVaraushistoria = $("#dialogi_varaushistoria").dialog({
+     $("#dialogi_varaushistoria").dialog({
         autoOpen: false,
         closeOnEscape: false,
         draggable: false,
@@ -158,30 +158,28 @@ $(function () {
             {
                 text: "Tallenna",
                 click: function () {
-                    open: tarkistapaallekkaisyydet($("#laite_id").val);
                     if ($.trim($("#alkupvm").val()) === "" ||
                         $.trim($("#loppupvm").val()) === "") {
                         $('#muutosError2').html('<p>Anna arvo kaikkiin kenttiin!</p>');
                         return false;
                     }
-                    else if (tarkistapaallekkaisyydet())      
+                    else if (tarkistapaallekkaisyydet($("#laite_id").val()))      
                          {
                          $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
                          return false;
                     } else {
-                        var lisattyVarausData = "laite_id=" + $("#laite_id").val +
-                            "&alkupvm=" + $("#alkupvm").val + " " + $("#kloaika1").val +
-                            "&loppupvm=" + $("#loppupvm").val + " " + $("#kloaika2").val +
-                            "&status=Varattu&kayttaja_id=";
-                        lisaaVaraus(lisattyVarausData, $("#laite_id").val);
-                        dialogVaraushistoria.dialog("close");
+                        var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
+                            "&alkupvm=" + $("#alkupvm").val() + " " + $("#kloaika1").val() +
+                            "&loppupvm=" + $("#loppupvm").val() + " " + $("#kloaika2").val() +
+                            "&status=Varattu";
+                        lisaaVaraus(lisattyVarausData, $("#laite_id").val());
                     }
                 },
             },
             {
                 text: "Takaisin",
                 click: function () {
-                    dialogVaraushistoria.dialog("close");
+                    $(this).dialog("close");
                 },
             }
         ],
@@ -237,9 +235,9 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
     });
 }
 
-function haeVaratutpaivat(laite_id) {     //Tämä failaa jostain syystä.
+function haeVaratutpaivat(sarjanro) {     //Tämä failaa jostain syystä.
     $.get(
-        "http://localhost:3000/laitteenvaraus/" + laite_id 
+        "http://localhost:3000/laitteenvaraus/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
 
             data.forEach(function (varaus) {
@@ -255,13 +253,15 @@ function haeVaratutpaivat(laite_id) {     //Tämä failaa jostain syystä.
                 );
             });
 
-        $("#laite_id").val(laite_id);
+        $("#laite_id").val(sarjanro);
 
-        dialogVaraushistoria.dialog('open');
+        $("#dialogi_varaushistoria").dialog("open");
+
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
+
 function lisaaVaraus(lisattyVarausData, laite_id) {
     $.post(
         "http://localhost:3000/laitteenvaraus",
@@ -273,19 +273,18 @@ function lisaaVaraus(lisattyVarausData, laite_id) {
     });
 }
 
-
 function tarkistapaallekkaisyydet(sarjanro) {
     $.get(
         "http://localhost:3000/laitteenvaraus/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
 
         data.forEach(function (pvm) {
-            var alku = pvm[0].alkupvm;
-            var loppu = pvm[0].loppupvm;
-            if (loppu >= ("#alkupvm").val && alku <= ("#loppupvm").val) {
-                paalekkain = true;
+            let alku = pvm[0].alkupvm;
+            let loppu = pvm[0].loppupvm;
+            if (loppu >= ("#alkupvm").val() && alku <= ("#loppupvm").val()) {
+                return true;
             } else
-                paalekkain = false;
+                return false;
         });
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
