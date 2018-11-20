@@ -194,50 +194,38 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
     ).done(function (data, textStatus, jqXHR) {
         $("#laitetaulu").empty();
 
-        if (data.length == 0) {
-            alert("Antamillasi hakuehdoilla ei löytynyt laitteita!");
-        } else if (adminkayttaja = false) {
-            data.forEach(function (laite) {
+        if (data.length == 0) 
+            alert("Antamillasi hakuehdoilla ei löytynyt laitteita!"); 
+        
+        data.forEach(function (laite) {
+            $("#laitetaulu").append(
+                "<tr>" +
+                "<td>" + laite.sarjanro + "</td>" +
+                "<td>" + laite.kategoria + "</td>" +
+                "<td>" + laite.nimi + "</td>" +
+                "<td>" + laite.merkki + "</td>" +
+                "<td>" + laite.malli + "</td>" +
+                "<td>" + laite.omistaja + "</td>" +
+                "<td>" + laite.kuvaus + "</td>" +
+                "<td>" + laite.sijainti + "</td>");
+            if (adminkayttaja = false) {
                 $("#laitetaulu").append(
-                    "<tr>" +
-                    "<td>" + laite.sarjanro + "</td>" +
-                    "<td>" + laite.kategoria + "</td>" +
-                    "<td>" + laite.nimi + "</td>" +
-                    "<td>" + laite.merkki + "</td>" +
-                    "<td>" + laite.malli + "</td>" +
-                    "<td>" + laite.omistaja + "</td>" +
-                    "<td>" + laite.kuvaus + "</td>" +
-                    "<td>" + laite.sijainti + "</td>" +
-                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + ")\">Varatutpäivät</button></td>" +
+                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>" +
                     "<td><button onclick=\"poistaLaite(" + laite.sarjanro + ")\">Poista laite</button></td>" +
                     "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + ")\">Muuta laite</button></td>" +
-                    "</tr>"
-                );
-            });
-        } else {
-            data.forEach(function (laite) {
+                    "</tr>");
+            } else {
                 $("#laitetaulu").append(
-                    "<tr>" +
-                    "<td>" + laite.sarjanro + "</td>" +
-                    "<td>" + laite.kategoria + "</td>" +
-                    "<td>" + laite.nimi + "</td>" +
-                    "<td>" + laite.merkki + "</td>" +
-                    "<td>" + laite.malli + "</td>" +
-                    "<td>" + laite.omistaja + "</td>" +
-                    "<td>" + laite.kuvaus + "</td>" +
-                    "<td>" + laite.sijainti + "</td>" +
-                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + ")\">Varatutpäivät</button></td>" +
-                    "</tr>"
-                );
-            });
-        }
-
+                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>" +
+                    "</tr>");
+            }
+        });
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
 
-function haeVaratutpaivat(sarjanro) {     //Tämä failaa jostain syystä.
+function haeVaratutpaivat(sarjanro) {     
     $.get(
         "http://localhost:3000/laitteenvaraus/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
