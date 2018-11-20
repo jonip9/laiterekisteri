@@ -8,7 +8,6 @@ const connection = mysql.createConnection({
 });
 
 module.exports = {
- feature-addNewReservation
     checkUser: (req, res) => {
         const username = req.body.tunnus;
         const password = req.body.salasana;
