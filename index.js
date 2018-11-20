@@ -16,16 +16,16 @@ app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
 const allowCrossDomain = (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
 };
 
 app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
 }));
 
 app.use(express.static('public'));
@@ -34,51 +34,65 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  let msg = '';
+    let msg = '';
 
-  if (req.session.error) {
-    msg = req.session.error;
-  }
+    if (req.session.error) {
+        msg = req.session.error;
+    }
 
-  if (req.session.success) {
-    msg = req.session.success;
-  }
+    if (req.session.success) {
+        msg = req.session.success;
+    }
 
-  res.render('login', {
-    message: msg,
-  });
+    res.render('login', {
+        message: msg,
+    });
 });
 
 app.post('/login', laiterekisteriController.checkUser);
 
 app.get('/client', (req, res) => {
-  res.sendFile(path.join(`${__dirname}/views/client.html`));
+    res.sendFile(path.join(`${__dirname}/views/client.html`));
 });
 
 app.route('/kayttaja')
-  .get(laiterekisteriController.fetchUserData)
-  .post(laiterekisteriController.registerUser);
+    .get(laiterekisteriController.fetchUserData)
+    .post(laiterekisteriController.registerUser);
 
 app.route('/kayttaja/:id')
-  .put(laiterekisteriController.updateUser);
+    .put(laiterekisteriController.updateUser);
 
 app.route('/laite')
-  .get(laiterekisteriController.fetchAllItems)
-  .post(laiterekisteriController.addItem);
+    .get(laiterekisteriController.fetchAllItems)
+    .post(laiterekisteriController.addItem);
 
 app.route('/laite/:id')
-  .get(laiterekisteriController.fetchOneItem)
-  .put(laiterekisteriController.updateItem)
-  .delete(laiterekisteriController.deleteItem);
+    .get(laiterekisteriController.fetchOneItem)
+    .put(laiterekisteriController.updateItem)
+    .delete(laiterekisteriController.deleteItem);
 
 app.route('/kategoria')
-  .get(laiterekisteriController.fetchCategory);
+    .get(laiterekisteriController.fetchCategory);
 
 app.route('/omistaja')
-  .get(laiterekisteriController.fetchOwner);
+    .get(laiterekisteriController.fetchOwner);
+
+app.route('/varaus')
+    .get(laiterekisteriController.fetchAllBookings)
+    .delete(laiterekisteriController.deleteBooking);
+
+app.route('/laina')
+    .get(laiterekisteriController.fetchAllLoans);
+
+app.route('/laitteenvaraus')
+    .post(laiterekisteriController.addBookedDates);
+
+app.route('/laitteenvaraus/:id')
+    .get(laiterekisteriController.fetchBookedDates)
+    .put(laiterekisteriController.updateBooking);
 
 app.listen(port, hostlocal, () => {
-  console.log(`Local server running AT http://${hostlocal}:${port}/`);
+    console.log(`Local server running AT http://${hostlocal}:${port}/`);
 });
 
 /* app.listen(port, hostname, () => {
