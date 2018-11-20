@@ -23,7 +23,7 @@ $(function () {
         document.getElementById("kloaika1").value = displayTime;
         document.getElementById("kloaika2").value = displayTime;
     }
-    window.onload = date;
+    window.onload = date();
 
     $("#hakulomake").submit(function (event) {
         event.preventDefault();
@@ -55,6 +55,7 @@ $(function () {
                 text: "Takaisin",
                 click: function () {
                     $(this).dialog("close");
+                    $("#hakulomake")[0].reset();
                 },
             }
         ],
