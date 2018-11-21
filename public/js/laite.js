@@ -1,6 +1,4 @@
 $(function () {
-    let adminkayttaja = false;
-
     function date() {
         var date = new Date();
 
@@ -42,7 +40,7 @@ $(function () {
     $("#laitedialogi").dialog({
         autoOpen: false,
         height: 500,
-        width: 1330,
+        width: 1500,
         buttons: [
             {
                 text: "Lisää",
@@ -124,9 +122,8 @@ $(function () {
                         $.trim($("#sijainti_muutos").val()) === "") {
                         alert('Anna arvo kaikki kenttiin!');
                         return false;
-                    } else {
-                        var muutettuData = $("#muutoslomake").serialize();
-                        muutaLaite(muutettuData, $("#sarjanro_muutos").val());
+                    } else {                      
+                        muutaLaite();
                         $(this).dialog("close");
                     }
                 },
@@ -145,7 +142,8 @@ $(function () {
     });
 
     //Varaushistoria diaogi                 TEE
-     $("#dialogi_varaushistoria").dialog({
+    $("#dialogi_varaushistoria").dialog({
+        width: 850,
         autoOpen: false,
         closeOnEscape: false,
         draggable: false,
@@ -164,7 +162,7 @@ $(function () {
                         return false;
                     }
 
-                    else if (tarkistapaallekkaisyydet($("#laite_id").val()))      
+                    else if (tarkistapaallekkaisyydet($("#laite_id").val()) != false)      
                          {
                          $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
                          return false;
@@ -182,6 +180,7 @@ $(function () {
                 text: "Takaisin",
                 click: function () {
                     $(this).dialog("close");
+                    $("#varaushistoriataulu").empty();
                 },
             }
         ],
@@ -199,7 +198,7 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
         
         data.forEach(function (laite) {
             $("#laitetaulu").append(
-                "<tr>" +
+                "<tr id=laite" + laite.sarjanro +  ">" +
                 "<td>" + laite.sarjanro + "</td>" +
                 "<td>" + laite.kategoria + "</td>" +
                 "<td>" + laite.nimi + "</td>" +
@@ -208,16 +207,16 @@ function haeLaitteet(hakuehdot) {                   //TEHTY
                 "<td>" + laite.omistaja + "</td>" +
                 "<td>" + laite.kuvaus + "</td>" +
                 "<td>" + laite.sijainti + "</td>");
-            if (adminkayttaja = false) {
-                $("#laitetaulu").append(
+            if ($("#isAdmin").val() === "true") {
+                $("#laite" + laite.sarjanro).append(
                     "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>" +
-                    "<td><button onclick=\"poistaLaite(" + laite.sarjanro + ")\">Poista laite</button></td>" +
-                    "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + ")\">Muuta laite</button></td>" +
-                    "</tr>");
+                    "<td><button onclick=\"poistaLaite(" + laite.sarjanro + "); return false;\">Poista laite</button></td>" +
+                    "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + "); return false;\">Muuta laite</button></td>"
+                 );
             } else {
-                $("#laitetaulu").append(
-                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>" +
-                    "</tr>");
+                $("#laite" + laite.sarjanro).append(
+                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>"
+                 );
             }
         });
     }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -257,6 +256,7 @@ function lisaaVaraus(lisattyVarausData, laite_id) {
         "http://localhost:3000/laitteenvaraus",
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
+        $("#varaushistoriataulu").empty();
         haeVaratutpaivat(laite_id);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
@@ -269,13 +269,12 @@ function tarkistapaallekkaisyydet(sarjanro) {
     ).done(function (data, textStatus, jqXHR) {
 
         data.forEach(function (pvm) {
-            let alku = pvm[0].alkupvm;
-            let loppu = pvm[0].loppupvm;
-            if (loppu >= ("#alkupvm").val() && alku <= ("#loppupvm").val()) {
+            let alku = pvm.alkupvm;
+            let loppu = pvm.loppupvm;
+            if (loppu >= $("#alkupvm").val() && alku <= $("#loppupvm").val()) 
                 return true;
-            } else
+            });
                 return false;
-        });
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
@@ -321,35 +320,31 @@ function poistaLaite(sarjanro) {
 
 
 
-function muutaLaite(data, sarjanro) {
-    $.ajax(
-        {
-            url: "http://localhost:3000/laite/" + sarjanro,
-            method: 'put',
-            data: data
-        }).done(function (data, textStatus, jqXHR) {
-            // Haetaan data uudelleen
-            $("#hakulomake").submit();
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            // Suoriteaan, jos kutsu epäonnistuu
-            console.log("Kutsu epäonnistui: " + errorThrown);
-        });
+function muutaLaite() {           
+    const muutettuData = $("#muutoslomake").serialize();
+
+    $.ajax({
+        url: "http://localhost:3000/laite/" + $("#sarjanro_muutos").val(),
+        method: 'put',
+        data: muutettuData,
+    }).done(function (data, textStatus, jqXHR) {
+        $("#hakulomake").submit();
+    });
 }
 
 function avaaMuutosLomake(sarjanro) {
     $.get(
-        "http://localhost:3000/laite/" + sarjanro
-    ).done(function (data, textStatus, jqXHR) {
-        $("#kategoria_muutos").val(data.kategoria);
-        $("#nimi_muutos").val(data.nimi);
-        $("#merkki_muutos").val(data.merkki);
-        $("#malli_muutos").val(data.malli);
-        $("#omistaja_muutos").val(data.omistaja);
-        $("#kuvaus_muutos").val(data.kuvaus);
-        $("#sijainti_muutos").val(data.sijainti);
+        "http://localhost:3000/laite/" + sarjanro,
+        (data, textStatus, jqXHR) => {
+            $("#sarjanro_muutos").val(sarjanro);
+            $("#kategoria_muutos").val(data[0].kategoria);
+            $("#nimi_muutos").val(data[0].nimi);
+            $("#merkki_muutos").val(data[0].merkki);
+            $("#malli_muutos").val(data[0].malli);
+            $("#omistaja_muutos").val(data[0].omistaja);
+            $("#kuvaus_muutos").val(data[0].kuvaus);
+            $("#sijainti_muutos").val(data[0].sijainti);
 
-        $("#dialogi_muutos").dialog("open");
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.log("status=" + textStatus + ", " + errorThrown);
-    });
+            $("#dialogi_muutos").dialog("open");
+        });
 }
