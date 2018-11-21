@@ -153,7 +153,7 @@ module.exports = {
     },
 
     fetchAllBookings: (req, res) => {
-        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = Varattu', [req.session.userid], (error, results, fields) => {
+        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = "Varattu"', [req.session.userid], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
@@ -164,7 +164,7 @@ module.exports = {
     },
 
     deleteBooking: (req, res) => {
-        connection.query('DELETE FROM varaus WHERE kayttaja_id = ?', [req.session.userid], (error, results, fields) => {
+        connection.query('DELETE FROM varaus WHERE id = ?', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
@@ -175,7 +175,7 @@ module.exports = {
     },
 
     fetchAllLoans: (req, res) => {
-        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = Lainattu', [req.session.userid], (error, results, fields) => {
+        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = "Lainattu"', [req.session.userid], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
