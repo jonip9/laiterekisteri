@@ -1,84 +1,7 @@
 $(() => {
     let formMuuta;
-
-    function haeVaraukset() { // Tee: admin tarkistus-> näyttää kaikki varaukset ja muutaLainatuksi Button
-        $.get(
-            'http://localhost:3000/varaus',
-        ).done((data, textStatus, jqXHR) => {
-            $('#varauksettaulu').empty();
-
-            data.forEach(function (varaus) {
-                $('#varauksettaulu').append(
-                    '<tr>'
-                    + '<td>' + varaus.id + '</td>'
-                    + '<td>' + varaus.laite_id + '</td>'
-                    + '<td>' + varaus.alkupvm + '</td>'
-                    + '<td>' + varaus.loppupvm + '</td>'
-                    + '<td>' + varaus.status + '</td>'
-                    + '<td>' + varaus.kayttaja_id + '</td>'
-                    + "<td><button onclick=\"poistaVaraus(" + varaus.id + ")\">Poista varaus</button></td>"
-                    // + "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ")\">Muuta lainatuksi</button></td>"
-                    + '</tr>'
-                );
-            });
-
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('status=' + textStatus + ', ' + errorThrown);
-        });
-    }
-    /*      Ei varmaan tarvi olla put
-    function muutaLainatuksi(id) {
-        $.ajax({
-            url: 'http://localhost:3000/laitteenvaraus/' + id,
-            method: 'put',
-        });
-    }
-    */
-    function haeLainat() { // Tee: admin tarkistus-> näyttää kaikki lainat ja muutaPalautetuksi Button
-        $.get(
-            'http://localhost:3000/laina',
-        ).done(function (data, textStatus, jqXHR) {
-            $('#lainattaulu').empty();
-
-            data.forEach(function (varaus) {
-                $('#varauksettaulu').append(
-                    '<tr>'
-                    + '<td>' + varaus.id + '</td>'
-                    + '<td>' + varaus.laite_id + '</td>'
-                    + '<td>' + varaus.alkupvm + '</td>'
-                    + '<td>' + varaus.loppupvm + '</td>'
-                    + '<td>' + varaus.status + '</td>'
-                    + '<td>' + varaus.kayttaja_id + '</td>'
-                    // + "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ")\">Muuta palautetuksi</button></td>"
-                    + '</tr>'
-                );
-            });
-
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('status=' + textStatus + ', ' + errorThrown);
-        });
-    }
-    /*
-    function muutaPalautetuksi(id) {
-        $.ajax({
-            url: 'http://localhost:3000/laitteenvaraus/' + id,
-            method: 'put',
-        });
-    }
-    */
-    function poistaVaraus(id) {
-        $.ajax(
-            {
-                url: "http://localhost:3000/varaus/" + id,
-                method: 'delete'
-            }).done(function (data, textStatus, jqXHR) {
-
-                $("#hakulomake").submit();
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                // Suoriteaan, jos kutsu epäonnistuu
-                console.log("Kutsu epäonnistui: " + errorThrown);
-            });
-    }
+    window.onload = haeVaraukset();
+    window.onload = haeLainat();
 
     function muutaKayttajatiedot() {
         const muutettukayttajaData = $('#kayttajanmuutoslomake').serialize();
@@ -99,16 +22,17 @@ $(() => {
             });
     }
 
-    /* 
-    $('#hakulomake').submit(function (event) {
-         event.preventDefault();
- 
-         let hakuehdot = $(this).serialize();
-         haeVaraukset(hakuehdot);
-     });
-     
+   /* $('#hakulomake').submit(function (event) {
+        event.preventDefault();
 
- */
+        let hakuehdot = $(this).serialize();
+        haeVaraukset(hakuehdot);
+    });
+    */
+    $('#kirjauduulos').click(function () {
+        location.href = "http://localhost:3000";
+    });
+
     const dialogMuuta = $('#dialogi_kayttajamuutos').dialog({
         autoOpen: false,
         closeOnEscape: false,
@@ -156,3 +80,83 @@ $(() => {
         event.preventDefault();
     });
 });
+
+function haeVaraukset() { // Tee: admin tarkistus-> näyttää kaikki varaukset 
+    $.get(
+        'http://localhost:3000/varaus',
+    ).done((data, textStatus, jqXHR) => {
+        $('#varauksettaulu').empty();
+
+        data.forEach(function (varaus) {
+            $('#varauksettaulu').append(
+                '<tr>'
+                + '<td>' + varaus.id + '</td>'
+                + '<td>' + varaus.laite_id + '</td>'
+                + '<td>' + varaus.alkupvm + '</td>'
+                + '<td>' + varaus.loppupvm + '</td>'
+                + '<td>' + varaus.status + '</td>'
+                + '<td>' + varaus.kayttaja_id + '</td>'
+                + "<td><button onclick=\"poistaVaraus(" + varaus.id + "); return false;\">Poista varaus</button></td>"
+                // + "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ")\">Muuta lainatuksi</button></td>"
+                + '</tr>'
+            );
+        });
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log('status=' + textStatus + ', ' + errorThrown);
+    });
+}
+/*      Ei varmaan tarvi olla put
+function muutaLainatuksi(id) {
+    $.ajax({
+        url: 'http://localhost:3000/laitteenvaraus/' + id,
+        method: 'put',
+    });
+}
+*/
+function haeLainat() { // Tee: admin tarkistus-> näyttää kaikki lainat 
+    $.get(
+        'http://localhost:3000/laina',
+    ).done(function (data, textStatus, jqXHR) {
+        $('#lainattaulu').empty();
+
+        data.forEach(function (varaus) {
+            $('#varauksettaulu').append(
+                '<tr>'
+                + '<td>' + varaus.id + '</td>'
+                + '<td>' + varaus.laite_id + '</td>'
+                + '<td>' + varaus.alkupvm + '</td>'
+                + '<td>' + varaus.loppupvm + '</td>'
+                + '<td>' + varaus.status + '</td>'
+                + '<td>' + varaus.kayttaja_id + '</td>'
+                // + "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ")\">Muuta palautetuksi</button></td>"
+                + '</tr>'
+            );
+        });
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log('status=' + textStatus + ', ' + errorThrown);
+    });
+}
+    /*
+    function muutaPalautetuksi(id) {
+        $.ajax({
+            url: 'http://localhost:3000/laitteenvaraus/' + id,
+            method: 'put',
+        });
+    }
+    */
+
+
+function poistaVaraus(id) {
+    $.ajax(
+        {
+            url: "http://localhost:3000/varaus", id,
+            method: 'delete'
+        }).done(function (data, textStatus, jqXHR) {
+
+            haeVaraukset();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log("Kutsu epäonnistui: " + errorThrown);
+        });
+}
