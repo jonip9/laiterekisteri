@@ -215,11 +215,11 @@ function haeLaitteet(hakuehdot) {
             $("#laitetaulu").append(
                 "<tr id=laite" + laite.sarjanro +  ">" +
                 "<td>" + laite.sarjanro + "</td>" +
-                "<td>" + laite.kategoria + "</td>" +
+                "<td>" + laite.katNimi + "</td>" +
                 "<td>" + laite.nimi + "</td>" +
                 "<td>" + laite.merkki + "</td>" +
                 "<td>" + laite.malli + "</td>" +
-                "<td>" + laite.omistaja + "</td>" +
+                "<td>" + laite.omNimi + "</td>" +
                 "<td>" + laite.kuvaus + "</td>" +
                 "<td>" + laite.sijainti + "</td>");
             if ($("#isAdmin").val() === "true") {

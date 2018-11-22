@@ -107,8 +107,8 @@ module.exports = {
     },
 
     fetchAllItems: (req, res) => {
-        connection.query('SELECT * FROM laite WHERE sarjanro LIKE ? AND kategoria LIKE ? AND nimi LIKE ? AND merkki LIKE ? AND malli LIKE ? AND omistaja LIKE ? AND sijainti LIKE ?',
-            [`${req.query.sarjanro}%`, `${req.query.kategoria}%`, `${req.query.nimi}%`, `${req.query.merkki}%`, `${req.query.malli}%`, `${req.query.omistaja}%`, `${req.query.sijainti}%`],
+        connection.query('SELECT sarjanro, kategoria.nimi AS katNimi, laite.nimi, merkki, malli, omistaja.nimi AS omNimi, kuvaus, sijainti FROM laite INNER JOIN kategoria ON laite.kategoria = kategoria.id INNER JOIN omistaja ON laite.omistaja = omistaja.id WHERE sarjanro LIKE ? AND kategoria.nimi LIKE ? AND laite.nimi LIKE ? AND merkki LIKE ? AND malli LIKE ? AND omistaja.nimi LIKE ? AND sijainti LIKE ?',
+            [`${req.query.sarjanro}%`, `${req.query.katNimi}%`, `${req.query.nimi}%`, `${req.query.merkki}%`, `${req.query.malli}%`, `${req.query.omNimi}%`, `${req.query.sijainti}%`],
             (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
