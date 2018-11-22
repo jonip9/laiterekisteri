@@ -153,7 +153,10 @@ module.exports = {
     },
 
     fetchAllBookings: (req, res) => {
-        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = "Varattu"', [req.session.userid], (error, results, fields) => {
+        var query1 = 'SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE status = "Varattu"'
+        if (req.session.userid != 99)
+            query1 += 'AND kayttaja_id = ?'; 
+        connection.query(query1, [req.session.userid], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
@@ -175,7 +178,10 @@ module.exports = {
     },
 
     fetchAllLoans: (req, res) => {
-        connection.query('SELECT * FROM varaus WHERE kayttaja_id = ? AND status = "Lainattu"', [req.session.userid], (error, results, fields) => {
+        var query2 = 'SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE status = "Lainattu"'
+        if (req.session.userid != 99)
+            query2 += 'AND kayttaja_id = ?';
+        connection.query(query2, [req.session.userid], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
@@ -185,13 +191,12 @@ module.exports = {
         });
     },
 
-    fetchBookedDates: (req, res) => {
+    fetchBookedDates: (req, res) => {               //NOW() ei toimi oikein ,ehkä muoto väärä 
         connection.query('SELECT * FROM varaus WHERE laite_id = ? AND loppupvm > NOW()', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 throw error;
             } else {
-                console.log("results=" + JSON.stringify(results));
                 res.send(results);
             }
         });
@@ -211,8 +216,9 @@ module.exports = {
     },
 
     updateBooking: (req, res) => {
-        connection.query('UPDATE varaus SET loppupvm = NOW(), status = IF(status = Varattu, Lainattu IF(status = Lainattu, Palautettu)) WHERE laite_id = ?',
-            [req.params.id], (error, results, fields) => {
+        //'UPDATE varaus SET loppupvm = NOW(), status = IF(status = "Varattu", "Lainattu" IF(status = "Lainattu", "Palautettu")) WHERE laite_id = ?'
+        var query3 = 'UPDATE varaus SET status = "Varattu" WHERE laite_id = ?'
+            connection.query(query3, [req.params.id], (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
                     throw error;

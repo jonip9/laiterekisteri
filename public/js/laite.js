@@ -26,34 +26,31 @@ $(function () {
     $("#hakulomake").submit(function (event) {
         event.preventDefault();
 
-        var hakuehdot = $(this).serialize();
+        let hakuehdot = $(this).serialize();
         haeLaitteet(hakuehdot);
     });
 
     $("#laitteet").click(function () {
-        // haeLaitteet();
+        let hakuehdot = $("#hakulomake").serialize();
+        haeLaitteet(hakuehdot);
         $("#laitedialogi").dialog("open");
     });
 
 
-    // Laite dialogi                //TEHTY
+    // Laite dialogi               
     $("#laitedialogi").dialog({
         autoOpen: false,
         height: 500,
         width: 1500,
         buttons: [
-            {
-                text: "Lisää",
-                click: function () {
-                    $("#dialogi_lisays").dialog("open");
-                    $("#hakulomake")[0].reset();
-                },
-            },
+
             {
                 text: "Takaisin",
                 click: function () {
                     $(this).dialog("close");
                     $("#hakulomake")[0].reset();
+                    haeKayttajanVaraukset();
+                    haeKayttajanLainat();
                 },
             }
         ],
@@ -63,9 +60,25 @@ $(function () {
         resizable: false
     });
 
+    //Lisätään "Lisää"-button jos #isAdmin = true
+    if ($("#isAdmin").val() === "true") {
+        $("#laitedialogi").dialog("option", "buttons",
+            {
+                "Lisää": function () {
+                    $("#dialogi_lisays").dialog("open");
+                    $("#hakulomake")[0].reset();
+                },
+                 
+                "Takaisin": function () {
+                    $(this).dialog("close");
+                    $("#hakulomake")[0].reset();
+                    haeKayttajanVaraukset();
+                    haeKayttajanLainat();
+                },   
+            });
+    }
 
-
-    //Laitteen lisays dialogi       //TEHTY
+    //Laitteen lisays dialogi       
     $("#dialogi_lisays").dialog({
         autoOpen: false,
         buttons: [
@@ -106,7 +119,7 @@ $(function () {
 
 
 
-    //Laitteen muutos dialogi               --TEHTY
+    //Laitteen muutos dialogi
     $("#dialogi_muutos").dialog({
         autoOpen: false,
         buttons: [
@@ -141,7 +154,7 @@ $(function () {
         resizable: false
     });
 
-    //Varaushistoria diaogi                 TEE
+    //Varaushistoria diaogi   
     $("#dialogi_varaushistoria").dialog({
         width: 850,
         autoOpen: false,
@@ -161,12 +174,14 @@ $(function () {
                         $('#muutosError2').html('<p>Anna arvo kaikkiin kenttiin!</p>');
                         return false;
                     }
-
-                    else if (tarkistapaallekkaisyydet($("#laite_id").val()) != false)      
+                    else if ($("#alkupvm").val() > $("#loppupvm").val()) {
+                        $('#muutosError2').html('<p>Alkupvm ei voi olla suurempi kuin loppupvm!!</p>');
+                        return false;      
+                    }
+                    else if (tarkistapaallekkaisyydet($("#laite_id").val()))      
                          {
                          $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
                          return false;
-                           
                     } else {
                         var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
                             "&alkupvm=" + $("#alkupvm").val() + " " + $("#kloaika1").val() +
@@ -187,7 +202,7 @@ $(function () {
     });
 });
 
-function haeLaitteet(hakuehdot) {                   //TEHTY
+function haeLaitteet(hakuehdot) {  
     $.get(
         "http://localhost:3000/laite", hakuehdot
     ).done(function (data, textStatus, jqXHR) {
@@ -268,12 +283,16 @@ function tarkistapaallekkaisyydet(sarjanro) {
         "http://localhost:3000/laitteenvaraus/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
 
-        data.forEach(function (pvm) {
-            let alku = pvm.alkupvm;
-            let loppu = pvm.loppupvm;
-            if (loppu >= $("#alkupvm").val() && alku <= $("#loppupvm").val()) 
-                return true;
+        if (data.length == 0) {
+            return false;
+        } else {
+            data.forEach(function (pvm) {
+                let alku = pvm.alkupvm;
+                let loppu = pvm.loppupvm;
+                if (loppu >= $("#alkupvm").val() && alku <= $("#loppupvm").val())
+                    return true;
             });
+        }
                 return false;
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
