@@ -114,7 +114,6 @@ module.exports = {
                     console.log(error.sqlMessage);
                     throw error;
                 } else {
-                    console.log(JSON.stringify(results));
                     res.send(results);
                 }
             });
