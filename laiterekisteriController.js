@@ -191,28 +191,6 @@ module.exports = {
         });
     },
 
-    fetchOneBookedDate: (req, res) => {
-        connection.query('SELECT alkupvm, loppupvm FROM varaus WHERE id = ?', [req.params.id], (error, results, fields) => {
-            if (error) {
-                console.log(error.sqlMessage);
-                throw error;
-            } else {
-                res.send(results);
-            }
-        });
-    },
-
-    fetchBookedDates: (req, res) => {      
-        connection.query('SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ?', [req.params.id], (error, results, fields) => {
-            if (error) {
-                console.log(error.sqlMessage);
-                throw error;
-            } else {
-                res.send(results);
-            }
-        });
-    },
-
     addBookedDates: (req, res) => {
         connection.query('INSERT INTO varaus(laite_id, alkupvm, loppupvm, status, kayttaja_id) VALUES (?, ?, ?, ?, ?)',
             [req.body.laite_id, req.body.alkupvm, req.body.loppupvm, req.body.status, req.session.userid],
@@ -226,7 +204,42 @@ module.exports = {
             });
     },
 
-    updateBooking: (req, res) => {
+    fetchOneBookedDate: (req, res) => {
+        connection.query('SELECT alkupvm, loppupvm FROM varaus WHERE id = ?', [req.params.id], (error, results, fields) => {
+            if (error) {
+                console.log(error.sqlMessage);
+                throw error;
+            } else {
+                res.send(results);
+            }
+        });
+    },
+
+    updateBookingDates: (req, res) => {
+        connection.query('UPDATE varaus SET alkupvm = ?, loppupvm = ? WHERE id = ?',
+            [req.body.alkupvm, req.body.loppupvm, req.params.id],
+            (error, results, fields) => {
+                if (error) {
+                    console.log(error.sqlMessage);
+                    throw error;
+                } else {
+                    res.send(results);
+                }
+            });
+    },
+
+    fetchBookedDates: (req, res) => {      
+        connection.query('SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ? AND loppupvm >= CURDATE()', [req.params.id], (error, results, fields) => {
+            if (error) {
+                console.log(error.sqlMessage);
+                throw error;
+            } else {
+                res.send(results);
+            }
+        });
+    },
+
+    updateBookingStatus: (req, res) => {
         console.log("hei");
         var query3 = 'UPDATE varaus SET status = "Lainattu" WHERE laite_id = ?'
         if (req.body.status == "Lainattu")
@@ -241,5 +254,16 @@ module.exports = {
                     res.send(results);
                 }
             });
+    },
+
+    fetchBookedDates2: (req, res) => {
+        connection.query('SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ? AND id != ?', [req.params.sarjanro, req.params.id], (error, results, fields) => {
+            if (error) {
+                console.log(error.sqlMessage);
+                throw error;
+            } else {
+                res.send(results);
+            }
+        });
     },
 };
