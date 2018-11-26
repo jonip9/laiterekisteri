@@ -114,6 +114,9 @@ app.route('/laitteenvaraus')
     .post(laiterekisteriController.addBookedDates);
 
 app.route('/laitteenvaraus/:id')
+    .get(laiterekisteriController.fetchOneBookedDate)
+
+app.route('/laitteenvaraukset/:id')
     .get(laiterekisteriController.fetchBookedDates)
     .put(laiterekisteriController.updateBooking);
 
