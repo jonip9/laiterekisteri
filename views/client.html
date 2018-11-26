@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -57,6 +57,7 @@
     <button id="laitteet">Laitteet</button>
 
     <div id="laitedialogi" title="Laitteet">
+        <div id="poistoerror"></div>
         <form id="hakulomake">
             <fieldset>
                 <legend>Hakuehdot</legend>
@@ -131,6 +132,48 @@
         </form>
     </div>
 
+
+    <div id="dialogi_varaushistoria2" title="Varaushistoria">
+        <div id="muutosError3"></div>
+        <form id="uusivaraus2">
+            <p>Anna varauksen uudet päivät</p>
+            
+            <input type="hidden" id="varaus_id" name="id">
+            <input type="hidden" id="laite_id2" name="laite_id">
+            <label for="alkupvm">Alkupvm:</label>
+            <input type="date" id="alkupvm2" name="alkupvm">
+            <label for="kloaika1">Kellon aika:</label>
+            <input type="time" id="kloaika11" name="kloaika1">
+            <label for="loppupvm">Loppupvm:</label>
+            <input type="date" id="loppupvm2" name="loppupvm">
+            <label for="kloaika2">Kellon aika:</label>
+            <input type="time" id="kloaika21" name="kloaika2">
+            <input type="hidden" id="status2" name="status" value="Varattu">
+            <input type="hidden" id="kayttaja_id2" name="kayttaja_id">
+
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </form>
+
+        <form id="varaushistoria2">
+            <p>Varatut päivät</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Laite_id</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä_id</th>
+                    </tr>
+                </thead>
+                <tbody id="varaushistoriataulu2"></tbody>
+            </table>
+        </form>
+    </div>
+
+
+
     <div id="dialogi_kayttajamuutos" title="Muuta käyttäjän tietoja">
         <div id="muutosError"></div>
         <form id="kayttajanmuutoslomake">
@@ -168,7 +211,7 @@
             <input type="text" id="sijainti_muutos" name="sijainti" placeholder="Sijainti">
         </form>
     </div>
-    
+
     <div><input type="hidden" name="isAdmin" id="isAdmin" value={{isAdmin}}></div>
 </body>
 
