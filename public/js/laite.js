@@ -16,10 +16,10 @@ $(function () {
         var today = year + "-" + month + "-" + day,
             displayTime = hour + ":" + min;
 
-        document.getElementById("alkupvm").value = today;
-        document.getElementById("loppupvm").value = today;
-        document.getElementById("kloaika1").value = displayTime;
-        document.getElementById("kloaika2").value = displayTime;
+        $("#alkupvm").val(today);
+        $("#loppupvm").val(today);
+        $("#kloaika1").val(displayTime);
+        $("#kloaika2").val(displayTime);
     }
     window.onload = date();
 
@@ -205,7 +205,6 @@ $(function () {
                 click: function () {
                     $(this).dialog("close");
                     $("#varaushistoriataulu").empty();
-                    date();
                 },
             }
         ],
@@ -278,7 +277,7 @@ function haeVaratutpaivat(sarjanro) {
 
 function lisaaVaraus(lisattyVarausData, laite_id) {
     $.post(
-        "http://localhost:3000/laitteenvaraukset",
+        "http://localhost:3000/laitteenvaraus",
         lisattyVarausData
     ).done(function (data, textStatus, jqXHR) {
         $("#varaushistoriataulu").empty();
