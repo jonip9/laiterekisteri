@@ -115,10 +115,15 @@ app.route('/laitteenvaraus')
 
 app.route('/laitteenvaraus/:id')
     .get(laiterekisteriController.fetchOneBookedDate)
+    .put(laiterekisteriController.updateBookingDates);
 
 app.route('/laitteenvaraukset/:id')
     .get(laiterekisteriController.fetchBookedDates)
-    .put(laiterekisteriController.updateBooking);
+    .put(laiterekisteriController.updateBookingStatus);
+
+app.route('/laitteenvaraukset/:sarjanro/:id')
+    .get(laiterekisteriController.fetchBookedDates2);
+    
 
 app.listen(port, hostlocal, () => {
     console.log(`Local server running AT http://${hostlocal}:${port}/`);
