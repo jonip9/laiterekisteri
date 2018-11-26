@@ -3,6 +3,49 @@ $(() => {
     window.onload = haeKayttajanVaraukset();
     window.onload = haeKayttajanLainat();
 
+    $("#dialogi_varaushistoria2").dialog({
+        width: 850,
+        autoOpen: false,
+        closeOnEscape: false,
+        draggable: false,
+        modal: true,
+        resizable: false,
+        close: () => {
+            $('#muutosError3').html('');
+        },
+        buttons: [
+            {
+                text: "Tallenna",
+                click: function () {
+                    if ($.trim($("#alkupvm2").val()) === "" ||
+                        $.trim($("#loppupvm2").val()) === "") {
+                        $('#muutosError3').html('<p>Anna arvo kaikkiin kenttiin!</p>');
+                        return false;
+                    }
+                    else if ($("#alkupvm2").val() > $("#loppupvm2").val()) {
+                        $('#muutosError3').html('<p>Alkupvm ei voi olla suurempi kuin loppupvm!!</p>');
+                        return false;
+                    }
+                    else if (tarkistapaallekkaisyydet2($("#laite_id2").val(), $("#varaus_id").val())) {     
+                        $('#muutosError3').html('<p>Varaus menee muiden varausten päälle!!</p>');
+                        return false;
+                    } else {
+                        var muutettuVarausData = "alkupvm=" + $("#alkupvm2").val() + " " + $("#kloaika11").val() +
+                            "&loppupvm=" + $("#loppupvm2").val() + " " + $("#kloaika21").val();
+                        muutaVarausta(muutettuVarausData);
+                    }
+                },
+            },
+            {
+                text: "Takaisin",
+                click: function () {
+                    $(this).dialog("close");
+                    $("#varaushistoriataulu2").empty();
+                },
+            }
+        ],
+    });
+
     function muutaKayttajatiedot() {
         const muutettukayttajaData = $('#kayttajanmuutoslomake').serialize();
 
@@ -89,7 +132,7 @@ function haeKayttajanVaraukset() {
                 + '<td>' + varaus.loppupvm + '</td>'
                 + '<td>' + varaus.status + '</td>'
                 + '<td>' + varaus.kayttaja_id + '</td>'
-                + "<td><button onclick=\"muutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button></td>"
+                + "<td><button onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button></td>"
                 + "<td><button onclick=\"poistaVaraus(" + varaus.id + "); return false;\">Poista varaus</button></td>");
             if ($("#isAdmin").val() === "true") {
                 $("#varaus" + varaus.id).append(
@@ -103,24 +146,84 @@ function haeKayttajanVaraukset() {
     });
 }
 
-function muutaVarausta(sarjanro, id) {
+function avaamuutaVarausta(sarjanro, id) {
     $.get(
-        "http://localhost:3000/laiteenvaraus/" + id,
+        "http://localhost:3000/laitteenvaraus/" + id,
         (data, textStatus, jqXHR) => {
-            var alku = data[0].alkupvm;
-            var pvm1 = alku.substring(0, 10);
-            var aika1 = alku.substring(11, 16);
-            var loppu = data[0].loppupvm;
-            var pvm2 = loppu.substring(0, 10);
-            var aika2 = loppu.substring(11, 16);
-            $("#alkupvm").val(pvm1);
-            $("#kloaika1").val(aika1);
-            $("#loppupvm").val(pvm2);
-            $("#klokaika2").val(aika2);
+            var alku = data[0].alkupvm,
+                pvm1 = alku.substring(0, 10),
+                aika1 = alku.substring(11, 16),
+                loppu = data[0].loppupvm,
+                pvm2 = loppu.substring(0, 10),
+                aika2 = loppu.substring(11, 16);
+            $("#alkupvm2").val(pvm1);
+            $("#loppupvm2").val(pvm2);
+            $("#kloaika11").val(aika1);
+            $("#kloaika21").val(aika2);
+            $("#varaus_id").val(id);
         });
-    document.getElementById('pvarausdialog').innerHTML = "Anna varauksen uudet päivät";
-    haeVaratutpaivat(sarjanro);
+        $.get(
+            "http://localhost:3000/laitteenvaraukset/" + sarjanro
+        ).done(function (data, textStatus, jqXHR) {
+
+            data.forEach(function (varaus) {
+                $("#varaushistoriataulu2").append(
+                    "<tr>" +
+                    "<td>" + varaus.id + "</td>" +
+                    "<td>" + varaus.laite_id + "</td>" +
+                    "<td>" + varaus.alkupvm + "</td>" +
+                    "<td>" + varaus.loppupvm + "</td>" +
+                    "<td>" + varaus.status + "</td>" +
+                    "<td>" + varaus.kayttaja_id + "</td>" +
+                    "</tr>"
+                );
+            });
+
+            $("#laite_id2").val(sarjanro);
+
+            $("#dialogi_varaushistoria2").dialog("open");
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log("status=" + textStatus + ", " + errorThrown);
+        });
+    
 }
+
+function muutaVarausta(muutettuVarausData) {
+
+    $.ajax({
+        url: "http://localhost:3000/laitteenvaraus/" + $("#varaus_id").val(),
+        method: 'put',
+        data: muutettuVarausData,
+    }).done(function (data, textStatus, jqXHR) {
+        $("#varaushistoriataulu2").empty();
+        avaamuutaVarausta($("#laite_id2").val(), $("#varaus_id").val());
+    });
+}
+
+function tarkistapaallekkaisyydet2(sarjanro, id) {
+    $.get(
+        "http://localhost:3000/laitteenvaraukset/" + sarjanro + "/" + id
+    ).done(function (data, textStatus, jqXHR) {
+
+        if (data.length == 0) {
+            return false;
+        } else {
+            data.forEach(function (pvm) {
+                let alku = pvm.alkupvm;
+                let loppu = pvm.loppupvm;
+                if (loppu >= $("#alkupvm").val() && alku <= $("#loppupvm").val())
+                    return true;
+            });
+        }
+        return false;
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log("status=" + textStatus + ", " + errorThrown);
+    });
+}
+
+
 
 function muutaLainatuksi(id, status) {
     $.ajax({
