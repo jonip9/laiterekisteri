@@ -16,10 +16,10 @@ $(function () {
         var today = year + "-" + month + "-" + day,
             displayTime = hour + ":" + min;
 
-        document.getElementById("alkupvm").value = today;
-        document.getElementById("loppupvm").value = today;
-        document.getElementById("kloaika1").value = displayTime;
-        document.getElementById("kloaika2").value = displayTime;
+        $("#alkupvm").val(today);
+        $("#loppupvm").val(today);
+        $("#kloaika1").val(displayTime);
+        $("#kloaika2").val(displayTime);
     }
     window.onload = date();
 
@@ -42,6 +42,9 @@ $(function () {
         autoOpen: false,
         height: 500,
         width: 1500,
+        close: () => {
+            $('#poistoerror').html('');
+        },
         buttons: [
 
             {
@@ -81,6 +84,9 @@ $(function () {
     //Laitteen lisays dialogi       
     $("#dialogi_lisays").dialog({
         autoOpen: false,
+        close: () => {
+            $('#poistoerror').html('');
+        },
         buttons: [
             {
                 text: "Tallenna",
@@ -122,6 +128,9 @@ $(function () {
     //Laitteen muutos dialogi
     $("#dialogi_muutos").dialog({
         autoOpen: false,
+        close: () => {
+            $('#poistoerror').html('');
+        },
         buttons: [
             {
                 text: "Tallenna",
@@ -241,7 +250,7 @@ function haeLaitteet(hakuehdot) {
 
 function haeVaratutpaivat(sarjanro) {     
     $.get(
-        "http://localhost:3000/laitteenvaraus/" + sarjanro
+        "http://localhost:3000/laitteenvaraukset/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
 
         data.forEach(function (varaus) {
@@ -280,7 +289,7 @@ function lisaaVaraus(lisattyVarausData, laite_id) {
 
 function tarkistapaallekkaisyydet(sarjanro) {
     $.get(
-        "http://localhost:3000/laitteenvaraus/" + sarjanro
+        "http://localhost:3000/laitteenvaraukset/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
 
         if (data.length == 0) {
@@ -315,7 +324,7 @@ function lisaaLaite(lisattyData) {
 
 function poistaLaite(sarjanro) {
     $.get(
-        "http://localhost:3000/laitteenvaraus/" + sarjanro
+        "http://localhost:3000/laitteenvaraukset/" + sarjanro
     ).done((data, textStatus, jqXHR) => {
 
         if (data.length === 0) {
