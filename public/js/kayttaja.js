@@ -89,10 +89,11 @@ function haeKayttajanVaraukset() {
                 + '<td>' + varaus.loppupvm + '</td>'
                 + '<td>' + varaus.status + '</td>'
                 + '<td>' + varaus.kayttaja_id + '</td>'
+                + "<td><button onclick=\"muutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button></td>"
                 + "<td><button onclick=\"poistaVaraus(" + varaus.id + "); return false;\">Poista varaus</button></td>");
             if ($("#isAdmin").val() === "true") {
                 $("#varaus" + varaus.id).append(
-                  "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ")\">Muuta lainatuksi</button></td>"
+                  "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ", " + varaus.status + ")\">Muuta lainatuksi</button></td>"
                 );
             }           
         });
@@ -102,10 +103,30 @@ function haeKayttajanVaraukset() {
     });
 }
 
-function muutaLainatuksi(id) {
+function muutaVarausta(sarjanro, id) {
+    $.get(
+        "http://localhost:3000/laiteenvaraus/" + id,
+        (data, textStatus, jqXHR) => {
+            var alku = data[0].alkupvm;
+            var pvm1 = alku.substring(0, 10);
+            var aika1 = alku.substring(11, 16);
+            var loppu = data[0].loppupvm;
+            var pvm2 = loppu.substring(0, 10);
+            var aika2 = loppu.substring(11, 16);
+            $("#alkupvm").val(pvm1);
+            $("#kloaika1").val(aika1);
+            $("#loppupvm").val(pvm2);
+            $("#klokaika2").val(aika2);
+        });
+    document.getElementById('pvarausdialog').innerHTML = "Anna varauksen uudet päivät";
+    haeVaratutpaivat(sarjanro);
+}
+
+function muutaLainatuksi(id, status) {
     $.ajax({
-        url: 'http://localhost:3000/laitteenvaraus/' + id,
-        method: 'put'
+        url: 'http://localhost:3000/laitteenvaraukset/' + id, 
+        method: 'put',
+        data: { status: status }
     }).done(function (data, textStatus, jqXHR) {
         haeKayttajanVaraukset();
         haeKayttajanLainat();
@@ -129,8 +150,8 @@ function haeKayttajanLainat() {
                 + '<td>' + varaus.kayttaja_id + '</td>');
             if ($("#isAdmin").val() === "true") {
                 $("#lainaus" + varaus.id).append(
-                    "<td><button onclick=\"muutaVaratuksi(" + varaus.id + ")\">Muuta varatuksi</button></td>" +
-                    "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ")\">Muuta palautetuksi</button></td>"
+                    "<td><button onclick=\"muutaVaratuksi(" + varaus.id + ", " + varaus.status +")\">Muuta varatuksi</button></td>" +
+                    "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ", " + varaus.status + "1" + ")\">Muuta palautetuksi</button></td>"
                 );
             }
         });
@@ -140,9 +161,9 @@ function haeKayttajanLainat() {
     });
 }
 
-    function muutaVaratuksi(id) {
+    function muutaVaratuksi(id, status) {
         $.ajax({
-            url: 'http://localhost:3000/laitteenvaraus/' + id,
+            url: 'http://localhost:3000/laitteenvaraukset/' + id, status,
             method: 'put',
         }).done(function (data, textStatus, jqXHR) {
             haeKayttajanVaraukset();
@@ -150,9 +171,9 @@ function haeKayttajanLainat() {
         });
     }
      
-    function muutaPalautetuksi(id) {
+    function muutaPalautetuksi(id, status) {
         $.ajax({
-            url: 'http://localhost:3000/laitteenvaraus/' + id,
+            url: 'http://localhost:3000/laitteenvaraukset/' + id, status,
             method: 'put',
         }).done(function (data, textStatus, jqXHR) {
             haeKayttajanVaraukset();
