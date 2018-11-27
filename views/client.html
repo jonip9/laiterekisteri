@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -137,7 +137,7 @@
         <div id="muutosError3"></div>
         <form id="uusivaraus2">
             <p>Anna varauksen uudet päivät</p>
-            
+
             <input type="hidden" id="varaus_id" name="id">
             <input type="hidden" id="laite_id2" name="laite_id">
             <label for="alkupvm">Alkupvm:</label>
@@ -187,19 +187,22 @@
         </form>
     </div>
 
-    <div id="dialogi_lisays" title="Lisää laitteen tiedot">
+    <div id="dialogi_lisays" title="Laitteen tiedot">
         <form id="lisayslomake">
-            <input type="text" id="kategoria_lisays" name="kategoria" placeholder="Kategoria">
+            <input type="hidden" id="sarjanro_muutos" name="sarjanro">
+            <!-- <input type="text" id="kategoria_lisays" name="kategoria" placeholder="Kategoria"> -->
+            <select name="kategoria" id="kategoria_lisays"></select>
             <input type="text" id="nimi_lisays" name="nimi" placeholder="Nimi">
             <input type="text" id="merkki_lisays" name="merkki" placeholder="Merkki">
             <input type="text" id="malli_lisays" name="malli" placeholder="Malli">
-            <input type="text" id="omistaja_lisays" name="omistaja" placeholder="Omistaja">
+            <!-- <input type="text" id="omistaja_lisays" name="omistaja" placeholder="Omistaja"> -->
+            <select name="omistaja" id="omistaja_lisays"></select>
             <input type="text" id="kuvaus_lisays" name="kuvaus" placeholder="Kuvaus">
             <input type="text" id="sijainti_lisays" name="sijainti" placeholder="Sijainti">
         </form>
     </div>
 
-    <div id="dialogi_muutos" title="Muuta laitteen tietoja">
+<!--     <div id="dialogi_muutos" title="Muuta laitteen tietoja">
         <form id="muutoslomake">
             <input type="hidden" id="sarjanro_muutos" name="sarjanro">
             <input type="text" id="kategoria_muutos" name="kategoria" placeholder="Kategoria">
@@ -210,7 +213,7 @@
             <input type="text" id="kuvaus_muutos" name="kuvaus" placeholder="Kuvaus">
             <input type="text" id="sijainti_muutos" name="sijainti" placeholder="Sijainti">
         </form>
-    </div>
+    </div> -->
 
     <div><input type="hidden" name="isAdmin" id="isAdmin" value={{isAdmin}}></div>
 </body>

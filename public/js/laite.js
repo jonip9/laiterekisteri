@@ -71,21 +71,31 @@ $(function () {
                     $("#dialogi_lisays").dialog("open");
                     $("#hakulomake")[0].reset();
                 },
-                 
+
                 "Takaisin": function () {
                     $(this).dialog("close");
                     $("#hakulomake")[0].reset();
                     haeKayttajanVaraukset();
                     haeKayttajanLainat();
-                },   
+                },
             });
     }
 
     //Laitteen lisays dialogi       
     $("#dialogi_lisays").dialog({
         autoOpen: false,
+        closeOnEscape: false,
+        draggable: false,
+        modal: true,
+        resizable: false,
+        create: () => {
+            haeKategoriat();
+            haeOmistajat();
+        },
         close: () => {
             $('#poistoerror').html('');
+            $("#sarjanro_muutos").val('');
+            $("#lisayslomake")[0].reset();
         },
         buttons: [
             {
@@ -100,33 +110,29 @@ $(function () {
                         $.trim($("#sijainti_lisays").val()) === "") {
                         alert('Anna arvo kaikki kenttiin!');
                         return false;
-                    } else {
-                        var lisattyData = $("#lisayslomake").serialize();
-                        lisaaLaite(lisattyData);
-                        $(this).dialog("close");
-
-                        $("#lisayslomake")[0].reset();
                     }
+
+                    if ($("#sarjanro_muutos").val() === '') {
+                        lisaaLaite();
+                    } else {
+                        muutaLaite();
+                    }
+                    $(this).dialog("close");
                 },
             },
             {
                 text: "Peruuta",
                 click: function () {
-                    $("#lisayslomake")[0].reset();
                     $(this).dialog("close");
                 },
             }
         ],
-        closeOnEscape: false,
-        draggable: false,
-        modal: true,
-        resizable: false
     });
 
 
 
     //Laitteen muutos dialogi
-    $("#dialogi_muutos").dialog({
+    /* $("#dialogi_muutos").dialog({
         autoOpen: false,
         close: () => {
             $('#poistoerror').html('');
@@ -144,7 +150,7 @@ $(function () {
                         $.trim($("#sijainti_muutos").val()) === "") {
                         alert('Anna arvo kaikki kenttiin!');
                         return false;
-                    } else {                      
+                    } else {
                         muutaLaite();
                         $(this).dialog("close");
                     }
@@ -161,7 +167,7 @@ $(function () {
         draggable: false,
         modal: true,
         resizable: false
-    });
+    }); */
 
     //Varaushistoria diaogi   
     $("#dialogi_varaushistoria").dialog({
@@ -185,12 +191,11 @@ $(function () {
                     }
                     else if ($("#alkupvm").val() > $("#loppupvm").val()) {
                         $('#muutosError2').html('<p>Alkupvm ei voi olla suurempi kuin loppupvm!!</p>');
-                        return false;      
+                        return false;
                     }
-                    else if (tarkistapaallekkaisyydet($("#laite_id").val()))      
-                         {
-                         $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
-                         return false;
+                    else if (tarkistapaallekkaisyydet($("#laite_id").val())) {
+                        $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
+                        return false;
                     } else {
                         var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
                             "&alkupvm=" + $("#alkupvm").val() + " " + $("#kloaika1").val() +
@@ -211,18 +216,18 @@ $(function () {
     });
 });
 
-function haeLaitteet(hakuehdot) {  
+function haeLaitteet(hakuehdot) {
     $.get(
         "http://localhost:3000/laite", hakuehdot
     ).done(function (data, textStatus, jqXHR) {
         $("#laitetaulu").empty();
 
-        if (data.length == 0) 
-            alert("Antamillasi hakuehdoilla ei löytynyt laitteita!"); 
-        
+        if (data.length == 0)
+            alert("Antamillasi hakuehdoilla ei löytynyt laitteita!");
+
         data.forEach(function (laite) {
             $("#laitetaulu").append(
-                "<tr id=laite" + laite.sarjanro +  ">" +
+                "<tr id=laite" + laite.sarjanro + ">" +
                 "<td>" + laite.sarjanro + "</td>" +
                 "<td>" + laite.katNimi + "</td>" +
                 "<td>" + laite.nimi + "</td>" +
@@ -236,11 +241,11 @@ function haeLaitteet(hakuehdot) {
                     "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>" +
                     "<td><button onclick=\"poistaLaite(" + laite.sarjanro + "); return false;\">Poista laite</button></td>" +
                     "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + "); return false;\">Muuta laite</button></td>"
-                 );
+                );
             } else {
                 $("#laite" + laite.sarjanro).append(
                     "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>"
-                 );
+                );
             }
         });
     }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -248,7 +253,7 @@ function haeLaitteet(hakuehdot) {
     });
 }
 
-function haeVaratutpaivat(sarjanro) {     
+function haeVaratutpaivat(sarjanro) {
     $.get(
         "http://localhost:3000/laitteenvaraukset/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
@@ -302,7 +307,7 @@ function tarkistapaallekkaisyydet(sarjanro) {
                     return true;
             });
         }
-                return false;
+        return false;
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
@@ -311,7 +316,9 @@ function tarkistapaallekkaisyydet(sarjanro) {
 
 
 
-function lisaaLaite(lisattyData) {
+function lisaaLaite() {
+    const lisattyData = $("#lisayslomake").serialize();
+
     $.post(
         "http://localhost:3000/laite",
         lisattyData
@@ -348,8 +355,9 @@ function poistaLaite(sarjanro) {
 
 
 
-function muutaLaite() {           
-    const muutettuData = $("#muutoslomake").serialize();
+function muutaLaite() {
+    const muutettuData = $("#lisayslomake").serialize();
+    console.log(muutettuData);
 
     $.ajax({
         url: "http://localhost:3000/laite/" + $("#sarjanro_muutos").val(),
@@ -360,7 +368,7 @@ function muutaLaite() {
     });
 }
 
-function avaaMuutosLomake(sarjanro) {
+/* function avaaMuutosLomake(sarjanro) {
     $.get(
         "http://localhost:3000/laite/" + sarjanro,
         (data, textStatus, jqXHR) => {
@@ -373,6 +381,42 @@ function avaaMuutosLomake(sarjanro) {
             $("#kuvaus_muutos").val(data[0].kuvaus);
             $("#sijainti_muutos").val(data[0].sijainti);
 
-            $("#dialogi_muutos").dialog("open");
+            $("#dialogi_lisays").dialog("open");
         });
+} */
+
+function avaaMuutosLomake(sarjanro) {
+    $.get(
+        "http://localhost:3000/laite/" + sarjanro,
+        (data, textStatus, jqXHR) => {
+            console.log(data[0]);
+            $("#sarjanro_muutos").val(sarjanro);
+            $("#kategoria_lisays").val(data[0].kategoria);
+            $("#nimi_lisays").val(data[0].nimi);
+            $("#merkki_lisays").val(data[0].merkki);
+            $("#malli_lisays").val(data[0].malli);
+            $("#omistaja_lisays").val(data[0].omistaja);
+            $("#kuvaus_lisays").val(data[0].kuvaus);
+            $("#sijainti_lisays").val(data[0].sijainti);
+
+            $("#dialogi_lisays").dialog("open");
+        });
+}
+
+function haeKategoriat() {
+    $("#kategoria_lisays").empty();
+    $.get("http://localhost:3000/kategoria", function (data, textStatus, jqXHR) {
+        $.each(data, (i, e) => {
+            $("#kategoria_lisays").append(new Option(e.nimi, e.id));
+        });
+    });
+}
+
+function haeOmistajat() {
+    $("#omistaja_lisays").empty();
+    $.get("http://localhost:3000/omistaja", function (data, textStatus, jqXHR) {
+        $.each(data, (i, e) => {
+            $("#omistaja_lisays").append(new Option(e.nimi, e.id));
+        });
+    });
 }
