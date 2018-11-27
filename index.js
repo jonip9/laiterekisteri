@@ -39,10 +39,12 @@ app.get('/', (req, res) => {
 
         if (req.session.error) {
             msg = req.session.error;
+            req.session.error = '';
         }
 
         if (req.session.success) {
             msg = req.session.success;
+            req.session.success = '';
         }
 
         res.render('login', {

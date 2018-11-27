@@ -11,6 +11,7 @@ $(() => {
       { tunnus: $('#reg_tunnus').val(), salasana: $('#reg_ss').val(), nimi: $('#reg_nimi').val() },
     ).done((data) => {
       dialog.dialog('close');
+      location.reload();
     }).fail((jqXHR, textStatus, errorThrown) => {
       console.log('status=' + textStatus + ', ' + errorThrown);
       $('#regError').html('<p>Käyttäjä on jo olemassa!</p>');
