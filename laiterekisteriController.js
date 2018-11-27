@@ -32,12 +32,12 @@ module.exports = {
         });
     },
 
-    registerUser: (req, res, next) => {
+    registerUser: (req, res) => {
         connection.query('INSERT INTO kayttaja(tunnus, salasana, nimi) VALUES (?, ?, ?)',
             [req.body.tunnus, req.body.salasana, req.body.nimi], (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    next(error);
+                    res.status(500).send(error);
                 } else {
                     req.session.success = 'Käyttäjä luotu onnistuneesti.';
                     res.send(results);
@@ -50,7 +50,7 @@ module.exports = {
             [req.body.salasana, req.body.nimi, req.params.id], (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -62,7 +62,7 @@ module.exports = {
             [req.session.user], (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -75,7 +75,7 @@ module.exports = {
             (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -88,7 +88,7 @@ module.exports = {
             (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -99,7 +99,7 @@ module.exports = {
         connection.query('DELETE FROM laite WHERE sarjanro = ?', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -112,7 +112,7 @@ module.exports = {
             (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -123,7 +123,7 @@ module.exports = {
         connection.query('SELECT sarjanro, kategoria, nimi, merkki, malli, omistaja, kuvaus, sijainti FROM laite WHERE sarjanro = ?', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -134,7 +134,7 @@ module.exports = {
         connection.query('SELECT id, nimi FROM kategoria', (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -145,7 +145,7 @@ module.exports = {
         connection.query('SELECT id, nimi FROM omistaja', (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -159,7 +159,7 @@ module.exports = {
         connection.query(query1, [req.session.userid], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -170,7 +170,7 @@ module.exports = {
         connection.query('DELETE FROM varaus WHERE id = ?', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -184,7 +184,7 @@ module.exports = {
         connection.query(query2, [req.session.userid], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -197,7 +197,7 @@ module.exports = {
             (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -208,7 +208,7 @@ module.exports = {
         connection.query('SELECT alkupvm, loppupvm FROM varaus WHERE id = ?', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -221,7 +221,7 @@ module.exports = {
             (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -232,7 +232,7 @@ module.exports = {
         connection.query('SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ? AND loppupvm >= CURDATE()', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
@@ -249,7 +249,7 @@ module.exports = {
             connection.query(query3, [req.params.id], (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    res.status(500).send(error);
                 } else {
                     res.send(results);
                 }
@@ -260,7 +260,7 @@ module.exports = {
         connection.query('SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ? AND id != ?', [req.params.sarjanro, req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
-                throw error;
+                res.status(500).send(error);
             } else {
                 res.send(results);
             }
