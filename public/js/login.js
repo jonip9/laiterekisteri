@@ -9,7 +9,7 @@ $(() => {
     $.post(
       'http://localhost:3000/kayttaja',
       { tunnus: $('#reg_tunnus').val(), salasana: $('#reg_ss').val(), nimi: $('#reg_nimi').val() },
-    ).done(() => {
+    ).done((data) => {
       dialog.dialog('close');
     }).fail((jqXHR, textStatus, errorThrown) => {
       console.log('status=' + textStatus + ', ' + errorThrown);
