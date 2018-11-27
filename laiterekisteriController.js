@@ -32,12 +32,12 @@ module.exports = {
         });
     },
 
-    registerUser: (req, res) => {
+    registerUser: (req, res, next) => {
         connection.query('INSERT INTO kayttaja(tunnus, salasana, nimi) VALUES (?, ?, ?)',
             [req.body.tunnus, req.body.salasana, req.body.nimi], (error, results, fields) => {
                 if (error) {
                     console.log(error.sqlMessage);
-                    throw error;
+                    next(error);
                 } else {
                     req.session.success = 'Käyttäjä luotu onnistuneesti.';
                     res.send(results);
