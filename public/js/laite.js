@@ -40,13 +40,20 @@ $(function () {
     // Laite dialogi               
     $("#laitedialogi").dialog({
         autoOpen: false,
+        closeOnEscape: false,
+        draggable: false,
+        modal: true,
+        resizable: false,
         height: 500,
         width: 1500,
+        create: () => {
+            haeKategoriat();
+            haeOmistajat();
+        },
         close: () => {
             $('#poistoerror').html('');
         },
         buttons: [
-
             {
                 text: "Takaisin",
                 click: function () {
@@ -57,10 +64,6 @@ $(function () {
                 },
             }
         ],
-        closeOnEscape: false,
-        draggable: false,
-        modal: true,
-        resizable: false
     });
 
     //Lisätään "Lisää"-button jos #isAdmin = true
@@ -88,10 +91,6 @@ $(function () {
         draggable: false,
         modal: true,
         resizable: false,
-        create: () => {
-            haeKategoriat();
-            haeOmistajat();
-        },
         close: () => {
             $('#poistoerror').html('');
             $("#sarjanro_muutos").val('');
@@ -128,46 +127,6 @@ $(function () {
             }
         ],
     });
-
-
-
-    //Laitteen muutos dialogi
-    /* $("#dialogi_muutos").dialog({
-        autoOpen: false,
-        close: () => {
-            $('#poistoerror').html('');
-        },
-        buttons: [
-            {
-                text: "Tallenna",
-                click: function () {
-                    if ($.trim($("#kategoria_muutos").val()) === "" ||
-                        $.trim($("#nimi_muutos").val()) === "" ||
-                        $.trim($("#merkki_muutos").val()) === "" ||
-                        $.trim($("#malli_muutos").val()) === "" ||
-                        $.trim($("#omistaja_muutos").val()) === "" ||
-                        $.trim($("#kuvaus_muutos").val()) === "" ||
-                        $.trim($("#sijainti_muutos").val()) === "") {
-                        alert('Anna arvo kaikki kenttiin!');
-                        return false;
-                    } else {
-                        muutaLaite();
-                        $(this).dialog("close");
-                    }
-                },
-            },
-            {
-                text: "Peruuta",
-                click: function () {
-                    $(this).dialog("close");
-                },
-            }
-        ],
-        closeOnEscape: false,
-        draggable: false,
-        modal: true,
-        resizable: false
-    }); */
 
     //Varaushistoria diaogi   
     $("#dialogi_varaushistoria").dialog({
@@ -368,23 +327,6 @@ function muutaLaite() {
     });
 }
 
-/* function avaaMuutosLomake(sarjanro) {
-    $.get(
-        "http://localhost:3000/laite/" + sarjanro,
-        (data, textStatus, jqXHR) => {
-            $("#sarjanro_muutos").val(sarjanro);
-            $("#kategoria_muutos").val(data[0].kategoria);
-            $("#nimi_muutos").val(data[0].nimi);
-            $("#merkki_muutos").val(data[0].merkki);
-            $("#malli_muutos").val(data[0].malli);
-            $("#omistaja_muutos").val(data[0].omistaja);
-            $("#kuvaus_muutos").val(data[0].kuvaus);
-            $("#sijainti_muutos").val(data[0].sijainti);
-
-            $("#dialogi_lisays").dialog("open");
-        });
-} */
-
 function avaaMuutosLomake(sarjanro) {
     $.get(
         "http://localhost:3000/laite/" + sarjanro,
@@ -408,6 +350,7 @@ function haeKategoriat() {
     $.get("http://localhost:3000/kategoria", function (data, textStatus, jqXHR) {
         $.each(data, (i, e) => {
             $("#kategoria_lisays").append(new Option(e.nimi, e.id));
+            $("#kategoria_haku").append(new Option(e.nimi, e.nimi));
         });
     });
 }
@@ -417,6 +360,7 @@ function haeOmistajat() {
     $.get("http://localhost:3000/omistaja", function (data, textStatus, jqXHR) {
         $.each(data, (i, e) => {
             $("#omistaja_lisays").append(new Option(e.nimi, e.id));
+            $("#omistaja_haku").append(new Option(e.nimi, e.nimi));
         });
     });
 }

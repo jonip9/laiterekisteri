@@ -62,11 +62,15 @@
             <fieldset>
                 <legend>Hakuehdot</legend>
                 <input type="text" id="sarjanro_haku" name="sarjanro" placeholder="Sarjanro">
-                <input type="text" id="kategoria_haku" name="katNimi" placeholder="Kategoria">
+                <select name="katNimi" id="kategoria_haku">
+                    <option value="">Kaikki</option>
+                </select>
                 <input type="text" id="nimi_haku" name="nimi" placeholder="Nimi">
                 <input type="text" id="merkki_haku" name="merkki" placeholder="Merkki">
                 <input type="text" id="malli_haku" name="malli" placeholder="Malli">
-                <input type="text" id="omistaja_haku" name="omNimi" placeholder="Omistaja">
+                <select name="omNimi" id="omistaja_haku">
+                    <option value="">Kaikki</option>
+                </select>
                 <input type="text" id="sijainti_haku" name="sijainti" placeholder="Sijainti">
 
                 <input type="submit" value="Hae">
@@ -190,30 +194,15 @@
     <div id="dialogi_lisays" title="Laitteen tiedot">
         <form id="lisayslomake">
             <input type="hidden" id="sarjanro_muutos" name="sarjanro">
-            <!-- <input type="text" id="kategoria_lisays" name="kategoria" placeholder="Kategoria"> -->
             <select name="kategoria" id="kategoria_lisays"></select>
             <input type="text" id="nimi_lisays" name="nimi" placeholder="Nimi">
             <input type="text" id="merkki_lisays" name="merkki" placeholder="Merkki">
             <input type="text" id="malli_lisays" name="malli" placeholder="Malli">
-            <!-- <input type="text" id="omistaja_lisays" name="omistaja" placeholder="Omistaja"> -->
             <select name="omistaja" id="omistaja_lisays"></select>
             <input type="text" id="kuvaus_lisays" name="kuvaus" placeholder="Kuvaus">
             <input type="text" id="sijainti_lisays" name="sijainti" placeholder="Sijainti">
         </form>
     </div>
-
-<!--     <div id="dialogi_muutos" title="Muuta laitteen tietoja">
-        <form id="muutoslomake">
-            <input type="hidden" id="sarjanro_muutos" name="sarjanro">
-            <input type="text" id="kategoria_muutos" name="kategoria" placeholder="Kategoria">
-            <input type="text" id="nimi_muutos" name="nimi" placeholder="Nimi">
-            <input type="text" id="merkki_muutos" name="merkki" placeholder="Merkki">
-            <input type="text" id="malli_muutos" name="malli" placeholder="Malli">
-            <input type="text" id="omistaja_muutos" name="omistaja" placeholder="Omistaja">
-            <input type="text" id="kuvaus_muutos" name="kuvaus" placeholder="Kuvaus">
-            <input type="text" id="sijainti_muutos" name="sijainti" placeholder="Sijainti">
-        </form>
-    </div> -->
 
     <div><input type="hidden" name="isAdmin" id="isAdmin" value={{isAdmin}}></div>
 </body>
