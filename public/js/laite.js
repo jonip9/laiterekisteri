@@ -36,7 +36,6 @@ $(function () {
         $("#laitedialogi").dialog("open");
     });
 
-
     // Laite dialogi               
     $("#laitedialogi").dialog({
         autoOpen: false,
@@ -165,6 +164,8 @@ $(function () {
         ],
     });
 });
+var datetext;
+var datetext2;
 
 function haeLaitteet(hakuehdot) {
     $.get(
@@ -288,7 +289,6 @@ function add2hours(kloaika1, kloaika2) {
    var datetext2 = dat2.toTimeString();
     datetext2 = datetext2.split(' ')[0];
     datetext2 = datetext2.substring(0, 5);
-    return datetext, datetext2;
 }
 
 function lisaaLaite() {
