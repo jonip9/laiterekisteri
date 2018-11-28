@@ -202,7 +202,8 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
         } else {
 
             $('#muutosError3').html('');
-            var muutettuVarausData = "alkupvm=" + datetext + "&loppupvm=" + datetext2;
+            var muutettuVarausData = "alkupvm=" + $("#alkupvm2").val() + " " + $("#kloaika11").val() +
+                "&loppupvm=" + $("#loppupvm2").val() + " " + $("#kloaika21").val();
 
             $.ajax({
                 url: "http://localhost:3000/laitteenvaraus/" + $("#varaus_id").val(),
