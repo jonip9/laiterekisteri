@@ -164,8 +164,6 @@ $(function () {
         ],
     });
 });
-var datetext;
-var datetext2;
 
 function haeLaitteet(hakuehdot) {
     $.get(
