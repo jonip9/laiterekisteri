@@ -195,15 +195,14 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
             if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput)
                 paallekain2 = true;
         });
+        add2hours($("#kloaika11").val(), $("#kloaika21").val(), $("#alkupvm2").val(), $("#loppupvm2").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
 
         if (paallekain2) {
             $('#muutosError3').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
-            add2hours($("#kloaika11").val(), $("#kloaika21").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
 
             $('#muutosError3').html('');
-            var muutettuVarausData = "alkupvm=" + $("#alkupvm2").val() + " " + datetext +
-                "&loppupvm=" + $("#loppupvm2").val() + " " + datetext2;
+            var muutettuVarausData = "alkupvm=" + datetext + "&loppupvm=" + datetext2;
 
             $.ajax({
                 url: "http://localhost:3000/laitteenvaraus/" + $("#varaus_id").val(),
@@ -216,7 +215,6 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
         }
     });
 }
-
 
 function muutaLainatuksi(id, status) {
     $.ajax({
