@@ -195,7 +195,7 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
             add2hours($("#kloaika11").val(), $("#kloaika21").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
 
             if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput)
-                paallekain = true;
+                paallekain2 = true;
         });
 
         if (paallekain2) {
