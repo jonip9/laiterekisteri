@@ -129,7 +129,7 @@ $(function () {
     });
 
     //Varaushistoria diaogi   
-    $("#dialogi_varaushistoria").dialog({
+   $("#dialogi_varaushistoria").dialog({
         width: 850,
         autoOpen: false,
         closeOnEscape: false,
@@ -151,17 +151,8 @@ $(function () {
                     else if ($("#alkupvm").val() > $("#loppupvm").val()) {
                         $('#muutosError2').html('<p>Alkupvm ei voi olla suurempi kuin loppupvm!!</p>');
                         return false;
-                    }
-                    else if (tarkistapaallekkaisyydet($("#laite_id").val())) {
-                        $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
-                        return false;
-                    } else {
-                        var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
-                            "&alkupvm=" + $("#alkupvm").val() + " " + $("#kloaika1").val() +
-                            "&loppupvm=" + $("#loppupvm").val() + " " + $("#kloaika2").val() +
-                            "&status=Varattu";
-                        lisaaVaraus(lisattyVarausData, $("#laite_id").val());
-                    }
+                    } else 
+                        tarkistapaallekkaisyydet($("#laite_id").val())
                 },
             },
             {
@@ -231,21 +222,8 @@ function haeVaratutpaivat(sarjanro) {
         });
 
         $("#laite_id").val(sarjanro);
-
         $("#dialogi_varaushistoria").dialog("open");
 
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.log("status=" + textStatus + ", " + errorThrown);
-    });
-}
-
-function lisaaVaraus(lisattyVarausData, laite_id) {
-    $.post(
-        "http://localhost:3000/laitteenvaraus",
-        lisattyVarausData
-    ).done(function (data, textStatus, jqXHR) {
-        $("#varaushistoriataulu").empty();
-        haeVaratutpaivat(laite_id);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("status=" + textStatus + ", " + errorThrown);
     });
@@ -256,24 +234,61 @@ function tarkistapaallekkaisyydet(sarjanro) {
         "http://localhost:3000/laitteenvaraukset/" + sarjanro
     ).done(function (data, textStatus, jqXHR) {
 
-        if (data.length == 0) {
-            return false;
+        let paallekain = false;
+        data.forEach(function (pvm) {
+            let alkutietokanta = pvm.alkupvm;
+            let lopputietokanta = pvm.loppupvm;
+            let alkuinput = $("#alkupvm").val() + "T" + $("#kloaika1").val() +":00.000Z";
+            let loppuinput = $("#loppupvm").val() + "T" + $("#kloaika2").val() + ":00.000Z";
+
+            add2hours($("#kloaika1").val(), $("#kloaika2").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
+                
+            if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput) 
+                paallekain = true;
+        }); 
+
+        if (paallekain) {
+            $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
-            data.forEach(function (pvm) {
-                let alku = pvm.alkupvm;
-                let loppu = pvm.loppupvm;
-                if (loppu >= $("#alkupvm").val() && alku <= $("#loppupvm").val())
-                    return true;
+            $('#muutosError2').html('');
+            var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
+                "&alkupvm=" + $("#alkupvm").val() + " " + datetext1 +
+                "&loppupvm=" + $("#loppupvm").val() + " " + datetext3 +
+                "&status=Varattu";
+
+            $.post(
+                "http://localhost:3000/laitteenvaraus",
+                lisattyVarausData
+            ).done(function (data, textStatus, jqXHR) {
+                $("#varaushistoriataulu").empty();
+                haeVaratutpaivat(sarjanro);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("status=" + textStatus + ", " + errorThrown);
             });
         }
-        return false;
-
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
 
+function add2hours(kloaika1, kloaika2) {
 
+    var dat = new Date, time = kloaika1.split(/\:|\-/g);
+    dat.setHours(time[0]);
+    dat.setMinutes(time[1]);
+    dat.setHours(dat.getHours() + 2);
+
+    datetext = dat.toTimeString();
+    datetext = datetext.split(' ')[0];
+    datetext1 = datetext.substring(0, 5);
+
+    var dat2 = new Date, time = kloaika2.split(/\:|\-/g);
+    dat2.setHours(time[0]);
+    dat2.setMinutes(time[1]);
+    dat2.setHours(dat2.getHours() + 2);
+
+    datetext2 = dat2.toTimeString();
+    datetext2 = datetext2.split(' ')[0];
+    datetext3 = datetext2.substring(0, 5);
+}
 
 function lisaaLaite() {
     const lisattyData = $("#lisayslomake").serialize();
