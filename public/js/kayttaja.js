@@ -25,15 +25,8 @@ $(() => {
                     else if ($("#alkupvm2").val() > $("#loppupvm2").val()) {
                         $('#muutosError3').html('<p>Alkupvm ei voi olla suurempi kuin loppupvm!!</p>');
                         return false;
-                    }
-                    else if (tarkistapaallekkaisyydet2($("#laite_id2").val(), $("#varaus_id").val())) {     
-                        $('#muutosError3').html('<p>Varaus menee muiden varausten päälle!!</p>');
-                        return false;
-                    } else {
-                        var muutettuVarausData = "alkupvm=" + $("#alkupvm2").val() + " " + $("#kloaika11").val() +
-                            "&loppupvm=" + $("#loppupvm2").val() + " " + $("#kloaika21").val();
-                        muutaVarausta(muutettuVarausData);
-                    }
+                    } else
+                        tarkistapaallekkaisyydet2($("#laite_id2").val(), $("#varaus_id").val())
                 },
             },
             {
@@ -180,25 +173,11 @@ function avaamuutaVarausta(sarjanro, id) {
             });
 
             $("#laite_id2").val(sarjanro);
-
             $("#dialogi_varaushistoria2").dialog("open");
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log("status=" + textStatus + ", " + errorThrown);
-        });
-    
-}
-
-function muutaVarausta(muutettuVarausData) {
-
-    $.ajax({
-        url: "http://localhost:3000/laitteenvaraus/" + $("#varaus_id").val(),
-        method: 'put',
-        data: muutettuVarausData,
-    }).done(function (data, textStatus, jqXHR) {
-        $("#varaushistoriataulu2").empty();
-        avaamuutaVarausta($("#laite_id2").val(), $("#varaus_id").val());
-    });
+        }); 
 }
 
 function tarkistapaallekkaisyydet2(sarjanro, id) {
@@ -206,24 +185,37 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
         "http://localhost:3000/laitteenvaraukset/" + sarjanro + "/" + id
     ).done(function (data, textStatus, jqXHR) {
 
-        if (data.length == 0) {
-            return false;
+        let paallekain2 = false;
+        let alkuinput = $("#alkupvm2").val() + "T" + $("#kloaika11").val() + ":00.000Z";
+        let loppuinput = $("#loppupvm2").val() + "T" + $("#kloaika21").val() + ":00.000Z";
+        data.forEach(function (pvm) {
+            let alkutietokanta = pvm.alkupvm;
+            let lopputietokanta = pvm.loppupvm;
+
+            if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput)
+                paallekain2 = true;
+        });
+        add2hours($("#kloaika11").val(), $("#kloaika21").val(), $("#alkupvm2").val(), $("#loppupvm2").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
+
+        if (paallekain2) {
+            $('#muutosError3').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
-            data.forEach(function (pvm) {
-                let alku = pvm.alkupvm;
-                let loppu = pvm.loppupvm;
-                if (loppu >= $("#alkupvm").val() && alku <= $("#loppupvm").val())
-                    return true;
+
+            $('#muutosError3').html('');
+            var muutettuVarausData = "alkupvm=" + $("#alkupvm2").val() + " " + $("#kloaika11").val() +
+                "&loppupvm=" + $("#loppupvm2").val() + " " + $("#kloaika21").val();
+
+            $.ajax({
+                url: "http://localhost:3000/laitteenvaraus/" + $("#varaus_id").val(),
+                method: 'put',
+                data: muutettuVarausData,
+            }).done(function (data, textStatus, jqXHR) {
+                $("#varaushistoriataulu2").empty();
+                avaamuutaVarausta($("#laite_id2").val(), $("#varaus_id").val());
             });
         }
-        return false;
-
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.log("status=" + textStatus + ", " + errorThrown);
     });
 }
-
-
 
 function muutaLainatuksi(id, status) {
     $.ajax({
