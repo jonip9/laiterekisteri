@@ -238,22 +238,22 @@ function tarkistapaallekkaisyydet(sarjanro) {
         data.forEach(function (pvm) {
             let alkutietokanta = pvm.alkupvm;
             let lopputietokanta = pvm.loppupvm;
-            let alkuinput = $("#alkupvm").val() + "T" + $("#kloaika1").val() +":00.000Z";
+            let alkuinput = $("#alkupvm").val() + "T" + $("#kloaika1").val() + ":00.000Z";
             let loppuinput = $("#loppupvm").val() + "T" + $("#kloaika2").val() + ":00.000Z";
 
-            add2hours($("#kloaika1").val(), $("#kloaika2").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
-                
-            if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput) 
+            if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput)
                 paallekain = true;
-        }); 
+        });
 
         if (paallekain) {
             $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
+            add2hours($("#kloaika1").val(), $("#kloaika2").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
+            
             $('#muutosError2').html('');
             var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
-                "&alkupvm=" + $("#alkupvm").val() + " " + datetext1 +
-                "&loppupvm=" + $("#loppupvm").val() + " " + datetext3 +
+                "&alkupvm=" + $("#alkupvm").val() + " " + datetext +
+                "&loppupvm=" + $("#loppupvm").val() + " " + datetext2 +
                 "&status=Varattu";
 
             $.post(
@@ -276,18 +276,19 @@ function add2hours(kloaika1, kloaika2) {
     dat.setMinutes(time[1]);
     dat.setHours(dat.getHours() + 2);
 
-    datetext = dat.toTimeString();
+    var datetext = dat.toTimeString();
     datetext = datetext.split(' ')[0];
-    datetext1 = datetext.substring(0, 5);
+    datetext = datetext.substring(0, 5);
 
     var dat2 = new Date, time = kloaika2.split(/\:|\-/g);
     dat2.setHours(time[0]);
     dat2.setMinutes(time[1]);
     dat2.setHours(dat2.getHours() + 2);
 
-    datetext2 = dat2.toTimeString();
+   var datetext2 = dat2.toTimeString();
     datetext2 = datetext2.split(' ')[0];
-    datetext3 = datetext2.substring(0, 5);
+    datetext2 = datetext2.substring(0, 5);
+    return datetext, datetext2;
 }
 
 function lisaaLaite() {
