@@ -245,17 +245,14 @@ function tarkistapaallekkaisyydet(sarjanro) {
             if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput)
                 paallekain = true;
         });
+        add2hours($("#kloaika1").val(), $("#kloaika2").val(), $("#alkupvm").val(), $("#loppupvm").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
 
         if (paallekain) {
             $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
-            add2hours($("#kloaika1").val(), $("#kloaika2").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
-            
             $('#muutosError2').html('');
             var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
-                "&alkupvm=" + $("#alkupvm").val() + " " + datetext +
-                "&loppupvm=" + $("#loppupvm").val() + " " + datetext2 +
-                "&status=Varattu";
+                "&alkupvm=" + datetext + "&loppupvm=" + datetext2 + "&status=Varattu";
 
             $.post(
                 "http://localhost:3000/laitteenvaraus",
@@ -270,25 +267,35 @@ function tarkistapaallekkaisyydet(sarjanro) {
     });
 }
 
-function add2hours(kloaika1, kloaika2) {
+function add2hours(kloaika1, kloaika2, alkupvm, loppupvm) {
 
-    var dat = new Date, time = kloaika1.split(/\:|\-/g);
-    dat.setHours(time[0]);
-    dat.setMinutes(time[1]);
+    var pvm = alkupvm + "-" + kloaika1;
+    var dat = new Date, time = pvm.split(/\:|\-/g);
+    dat.setFullYear(time[0]);
+    dat.setMonth(time[1] - 1);
+    dat.setDate(time[2]);
+    dat.setHours(time[3]);
+    dat.setMinutes(time[4]);
+    if (dat.getHours >= 22)
+        dat.setDate(dat.getDate() + 1);
+
     dat.setHours(dat.getHours() + 2);
+    var myDate = new Date(dat);
+    datetext = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + (myDate.getDate())).slice(-2) + ' ' + myDate.getHours() + ':' + ('0' + (myDate.getMinutes())).slice(-2);
 
-    var datetext = dat.toTimeString();
-    datetext = datetext.split(' ')[0];
-    datetext = datetext.substring(0, 5);
+    var pvm2 = loppupvm + "-" + kloaika2;
+    var dat2 = new Date, time = pvm2.split(/\:|\-/g);
+    dat2.setFullYear(time[0]);
+    dat2.setMonth(time[1] - 1);
+    dat2.setDate(time[2]);
+    dat2.setHours(time[3]);
+    dat2.setMinutes(time[4]);
+    if (dat2.getHours >= 22)
+        dat2.setDate(dat2.getDate() + 1);
 
-    var dat2 = new Date, time = kloaika2.split(/\:|\-/g);
-    dat2.setHours(time[0]);
-    dat2.setMinutes(time[1]);
     dat2.setHours(dat2.getHours() + 2);
-
-   var datetext2 = dat2.toTimeString();
-    datetext2 = datetext2.split(' ')[0];
-    datetext2 = datetext2.substring(0, 5);
+    var myDate2 = new Date(dat2);
+    datetext2 = myDate2.getFullYear() + '-' + ('0' + (myDate2.getMonth() + 1)).slice(-2) + '-' + ('0' + (myDate2.getDate())).slice(-2) + ' ' + myDate2.getHours() + ':' + ('0' + (myDate2.getMinutes())).slice(-2);
 }
 
 function lisaaLaite() {
