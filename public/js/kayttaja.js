@@ -182,17 +182,15 @@ function avaamuutaVarausta(sarjanro, id) {
 
 function tarkistapaallekkaisyydet2(sarjanro, id) {
     $.get(
-        "http://localhost:3000/laitteenvaraukset/" + sarjanro + "/" +id
+        "http://localhost:3000/laitteenvaraukset/" + sarjanro + "/" + id
     ).done(function (data, textStatus, jqXHR) {
 
         let paallekain2 = false;
+        let alkuinput = $("#alkupvm2").val() + "T" + $("#kloaika11").val() + ":00.000Z";
+        let loppuinput = $("#loppupvm2").val() + "T" + $("#kloaika21").val() + ":00.000Z";
         data.forEach(function (pvm) {
             let alkutietokanta = pvm.alkupvm;
             let lopputietokanta = pvm.loppupvm;
-            let alkuinput = $("#alkupvm2").val() + "T" + $("#kloaika11").val() + ":00.000Z";
-            let loppuinput = $("#loppupvm2").val() + "T" + $("#kloaika21").val() + ":00.000Z";
-
-            add2hours($("#kloaika11").val(), $("#kloaika21").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
 
             if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput)
                 paallekain2 = true;
@@ -201,9 +199,11 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
         if (paallekain2) {
             $('#muutosError3').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
+            add2hours($("#kloaika11").val(), $("#kloaika21").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
+
             $('#muutosError3').html('');
-            var muutettuVarausData = "alkupvm=" + $("#alkupvm2").val() + " " + datetext1 +
-                "&loppupvm=" + $("#loppupvm2").val() + " " + datetext3;
+            var muutettuVarausData = "alkupvm=" + $("#alkupvm2").val() + " " + datetext +
+                "&loppupvm=" + $("#loppupvm2").val() + " " + datetext2;
 
             $.ajax({
                 url: "http://localhost:3000/laitteenvaraus/" + $("#varaus_id").val(),
@@ -216,7 +216,6 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
         }
     });
 }
-
 
 
 function muutaLainatuksi(id, status) {
