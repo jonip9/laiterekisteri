@@ -121,17 +121,20 @@ function haeKayttajanVaraukset() {
                 "<tr id=varaus" + varaus.id + ">"
                 + '<td>' + varaus.id + '</td>'
                 + '<td>' + varaus.laite_id + '</td>'
+                + '<td>' + varaus.laite + '</td>'
+                + '<td>' + varaus.merkki + '</td>'
+                + '<td>' + varaus.malli + '</td>'
                 + '<td>' + varaus.alkupvm + '</td>'
                 + '<td>' + varaus.loppupvm + '</td>'
                 + '<td>' + varaus.status + '</td>'
-                + '<td>' + varaus.kayttaja_id + '</td>'
+                + '<td>' + varaus.kayttaja + '</td>'
                 + "<td><button onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button></td>"
                 + "<td><button onclick=\"poistaVaraus(" + varaus.id + "); return false;\">Poista varaus</button></td>");
             if ($("#isAdmin").val() === "true") {
                 $("#varaus" + varaus.id).append(
                   "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ", " + varaus.status + ")\">Muuta lainatuksi</button></td>"
                 );
-            }           
+            }
         });
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -234,7 +237,7 @@ function haeKayttajanLainat() {
         $('#lainattaulu').empty();
 
         data.forEach(function (varaus) {
-            $('#varauksettaulu').append(
+            $('#lainattaulu').append(
                 "<tr id=lainaus" + varaus.id + ">"
                 + '<td>' + varaus.id + '</td>'
                 + '<td>' + varaus.laite_id + '</td>'
