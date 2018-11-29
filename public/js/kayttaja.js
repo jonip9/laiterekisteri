@@ -195,8 +195,7 @@ function tarkistapaallekkaisyydet2(sarjanro, id) {
             if (lopputietokanta >= alkuinput && alkutietokanta <= loppuinput)
                 paallekain2 = true;
         });
-        add2hours($("#kloaika11").val(), $("#kloaika21").val(), $("#alkupvm2").val(), $("#loppupvm2").val());    //Aika lisättäessä serverille se vähentää asetetusta ajasta 2h, joten tämä korjaa sen
-
+        
         if (paallekain2) {
             $('#muutosError3').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
