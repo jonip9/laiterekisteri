@@ -115,12 +115,15 @@
             <input type="date" id="loppupvm" name="loppupvm">
             <label for="kloaika2">Kellon aika:</label>
             <input type="time" id="kloaika2" name="kloaika2">
-            <input type="hidden" id="status" name="status" value="Varattu">
             <input type="hidden" id="kayttaja_id" name="kayttaja_id">
-
+            <label for="status">Status: </label>
+            <select name="status" id="status">
+                <option selected="selected" value="Varattu">Varattu</option>
+                <option value="Korjauksessa">Korjauksessa</option>
+            </select>
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </form>
-
+        
         <form id="varaushistoria">
             <p>Varatut päivät</p>
             <table>
