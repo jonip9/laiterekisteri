@@ -123,17 +123,20 @@ function haeKayttajanVaraukset() {
                 "<tr id=varaus" + varaus.id + ">"
                 + '<td>' + varaus.id + '</td>'
                 + '<td>' + varaus.laite_id + '</td>'
+                + '<td>' + varaus.laite + '</td>'
+                + '<td>' + varaus.merkki + '</td>'
+                + '<td>' + varaus.malli + '</td>'
                 + '<td>' + parsittualkupvm + '</td>'
                 + '<td>' + parsittuloppupvm + '</td>'
                 + '<td>' + varaus.status + '</td>'
-                + '<td>' + varaus.kayttaja_id + '</td>'
-                + "<td><button onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varausta</button></td>"
+                + '<td>' + varaus.kayttaja + '</td>'
+                + "<td><button onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button></td>"
                 + "<td><button onclick=\"poistaVaraus(" + varaus.id + "); return false;\">Poista varaus</button></td>");
             if ($("#isAdmin").val() === "true") {
                 $("#varaus" + varaus.id).append(
                   "<td><button onclick=\"muutaLainatuksi(" + varaus.id + ", " + varaus.status + ")\">Muuta lainatuksi</button></td>"
                 );
-            }           
+            }
         });
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log('status=' + textStatus + ', ' + errorThrown);
@@ -167,10 +170,13 @@ function avaamuutaVarausta(sarjanro, id) {
                     "<tr>" +
                     "<td>" + varaus.id + "</td>" +
                     "<td>" + varaus.laite_id + "</td>" +
+                    "<td>" + varaus.laite + "</td>" +
+                    "<td>" + varaus.merkki + "</td>" +
+                    "<td>" + varaus.malli + "</td>" +
                     "<td>" + parsittualkupvm + "</td>" +
                     "<td>" + parsittuloppupvm + "</td>" +
                     "<td>" + varaus.status + "</td>" +
-                    "<td>" + varaus.kayttaja_id + "</td>" +
+                    "<td>" + varaus.kayttaja + "</td>" +
                     "</tr>"
                 );
             });
@@ -238,7 +244,7 @@ function haeKayttajanLainat() {
         data.forEach(function (varaus) {
             var parsittualkupvm = varaus.alkupvm.substring(0, 10) + " " + varaus.alkupvm.substring(11, 16);
             var parsittuloppupvm = varaus.loppupvm.substring(0, 10) + " " + varaus.loppupvm.substring(11, 16);
-            $('#varauksettaulu').append(
+            $('#lainattaulu').append(
                 "<tr id=lainaus" + varaus.id + ">"
                 + '<td>' + varaus.id + '</td>'
                 + '<td>' + varaus.laite_id + '</td>'
