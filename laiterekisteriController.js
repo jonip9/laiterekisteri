@@ -5,6 +5,7 @@ const connection = mysql.createConnection({
     user: 'pma',
     password: 'eta7oht',
     database: 'laiterekisteri',
+    timezone: 'Z',
 });
 
 module.exports = {
@@ -153,9 +154,9 @@ module.exports = {
     },
 
     fetchAllBookings: (req, res) => {
-        var query1 = 'SELECT id, laite_id, laite, merkki, malli, CONVERT_TZ(alkupvm,"+00:00","Europe/Helsinki") AS alkupvm, CONVERT_TZ(loppupvm,"+00:00","Europe/Helsinki") AS loppupvm, status, kayttaja FROM laiteVaraus'
+        var query1 = 'SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteVaraus'
         if (req.session.userid != 99)
-            query1 += ' WHERE kayttaja = ?'; 
+            query1 += ' WHERE kayttaja = ?';
         connection.query(query1, [req.session.user], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
@@ -178,7 +179,7 @@ module.exports = {
     },
 
     fetchAllLoans: (req, res) => {
-        var query2 = 'SELECT id, laite_id, CONVERT_TZ(alkupvm,"+00:00","Europe/Helsinki") AS alkupvm, CONVERT_TZ(loppupvm,"+00:00","Europe/Helsinki") AS loppupvm, status, kayttaja_id FROM varaus WHERE status = "Lainattu"'
+        var query2 = 'SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE status = "Lainattu"'
         if (req.session.userid != 99)
             query2 += 'AND kayttaja_id = ?';
         connection.query(query2, [req.session.userid], (error, results, fields) => {
@@ -205,7 +206,7 @@ module.exports = {
     },
 
     fetchOneBookedDate: (req, res) => {
-        connection.query('SELECT CONVERT_TZ(alkupvm,"+00:00","Europe/Helsinki") AS alkupvm, CONVERT_TZ(loppupvm,"+00:00","Europe/Helsinki") AS loppupvm FROM varaus WHERE id = ?', [req.params.id], (error, results, fields) => {
+        connection.query('SELECT alkupvm, loppupvm FROM varaus WHERE id = ?', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 res.status(500).send(error);
@@ -229,7 +230,7 @@ module.exports = {
     },
 
     fetchBookedDates: (req, res) => {      
-        connection.query('SELECT id, laite_id, CONVERT_TZ(alkupvm,"+00:00","Europe/Helsinki") AS alkupvm, CONVERT_TZ(loppupvm,"+00:00","Europe/Helsinki") AS loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ? AND loppupvm >= CURDATE()', [req.params.id], (error, results, fields) => {
+        connection.query('SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteVaraus WHERE laite_id = ? AND loppupvm >= CURDATE()', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 res.status(500).send(error);
@@ -257,7 +258,7 @@ module.exports = {
     },
 
     fetchBookedDates2: (req, res) => {
-        connection.query('SELECT id, laite_id, CONVERT_TZ(alkupvm,"+00:00","Europe/Helsinki") AS alkupvm, CONVERT_TZ(loppupvm,"+00:00","Europe/Helsinki") AS loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ? AND id != ?', [req.params.sarjanro, req.params.id], (error, results, fields) => {
+        connection.query('SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE laite_id = ? AND id != ?', [req.params.sarjanro, req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 res.status(500).send(error);

@@ -167,10 +167,13 @@ function avaamuutaVarausta(sarjanro, id) {
                     "<tr>" +
                     "<td>" + varaus.id + "</td>" +
                     "<td>" + varaus.laite_id + "</td>" +
+                    "<td>" + varaus.laite + "</td>" +
+                    "<td>" + varaus.merkki + "</td>" +
+                    "<td>" + varaus.malli + "</td>" +
                     "<td>" + varaus.alkupvm + "</td>" +
                     "<td>" + varaus.loppupvm + "</td>" +
                     "<td>" + varaus.status + "</td>" +
-                    "<td>" + varaus.kayttaja_id + "</td>" +
+                    "<td>" + varaus.kayttaja + "</td>" +
                     "</tr>"
                 );
             });
