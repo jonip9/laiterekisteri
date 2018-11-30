@@ -128,7 +128,7 @@ $(function () {
     });
 
     //Varaushistoria diaogi   
-   $("#dialogi_varaushistoria").dialog({
+    $("#dialogi_varaushistoria").dialog({
         width: 850,
         autoOpen: false,
         closeOnEscape: false,
@@ -150,7 +150,7 @@ $(function () {
                     else if ($("#alkupvm").val() > $("#loppupvm").val()) {
                         $('#muutosError2').html('<p>Alkupvm ei voi olla suurempi kuin loppupvm!!</p>');
                         return false;
-                    } else 
+                    } else
                         tarkistapaallekkaisyydet($("#laite_id").val())
                 },
             },
@@ -253,7 +253,7 @@ function tarkistapaallekkaisyydet(sarjanro) {
             $('#muutosError2').html('<p>Varaus menee muiden varausten päälle!!</p>');
         } else {
             $('#muutosError2').html('');
-             var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
+            var lisattyVarausData = "laite_id=" + $("#laite_id").val() +
                 "&alkupvm=" + $("#alkupvm").val() + " " + $("#kloaika1").val() +
                 "&loppupvm=" + $("#loppupvm").val() + " " + $("#kloaika2").val() +
                 "&status=" + $("#status").val();
