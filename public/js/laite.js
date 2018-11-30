@@ -150,8 +150,9 @@ $(function () {
                     else if ($("#alkupvm").val() > $("#loppupvm").val()) {
                         $('#muutosError2').html('<p>Alkupvm ei voi olla suurempi kuin loppupvm!!</p>');
                         return false;
-                    } else
-                        tarkistapaallekkaisyydet($("#laite_id").val())
+                    } else {
+                        tarkistapaallekkaisyydet($("#laite_id").val());
+                    }
                 },
             },
             {
