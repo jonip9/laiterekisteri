@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -8,6 +8,9 @@
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/mystyle.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <title>Asiakkaan käsittely</title>
 
     <script src="/js/laite.js"></script>
@@ -21,7 +24,7 @@
     <a class="ui-button ui-widget ui-corner-all" href="/logout">Kirjaudu ulos</a>
 
 
-    <table>
+    <table id="varausDatatable" class="display" style="width:60%" data-order='[[ 1, "asc" ]]'>
         <thead>
             <tr>
                 <th>Id</th>
@@ -35,26 +38,29 @@
                 <th>Käyttäjä</th>
                 <th>#</th>
                 <th>#</th>
+                <th>#</th>
             </tr>
         </thead>
-        <tbody id="varauksettaulu"></tbody>
     </table>
 
 
-    <table>
+    <table id="lainatDatatable" class="display" style="width:60%" data-order='[[ 1, "asc" ]]'>
         <thead>
             <tr>
                 <th>Id</th>
-                <th>LaiteId</th>
+                <th>Sarjanumero</th>
+                <th>Laite</th>
+                <th>Merkki</th>
+                <th>Malli</th>
                 <th>Alkupvm</th>
                 <th>Loppupvm</th>
                 <th>Status</th>
-                <th>KäyttäjäId</th>
+                <th>Käyttäjä</th>
+                <th>#</th>
                 <th>#</th>
                 <th>#</th>
             </tr>
         </thead>
-        <tbody id="lainattaulu"></tbody>
     </table>
 
     <button id="laitteet">Laitteet</button>
@@ -126,7 +132,7 @@
 
         <form id="varaushistoria">
             <p>Varatut päivät</p>
-            <table>
+            <table  id="varaushistoriataulu" class="display" data-order='[[ 1, "asc" ]]'>
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -140,7 +146,6 @@
                         <th>Käyttäjä</th>
                     </tr>
                 </thead>
-                <tbody id="varaushistoriataulu"></tbody>
             </table>
         </form>
     </div>
@@ -169,7 +174,7 @@
 
         <form id="varaushistoria2">
             <p>Varatut päivät</p>
-            <table>
+            <table  id="varaushistoriataulu2" class="display" data-order='[[ 1, "asc" ]]'>
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -183,7 +188,6 @@
                         <th>Käyttäjä</th>
                     </tr>
                 </thead>
-                <tbody id="varaushistoriataulu2"></tbody>
             </table>
         </form>
     </div>
