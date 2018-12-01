@@ -229,7 +229,7 @@ module.exports = {
             });
     },
 
-    fetchBookedDates: (req, res) => {      
+    fetchBookedDates: (req, res) => {
         connection.query('SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteVaraus WHERE laite_id = ? AND loppupvm >= CURDATE()', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
@@ -247,14 +247,14 @@ module.exports = {
             query3 = 'UPDATE varaus SET status = "Palautettu" WHERE laite_id = ?';
         if (req.body.status == "Lainattu1")
             query3 = 'UPDATE varaus SET status = "Varattu" WHERE laite_id = ?';
-            connection.query(query3, [req.params.id], (error, results, fields) => {
-                if (error) {
-                    console.log(error.sqlMessage);
-                    res.status(500).send(error);
-                } else {
-                    res.send(results);
-                }
-            });
+        connection.query(query3, [req.params.id], (error, results, fields) => {
+            if (error) {
+                console.log(error.sqlMessage);
+                res.status(500).send(error);
+            } else {
+                res.send(results);
+            }
+        });
     },
 
     fetchBookedDates2: (req, res) => {

@@ -106,8 +106,7 @@ app.route('/omistaja')
     .get(laiterekisteriController.fetchOwner);
 
 app.route('/varaus')
-    .get(laiterekisteriController.fetchAllBookings)
-    .delete(laiterekisteriController.deleteBooking);
+    .get(laiterekisteriController.fetchAllBookings);
 
 app.route('/laina')
     .get(laiterekisteriController.fetchAllLoans);
@@ -117,7 +116,8 @@ app.route('/laitteenvaraus')
 
 app.route('/laitteenvaraus/:id')
     .get(laiterekisteriController.fetchOneBookedDate)
-    .put(laiterekisteriController.updateBookingDates);
+    .put(laiterekisteriController.updateBookingDates)
+    .delete(laiterekisteriController.deleteBooking);
 
 app.route('/laitteenvaraukset/:id')
     .get(laiterekisteriController.fetchBookedDates)
@@ -125,7 +125,7 @@ app.route('/laitteenvaraukset/:id')
 
 app.route('/laitteenvaraukset/:sarjanro/:id')
     .get(laiterekisteriController.fetchBookedDates2);
-    
+
 
 app.listen(port, hostlocal, () => {
     console.log(`Local server running AT http://${hostlocal}:${port}/`);
