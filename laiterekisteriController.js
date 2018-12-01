@@ -179,10 +179,10 @@ module.exports = {
     },
 
     fetchAllLoans: (req, res) => {
-        var query2 = 'SELECT id, laite_id, alkupvm, loppupvm, status, kayttaja_id FROM varaus WHERE status = "Lainattu"'
+        var query2 = 'SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteLainaus'
         if (req.session.userid != 99)
-            query2 += 'AND kayttaja_id = ?';
-        connection.query(query2, [req.session.userid], (error, results, fields) => {
+            query2 += 'WHERE kayttaja = ?';
+        connection.query(query2, [req.session.user], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 res.status(500).send(error);
