@@ -27,6 +27,8 @@ $(function () {
         document.getElementById('status').style.visibility = 'hidden';
         document.getElementById('statuslabel').style.visibility = 'hidden';
     }
+
+
     function show() {
         if ($("#isAdmin").val() === "true") {
             document.getElementById('status').style.visibility = 'visible';
@@ -241,17 +243,17 @@ function haeVaratutpaivat(sarjanro) {
                     { 'data': 'kayttaja' }
                 ], "columnDefs":
                     [
-                        { "width": "10%", "targets": "all" },
+                        { "width": "15%", "targets": [5,6] },
                         {
                             targets: 5,
                             render: function (data, type, row) {
-                                var parsittualkupvm = data.substring(0, 10) + " " + data.substring(11, 16);
+                                var parsittualkupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
                                 return parsittualkupvm;
                             }
                         }, {
                             targets: 6,
                             render: function (data, type, row) {
-                                var parsittuloppupvm = data.substring(0, 10) + " " + data.substring(11, 16);
+                                var parsittuloppupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
                                 return parsittuloppupvm;
                             }
                         }
