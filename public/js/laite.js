@@ -258,6 +258,47 @@ function haeVaratutpaivat(sarjanro) {
                             }
                         }
                     ]
+             });
+        }
+    });
+
+    $.ajax({
+        url: "http://localhost:3000/vanhatlaitteenvaraukset/" + sarjanro,
+        method: 'GET',
+        datatype: 'json',
+        success: function (data) {
+
+            $('#vanhatvarauksettaulu').DataTable({
+                bJQueryUI: true,
+                data: data,
+                destroy: true,
+                columns: [
+                    { 'data': 'id' },
+                    { 'data': 'laite_id' },
+                    { 'data': 'laite' },
+                    { 'data': 'merkki' },
+                    { 'data': 'malli' },
+                    { 'data': 'alkupvm' },
+                    { 'data': 'loppupvm' },
+                    { 'data': 'status' },
+                    { 'data': 'kayttaja' }
+                ], "columnDefs":
+                    [
+                        { "width": "15%", "targets": [5, 6] },
+                        {
+                            targets: 5,
+                            render: function (data, type, row) {
+                                var parsittualkupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
+                                return parsittualkupvm;
+                            }
+                        }, {
+                            targets: 6,
+                            render: function (data, type, row) {
+                                var parsittuloppupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
+                                return parsittuloppupvm;
+                            }
+                        }
+                    ]
             });
         }
     });
