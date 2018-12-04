@@ -154,7 +154,7 @@ module.exports = {
     },
 
     fetchAllBookings: (req, res) => {
-        var query1 = 'SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteVaraus'
+        var query1 = 'SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteVaraus';
         if (req.session.userid != 99)
             query1 += ' WHERE kayttaja = ?';
         connection.query(query1, [req.session.user], (error, results, fields) => {
@@ -179,9 +179,9 @@ module.exports = {
     },
 
     fetchAllLoans: (req, res) => {
-        var query2 = 'SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteLainaus'
+        var query2 = 'SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteLainaus';
         if (req.session.userid != 99)
-            query2 += 'WHERE kayttaja = ?';
+            query2 += ' WHERE kayttaja = ?';
         connection.query(query2, [req.session.user], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
@@ -241,12 +241,14 @@ module.exports = {
     },
 
     updateBookingStatus: (req, res) => {
-        console.log("hei");
-        var query3 = 'UPDATE varaus SET status = "Lainattu" WHERE laite_id = ?'
+        var query3 = 'UPDATE varaus SET status = "Lainattu" WHERE id = ?';
+
         if (req.body.status == "Lainattu")
-            query3 = 'UPDATE varaus SET status = "Palautettu" WHERE laite_id = ?';
+            query3 = 'UPDATE varaus SET status = "Palautettu" WHERE id = ?';
+
         if (req.body.status == "Lainattu1")
-            query3 = 'UPDATE varaus SET status = "Varattu" WHERE laite_id = ?';
+            query3 = 'UPDATE varaus SET status = "Varattu" WHERE id = ?';
+
         connection.query(query3, [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);

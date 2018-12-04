@@ -124,7 +124,7 @@ function haeKayttajanVaraukset() {
                                 "targets": -1,
                                 "render": function (varaus) {
                                     if ($("#isAdmin").val() === "true") {
-                                        return "<button onclick=\"muutaLainatuksi(" + varaus.id + ", " + varaus.status + ")\">Muuta lainatuksi</button>";
+                                        return "<button onclick=\"muutaLainatuksi(" + varaus.id + ", '" + varaus.status + "')\">Muuta lainatuksi</button>";
                                     } return "";}
                             }
                        ]
