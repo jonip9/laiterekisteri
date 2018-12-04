@@ -23,7 +23,7 @@
     <!-- <button id="kirjauduUlos">Kirjaudu ulos</button> -->
     <a class="ui-button ui-widget ui-corner-all" href="/logout">Kirjaudu ulos</a>
 
-
+    <h2>Varaukset:</h2>
     <table id="varausDatatable" class="display" style="width:60%" data-order='[[ 6, "asc" ]]'>
         <thead>
             <tr>
@@ -43,7 +43,7 @@
         </thead>
     </table>
 
-
+        <h2>Lainat:</h2>
     <table id="lainatDatatable" class="display" style="width:60%" data-order='[[ 6, "asc" ]]'>
         <thead>
             <tr>
@@ -131,8 +131,27 @@
         </form>
 
         <form id="varaushistoria">
-            <p>Varatut päivät</p>
-            <table  id="varaushistoriataulu" class="display" data-order='[[ 6, "asc" ]]'>
+            <h2>Varatut päivät:</h2>
+            <table id="varaushistoriataulu" class="display" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                    </tr>
+                </thead>
+            </table>
+        </form>
+
+        <form id="vanhatvaraukset">
+            <h2>Vanhat varaukset:</h2>
+            <table id="vanhatvarauksettaulu" class="display" data-order='[[ 6, "asc" ]]'>
                 <thead>
                     <tr>
                         <th>Id</th>
