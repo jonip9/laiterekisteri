@@ -175,14 +175,14 @@ function haeKayttajanLainat() {
                             "targets": -3,
                             "render": function (varaus) {
                                 if ($("#isAdmin").val() === "true") {
-                                    return "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ", " + varaus.status + ")\">Muuta palautetuksi</button></td>";
+                                    return "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ", '" + varaus.status + "')\">Muuta palautetuksi</button></td>";
                                 } return "";
                             }
                         }, {
                             "targets": -2,
                             "render": function (varaus) {
                                 if ($("#isAdmin").val() === "true") {
-                                    return "<td><button onclick=\"muutaVaratuksi(" + varaus.id + ", " + varaus.status + "1" + ")\">Muuta varatuksi</button></td>";
+                                    return "<td><button onclick=\"muutaVaratuksi(" + varaus.id + ", '" + varaus.status + "1" + "')\">Muuta varatuksi</button></td>";
                                 } return "";
                             }
                         }, {
