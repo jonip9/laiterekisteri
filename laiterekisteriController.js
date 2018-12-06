@@ -244,7 +244,7 @@ module.exports = {
         var query3 = 'UPDATE varaus SET status = "Lainattu" WHERE id = ?';
 
         if (req.body.status == "Lainattu")
-            query3 = 'UPDATE varaus SET status = "Palautettu" WHERE id = ?';
+            query3 = 'UPDATE varaus SET status = "Palautettu", loppupvm = IF(DATE(loppupvm)>CURDATE(), CURRENT_TIMESTAMP(), loppupvm) WHERE id = ?';
 
         if (req.body.status == "Lainattu1")
             query3 = 'UPDATE varaus SET status = "Varattu" WHERE id = ?';
