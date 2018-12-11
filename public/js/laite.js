@@ -18,8 +18,8 @@ $(function () {
         draggable: false,
         modal: true,
         resizable: false,
-        height: 500,
-        width: 1500,
+        height: 800,
+        width: 'auto',
         create: () => {
             haeKategoriat();
             haeOmistajat();
