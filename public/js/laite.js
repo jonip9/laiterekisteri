@@ -18,7 +18,7 @@ $(function () {
         draggable: false,
         modal: true,
         resizable: false,
-        height: 500,
+        height: 800,
         width: 1500,
         create: () => {
             haeKategoriat();
