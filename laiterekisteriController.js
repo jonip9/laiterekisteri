@@ -230,7 +230,7 @@ module.exports = {
     },
 
     fetchBookedDates: (req, res) => {
-        connection.query('SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteVaraus WHERE laite_id = ? AND loppupvm >= CURDATE()', [req.params.id], (error, results, fields) => {
+        connection.query('SELECT id, laite_id, laite, merkki, malli, alkupvm, loppupvm, status, kayttaja FROM laiteVaraus WHERE laite_id = ?', [req.params.id], (error, results, fields) => {
             if (error) {
                 console.log(error.sqlMessage);
                 res.status(500).send(error);
