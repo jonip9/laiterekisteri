@@ -19,7 +19,7 @@ $(function () {
         modal: true,
         resizable: false,
         height: 800,
-        width: 'auto',
+        width: 1500,
         create: () => {
             haeKategoriat();
             haeOmistajat();
