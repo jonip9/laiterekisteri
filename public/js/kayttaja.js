@@ -72,65 +72,66 @@ $(() => {
 });
 
 function haeKayttajanVaraukset() {
-        $.ajax({
-            url: 'http://localhost:3000/varaus',
-            method: 'GET',
-            datatype: 'json',
-            success: function (data) {
-                $('#varausDatatable').DataTable({
-                     data: data,
-                     destroy: true,
-                    columns: [
-                        { 'data': 'id' },
-                        { 'data': 'laite_id' },
-                        { 'data': 'laite' },
-                        { 'data': 'merkki' },
-                        { 'data': 'malli' },
-                        { 'data': 'alkupvm' },
-                        { 'data': 'loppupvm' },
-                        { 'data': 'status' },
-                        { 'data': 'kayttaja' },
-                        { "data": null },
-                        { "data": null },
-                        { "data": null }
-                    ], "columnDefs":
-                        [
-                            { "width": "20%", "targets": [5, 6] },
-                            {
-                                targets: 5,
-                                render: function (data, type, row) {
-                                    var parsittualkupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
-                                    return parsittualkupvm;
-                                }
-                            },{
-                                targets: 6,
-                                render: function (data, type, row) {
-                                    var parsittuloppupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
-                                    return parsittuloppupvm;
-                                }
-                            }, {
-                                "data": null,
-                                "targets": -3,
-                                "render": function (varaus) {
-                                    return "<button onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button>";
-                                }
-                            },{
-                                "data": null,
-                                "targets": -2,
-                                "render": function (varaus) {
-                                    return "<button onclick=\"poistaVaraus(" + varaus.id + "); return false;\">Poista varaus</button>";
-                                }
-                            },{
-                                "targets": -1,
-                                "render": function (varaus) {
-                                    if ($("#isAdmin").val() === "true") {
-                                        return "<button onclick=\"muutaLainatuksi(" + varaus.id + ", '" + varaus.status + "')\">Muuta lainatuksi</button>";
-                                    } return "";}
+    $.ajax({
+        url: 'http://localhost:3000/varaus',
+        method: 'GET',
+        datatype: 'json',
+        success: function (data) {
+            $('#varausDatatable').DataTable({
+                data: data,
+                destroy: true,
+                columns: [
+                    { 'data': 'id' },
+                    { 'data': 'laite_id' },
+                    { 'data': 'laite' },
+                    { 'data': 'merkki' },
+                    { 'data': 'malli' },
+                    { 'data': 'alkupvm' },
+                    { 'data': 'loppupvm' },
+                    { 'data': 'status' },
+                    { 'data': 'kayttaja' },
+                    { "data": null },
+                    { "data": null },
+                    { "data": null }
+                ], "columnDefs":
+                    [
+                        { "width": "20%", "targets": [5, 6] },
+                        {
+                            targets: 5,
+                            render: function (data, type, row) {
+                                var parsittualkupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
+                                return parsittualkupvm;
                             }
-                       ]
-                });
-            }
-        });
+                        }, {
+                            targets: 6,
+                            render: function (data, type, row) {
+                                var parsittuloppupvm = data.substring(11, 16) + " " + data.substring(8, 10) + data.substring(4, 8) + data.substring(0, 4);
+                                return parsittuloppupvm;
+                            }
+                        }, {
+                            "data": null,
+                            "targets": -3,
+                            "render": function (varaus) {
+                                return "<button class=\"btn btn-info\" onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button>";
+                            }
+                        }, {
+                            "data": null,
+                            "targets": -2,
+                            "render": function (varaus) {
+                                return "<button class=\"btn btn-danger\" onclick=\"poistaVaraus(" + varaus.id + "); return false;\">Poista varaus</button>";
+                            }
+                        }, {
+                            "targets": -1,
+                            "render": function (varaus) {
+                                if ($("#isAdmin").val() === "true") {
+                                    return "<button class=\"btn btn-warning\" onclick=\"muutaLainatuksi(" + varaus.id + ", '" + varaus.status + "')\">Muuta lainatuksi</button>";
+                                } return "";
+                            }
+                        }
+                    ]
+            });
+        }
+    });
 }
 
 function haeKayttajanLainat() {
@@ -175,21 +176,21 @@ function haeKayttajanLainat() {
                             "targets": -3,
                             "render": function (varaus) {
                                 if ($("#isAdmin").val() === "true") {
-                                    return "<td><button onclick=\"muutaPalautetuksi(" + varaus.id + ", '" + varaus.status + "')\">Muuta palautetuksi</button></td>";
+                                    return "<td><button class=\"btn btn-info2\" onclick=\"muutaPalautetuksi(" + varaus.id + ", '" + varaus.status + "')\">Muuta palautetuksi</button></td>";
                                 } return "";
                             }
                         }, {
                             "targets": -2,
                             "render": function (varaus) {
                                 if ($("#isAdmin").val() === "true") {
-                                    return "<td><button onclick=\"muutaVaratuksi(" + varaus.id + ", '" + varaus.status + "1" + "')\">Muuta varatuksi</button></td>";
+                                    return "<td><button class=\"btn btn-primary\" onclick=\"muutaVaratuksi(" + varaus.id + ", '" + varaus.status + "1" + "')\">Muuta varatuksi</button></td>";
                                 } return "";
                             }
                         }, {
                             "targets": -1,
                             "render": function (varaus) {
                                 if ($("#isAdmin").val() === "true") {
-                                    return "<button onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button>";
+                                    return "<button class=\"btn btn-info\" onclick=\"avaamuutaVarausta(" + varaus.laite_id + "," + varaus.id + "); return false;\">Muuta varaus</button>";
                                 } return "";
                             }
                         }
@@ -198,4 +199,3 @@ function haeKayttajanLainat() {
         }
     });
 }
-
