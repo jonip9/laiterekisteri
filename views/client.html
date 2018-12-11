@@ -4,7 +4,8 @@
 
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/trontastic/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/mystyle.css">
@@ -20,13 +21,22 @@
 
 </head>
 
-<body>
-    <button id="muutaTietoja">Muuta käyttäjätietoja</button>
-    <!-- <button id="kirjauduUlos">Kirjaudu ulos</button> -->
-    <a class="ui-button ui-widget ui-corner-all" href="/logout">Kirjaudu ulos</a>
+<body style="background-color:powderblue;">
+    <nav>
+        <div class="container-fluid p-3 mb-2 bg-dark">
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <button id="muutaTietoja" class="btn btn-outline-success mr-1 my-2 my-sm-0">Muuta käyttäjätietoja</button>
+                </li>
+                <li class="nav-item">
+                    <!--<button id="kirjauduUlos" class="btn btn-danger navbar-btn">Kirjaudu ulos</button></li>-->
+                    <a class="btn btn-danger navbar-btn" href="/logout">Kirjaudu ulos</a>
+            </ul>
+        </div>
+    </nav>
 
-    <h2>Varaukset:</h2>
-    <table id="varausDatatable" class="display" style="width:60%" data-order='[[ 6, "asc" ]]'>
+    <h2 style="text-align: center">Varaukset:</h2>
+    <table id="varausDatatable" class="display" style="width:60%; background-color: aqua" data-order='[[ 6, "asc" ]]'>
         <thead>
             <tr>
                 <th>Id</th>
@@ -45,8 +55,8 @@
         </thead>
     </table>
 
-        <h2>Lainat:</h2>
-    <table id="lainatDatatable" class="display" style="width:60%" data-order='[[ 6, "asc" ]]'>
+    <h2 style="text-align: center">Lainat:</h2>
+    <table id="lainatDatatable" class="display" style="width:60%; background-color: deepskyblue" data-order='[[ 6, "asc" ]]'>
         <thead>
             <tr>
                 <th>Id</th>
@@ -65,7 +75,7 @@
         </thead>
     </table>
 
-    <button id="laitteet">Laitteet</button>
+    <button id="laitteet" class="btn btn-info" style="position: relative; left: 10px; margin-top: 100px;">Laitteet</button>
 
     <div id="laitedialogi" title="Laitteet">
         <div id="poistoerror"></div>
@@ -73,18 +83,18 @@
             <fieldset>
                 <legend>Hakuehdot</legend>
                 <input type="text" id="sarjanro_haku" name="sarjanro" placeholder="Sarjanro">
-                <select name="katNimi" id="kategoria_haku">
+                <select name="katNimi" id="kategoria_haku" style="height: 32px">
                     <option value="">Kaikki</option>
                 </select>
                 <input type="text" id="nimi_haku" name="nimi" placeholder="Nimi">
                 <input type="text" id="merkki_haku" name="merkki" placeholder="Merkki">
                 <input type="text" id="malli_haku" name="malli" placeholder="Malli">
-                <select name="omNimi" id="omistaja_haku">
+                <select name="omNimi" id="omistaja_haku" style="height: 32px">
                     <option value="">Kaikki</option>
                 </select>
                 <input type="text" id="sijainti_haku" name="sijainti" placeholder="Sijainti">
 
-                <input type="submit" value="Hae">
+                <input type="submit" value="Hae" class="btn btn-info">
             </fieldset>
         </form>
         <form id="laitelomake">
@@ -195,7 +205,7 @@
 
         <form id="varaushistoria2">
             <p>Varatut päivät</p>
-            <table  id="varaushistoriataulu2" class="display" data-order='[[ 6, "asc" ]]'>
+            <table id="varaushistoriataulu2" class="display" data-order='[[ 6, "asc" ]]'>
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -215,7 +225,7 @@
 
 
 
-    <div id="dialogi_kayttajamuutos" title="Muuta käyttäjän tietoja">
+    <div id="dialogi_kayttajamuutos" title="Muuta käyttäjän tietoja" style="height: 100%; overflow: hidden">
         <div id="muutosError"></div>
         <form id="kayttajanmuutoslomake">
             <input type="hidden" id="usrID" name="id">

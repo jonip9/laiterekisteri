@@ -11,7 +11,7 @@ $(function () {
         haeLaitteet(hakuehdot);
         $("#laitedialogi").dialog("open");
     });
-              
+
     $("#laitedialogi").dialog({
         autoOpen: false,
         closeOnEscape: false,
@@ -57,7 +57,7 @@ $(function () {
                 },
             });
     }
-     
+
     $("#dialogi_lisays").dialog({
         autoOpen: false,
         closeOnEscape: false,
@@ -124,13 +124,13 @@ function haeLaitteet(hakuehdot) {
                 "<td>" + laite.sijainti + "</td>");
             if ($("#isAdmin").val() === "true") {
                 $("#laite" + laite.sarjanro).append(
-                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>" +
-                    "<td><button onclick=\"poistaLaite(" + laite.sarjanro + "); return false;\">Poista laite</button></td>" +
-                    "<td><button onclick=\"avaaMuutosLomake(" + laite.sarjanro + "); return false;\">Muuta laite</button></td>"
+                    "<td><button class=\"btn btn-info\" onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>" +
+                    "<td><button class=\"btn btn-danger\" onclick=\"poistaLaite(" + laite.sarjanro + "); return false;\">Poista laite</button></td>" +
+                    "<td><button class=\"btn btn-warning\" onclick=\"avaaMuutosLomake(" + laite.sarjanro + "); return false;\">Muuta laite</button></td>"
                 );
             } else {
                 $("#laite" + laite.sarjanro).append(
-                    "<td><button onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>"
+                    "<td><button class=\"btn btn-info\" onclick=\"haeVaratutpaivat(" + laite.sarjanro + "); return false;\">Varatutpäivät</button></td>"
                 );
             }
         });
