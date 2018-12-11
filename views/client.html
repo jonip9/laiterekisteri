@@ -25,6 +25,9 @@
     <nav>
         <div class="container-fluid p-3 mb-2 bg-dark">
             <ul class="nav justify-content-end">
+                <li class="nav-item mr-auto">
+                    <button id="laitteet" class="btn btn-info mr-2 my-2 my-sm-0">Laitteet</button>
+                </li>
                 <li class="nav-item">
                     <button id="muutaTietoja" class="btn btn-outline-success mr-1 my-2 my-sm-0">Muuta käyttäjätietoja</button>
                 </li>
@@ -34,47 +37,57 @@
             </ul>
         </div>
     </nav>
-
-    <h2 style="text-align: center">Varaukset:</h2>
-    <table id="varausDatatable" class="display" style="width:60%; background-color: aqua" data-order='[[ 6, "asc" ]]'>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Sarjanumero</th>
-                <th>Laite</th>
-                <th>Merkki</th>
-                <th>Malli</th>
-                <th>Alkupvm</th>
-                <th>Loppupvm</th>
-                <th>Status</th>
-                <th>Käyttäjä</th>
-                <th>#</th>
-                <th>#</th>
-                <th>#</th>
-            </tr>
-        </thead>
-    </table>
-
-    <h2 style="text-align: center">Lainat:</h2>
-    <table id="lainatDatatable" class="display" style="width:60%; background-color: deepskyblue" data-order='[[ 6, "asc" ]]'>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Sarjanumero</th>
-                <th>Laite</th>
-                <th>Merkki</th>
-                <th>Malli</th>
-                <th>Alkupvm</th>
-                <th>Loppupvm</th>
-                <th>Status</th>
-                <th>Käyttäjä</th>
-                <th>#</th>
-                <th>#</th>
-                <th>#</th>
-            </tr>
-        </thead>
-    </table>
-
+    <div class="row">
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+        <div class="col-md-9">
+            <h2 style="text-align: center">Varaukset:</h2>
+            <table id="varausDatatable" class="display" style="width:100%; background-color: aqua" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                        <th>#</th>
+                        <th>#</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="hidden-xs hidden-ms col-md-1"></div>
+    </div>
+            
+    <div class="row">
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+        <div class="col-md-9">
+            <h2 style="text-align: center">Lainat:</h2>
+            <table id="lainatDatatable" class="display" style="width:100%; background-color: deepskyblue" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                        <th>#</th>
+                        <th>#</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="hidden-xs hidden-ms col-md-1"></div>
+    </div>
     <button id="laitteet" class="btn btn-info" style="position: relative; left: 10px; margin-top: 100px;">Laitteet</button>
 
     <div id="laitedialogi" title="Laitteet">
