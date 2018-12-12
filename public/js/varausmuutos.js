@@ -156,7 +156,6 @@ function muutaLainatuksi(id, status) {
     });
 }
 
-
 function poistaVaraus(id) {
     $('#dialog-poisto-varmennus').dialog({
         buttons: {

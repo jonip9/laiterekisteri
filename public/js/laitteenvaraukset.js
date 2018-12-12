@@ -36,7 +36,7 @@ $(function () {
     }
     window.onload = hide();
     window.onload = show();
- 
+
     $("#dialogi_varaushistoria").dialog({
         width: 1200,
         autoOpen: false,
