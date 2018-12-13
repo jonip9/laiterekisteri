@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/trontastic/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>Sisäänkirjautuminen</title>
+
+    <script src="/js/login.js"></script>
+</head>
+
+<body style="background-color:powderblue;">
+    <h1 style="font: 50px; font-family:'Comic Sans MS'; text-align: center">Laiterekisteri</h1>
+    <div style="width: 200px;height: 500px;position: absolute;top:0;bottom: 0;left: 0;right: 0;margin: auto">
+        <p class="text-danger mb-0">{{message}}</p>
+
+        <p>Kirjaudu sisään järjestelmään</p>
+        <form id="loginForm" action="/login" method="post">
+            <label for="tunnus">Tunnus</label>
+            <input type="text" id="tunnus" name="tunnus" class="mr-2" />
+            <label for="salasana">Salasana</label>
+            <input type="text" id="salasana" name="salasana" />
+            <input type="submit" id="kirjaudu" name="send" value="Kirjaudu" class="btn btn-success" style="margin-top: 15px;" />
+        </form>
+        <p><button id="register" class="btn btn-info ml-1" style="position: relative; right: 5px; margin-top: 15px;">Rekisteröidy</button></p>
+        <a href="/img/toimintolista.jpg" target="_blank" class="btn btn-info">Toimintolista</a>
+    </div>
+
+    <div id="dialogi_register" title="Rekisteröityminen" style="height: 100%; overflow: hidden">
+        <div id="regError"></div>
+        <form id="reg_lomake">
+            <input type="text" id="reg_tunnus" name="tunnus" placeholder="Tunnus">
+            <input type="text" id="reg_ss" name="salasana" placeholder="Salasana">
+            <input type="text" id="reg_ss2" name="vahvista salasana" placeholder="Vahvista salasana">
+            <input type="text" id="reg_nimi" name="nimi" placeholder="Nimi">
+
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </form>
+    </div>
+</body>
+
+</html>

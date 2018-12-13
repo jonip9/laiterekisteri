@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/trontastic/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/mystyle.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <title>Asiakkaan käsittely</title>
+
+    <script src="/js/laite.js"></script>
+    <script src="/js/kayttaja.js"></script>
+    <script src="/js/laitteenvaraukset.js"></script>
+    <script src="/js/varausmuutos.js"></script>
+
+</head>
+
+<body style="background-color:powderblue;">
+    <nav>
+        <div class="container-fluid p-3 mb-2 bg-dark">
+            <ul class="nav justify-content-end">
+                <li class="nav-item mr-auto">
+                    <button id="laitteet" class="btn btn-info mr-2 my-2 my-sm-0">Laitteet</button>
+                </li>
+                <li class="nav-item">
+                    <button id="muutaTietoja" class="btn btn-outline-success mr-1 my-2 my-sm-0">Muuta käyttäjätietoja</button>
+                </li>
+                <li class="nav-item">
+                    <!--<button id="kirjauduUlos" class="btn btn-danger navbar-btn">Kirjaudu ulos</button></li>-->
+                    <a class="btn btn-danger navbar-btn" href="/logout">Kirjaudu ulos</a>
+            </ul>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+        <div class="col-md-9">
+            <h2 style="text-align: center">Varaukset:</h2>
+            <table id="varausDatatable" class="display" style="width:100%; background-color: aqua" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                        <th>#</th>
+                        <th>#</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="hidden-xs hidden-ms col-md-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+        <div class="col-md-9">
+            <h2 style="text-align: center">Lainat:</h2>
+            <table id="lainatDatatable" class="display" style="width:100%; background-color: deepskyblue" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                        <th>#</th>
+                        <th>#</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="hidden-xs hidden-ms col-md-1"></div>
+    </div>
+
+    <div id="laitedialogi" title="Laitteet">
+        <div id="poistoerror"></div>
+        <form id="hakulomake">
+            <fieldset>
+                <legend>Hakuehdot</legend>
+                <input type="text" id="sarjanro_haku" name="sarjanro" placeholder="Sarjanro">
+                <select name="katNimi" id="kategoria_haku" style="height: 32px">
+                    <option value="">Kaikki</option>
+                </select>
+                <input type="text" id="nimi_haku" name="nimi" placeholder="Nimi">
+                <input type="text" id="merkki_haku" name="merkki" placeholder="Merkki">
+                <input type="text" id="malli_haku" name="malli" placeholder="Malli">
+                <select name="omNimi" id="omistaja_haku" style="height: 32px">
+                    <option value="">Kaikki</option>
+                </select>
+                <input type="text" id="sijainti_haku" name="sijainti" placeholder="Sijainti">
+
+                <input type="submit" value="Hae" class="btn btn-info">
+            </fieldset>
+        </form>
+        <form id="laitelomake">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sarjanro</th>
+                        <th>Kategoria</th>
+                        <th>Nimi</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Omistaja</th>
+                        <th>Kuvaus</th>
+                        <th>Sijainti</th>
+                        <th>#</th>
+                        <th>#</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+                <tbody id="laitetaulu"></tbody>
+            </table>
+        </form>
+    </div>
+
+    <div id="dialogi_varaushistoria" title="Varaushistoria">
+        <div id="muutosError2"></div>
+        <form id="uusivaraus">
+            <p>Tee uusi varaus</p>
+
+            <input type="hidden" id="laite_id" name="laite_id">
+            <label for="alkupvm">Alkupvm:</label>
+            <input type="date" id="alkupvm" name="alkupvm">
+            <label for="kloaika1">Kellon aika:</label>
+            <input type="time" id="kloaika1" name="kloaika1">
+            <label for="loppupvm">Loppupvm:</label>
+            <input type="date" id="loppupvm" name="loppupvm">
+            <label for="kloaika2">Kellon aika:</label>
+            <input type="time" id="kloaika2" name="kloaika2">
+            <input type="hidden" id="kayttaja_id" name="kayttaja_id">
+            <label for="status" id="statuslabel">Status: </label>
+            <select name="status" id="status">
+                <option selected="selected" value="Varattu">Varattu</option>
+                <option value="Huollossa">Huollossa</option>
+            </select>
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </form>
+
+        <form id="varaushistoria">
+            <h2>Varatut päivät:</h2>
+            <table id="varaushistoriataulu" class="display" style="color: black" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                    </tr>
+                </thead>
+            </table>
+        </form>
+
+        <form id="vanhatvaraukset">
+            <h2>Vanhat varaukset:</h2>
+            <table id="vanhatvarauksettaulu" class="display" style="color: black" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                    </tr>
+                </thead>
+            </table>
+        </form>
+    </div>
+
+    <div id="dialogi_varaushistoria2" title="Varaushistoria">
+        <div id="muutosError3"></div>
+        <form id="uusivaraus2">
+            <p>Anna varauksen uudet päivät</p>
+
+            <input type="hidden" id="varaus_id" name="id">
+            <input type="hidden" id="laite_id2" name="laite_id">
+            <label for="alkupvm">Alkupvm:</label>
+            <input type="date" id="alkupvm2" name="alkupvm">
+            <label for="kloaika1">Kellon aika:</label>
+            <input type="time" id="kloaika11" name="kloaika1">
+            <label for="loppupvm">Loppupvm:</label>
+            <input type="date" id="loppupvm2" name="loppupvm">
+            <label for="kloaika2">Kellon aika:</label>
+            <input type="time" id="kloaika21" name="kloaika2">
+            <input type="hidden" id="status2" name="status" value="Varattu">
+            <input type="hidden" id="kayttaja_id2" name="kayttaja_id">
+
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </form>
+
+        <form id="varaushistoria2">
+            <p>Varatut päivät</p>
+            <table id="varaushistoriataulu2" class="display" style="color: black" data-order='[[ 6, "asc" ]]'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Sarjanumero</th>
+                        <th>Laite</th>
+                        <th>Merkki</th>
+                        <th>Malli</th>
+                        <th>Alkupvm</th>
+                        <th>Loppupvm</th>
+                        <th>Status</th>
+                        <th>Käyttäjä</th>
+                    </tr>
+                </thead>
+            </table>
+        </form>
+    </div>
+
+    <div id="dialogi_kayttajamuutos" title="Muuta käyttäjän tietoja" style="height: 100%; overflow: hidden">
+        <div id="muutosError"></div>
+        <form id="kayttajanmuutoslomake">
+            <input type="hidden" id="usrID" name="id">
+            <input type="text" id="usrTunnus" name="tunnus" placeholder="Tunnus" readonly>
+            <input type="text" id="usrSalasana" name="salasana" placeholder="Salasana">
+            <input type="text" id="usrSalasana2" name="salasana2" placeholder="Salasana2">
+            <input type="text" id="usrNimi" name="nimi" placeholder="Nimi">
+
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </form>
+    </div>
+
+    <div id="dialogi_lisays" title="Laitteen tiedot">
+        <form id="lisayslomake">
+            <input type="hidden" id="sarjanro_muutos" name="sarjanro">
+            <select name="kategoria" id="kategoria_lisays"></select>
+            <input type="text" id="nimi_lisays" name="nimi" placeholder="Nimi">
+            <input type="text" id="merkki_lisays" name="merkki" placeholder="Merkki">
+            <input type="text" id="malli_lisays" name="malli" placeholder="Malli">
+            <select name="omistaja" id="omistaja_lisays"></select>
+            <input type="text" id="kuvaus_lisays" name="kuvaus" placeholder="Kuvaus">
+            <input type="text" id="sijainti_lisays" name="sijainti" placeholder="Sijainti">
+        </form>
+    </div>
+
+    <div id="dialog-poisto-varmennus">
+        <p id="varausPoistoError"></p>
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Haluatko varmasti
+            poistaa varauksen?</p>
+    </div>
+
+    <div><input type="hidden" name="isAdmin" id="isAdmin" value={{isAdmin}}></div>
+</body>
+
+</html>
