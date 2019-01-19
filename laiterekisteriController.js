@@ -1,9 +1,9 @@
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
-    host: 'weboht.hopto.org',
-    user: 'pma',
-    password: 'eta7oht',
+    host: '',
+    user: '',
+    password: '',
     database: 'laiterekisteri',
     timezone: 'Z',
 });
