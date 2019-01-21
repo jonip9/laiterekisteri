@@ -1,6 +1,6 @@
 # Web-ohjelmoinnin harjoitustyö
 
 ### Tekijät
-* Juhani Juusola
 * Jimi Holopainen
+* Juhani Juusola
 * Joni Pössi
